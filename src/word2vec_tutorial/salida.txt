@@ -1,0 +1,245 @@
+(tensor_project)lomaranis@lomaranis-R530-R730-P590 ~/repos/tensor_project/src/word2vec_tutorial $ python word2vec_basic.py 
+Found and verified text8.zip
+Data size 17005207
+Most common words (+UNK) [['UNK', 418391], ('the', 1061396), ('of', 593677), ('and', 416629), ('one', 411764)]
+Sample data [5239, 3084, 12, 6, 195, 2, 3137, 46, 59, 156] ['anarchism', 'originated', 'as', 'a', 'term', 'of', 'abuse', 'first', 'used', 'against']
+3084 originated -> 12 as
+3084 originated -> 5239 anarchism
+12 as -> 3084 originated
+12 as -> 6 a
+6 a -> 195 term
+6 a -> 12 as
+195 term -> 2 of
+195 term -> 6 a
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE3 instructions, but these are available on your machine and could speed up CPU computations.
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+Initialized
+Average loss at step  0 :  275.079101562
+Nearest to of: friendliness, fateful, glyphs, churchmen, kurtz, inwardly, hints, iudex,
+Nearest to between: sucking, resolves, anz, vpn, cheerleading, pickens, actresses, kajang,
+Nearest to may: kampaku, illustrious, regia, stepson, presumption, evan, believing, blocked,
+Nearest to about: mane, haiku, shuster, guessing, luke, interviewer, bedding, hale,
+Nearest to which: powered, capac, wales, tautology, golan, lawmakers, scary, vernet,
+Nearest to who: trigonometric, authorizes, unsuitable, leyden, zeitgeist, choreography, passively, theatrically,
+Nearest to into: wil, kissed, northernmost, suzanne, jabberwocky, cotswolds, ships, purity,
+Nearest to two: qarase, suleiman, istanbul, solent, sowell, postulates, loop, decolonisation,
+Nearest to over: larynx, cfm, rhode, comerica, bulgarian, movable, redeveloped, classically,
+Nearest to eight: fond, superpowered, cash, fieldwork, reinventing, ice, pottery, reruns,
+Nearest to so: skit, miguel, herbivorous, injectors, electrically, mujahidin, supernatural, townhouse,
+Nearest to th: tetrarchy, accused, impaled, russians, morel, huntingdon, warner, john,
+Nearest to after: levite, pray, dey, saber, lawful, auf, wes, cairns,
+Nearest to united: confessions, iom, monogram, tivoli, baffling, walkways, xiongnu, bounced,
+Nearest to history: eustace, rationale, systema, prut, sampling, pelvic, masturbate, loya,
+Nearest to a: acheson, tyndale, cbd, biafra, lombardo, exposures, ott, runs,
+Average loss at step  2000 :  113.729364659
+Average loss at step  4000 :  52.3695234296
+Average loss at step  6000 :  33.260153435
+Average loss at step  8000 :  23.4353856916
+Average loss at step  10000 :  18.1058149991
+Nearest to of: in, and, for, mathbf, nine, agave, archie, the,
+Nearest to between: abortion, significant, birmingham, atomic, found, challenged, culture, reason,
+Nearest to may: total, paint, nine, institute, believing, achaemenid, analogue, official,
+Nearest to about: somalia, luke, nine, ch, followers, pogrom, profit, denver,
+Nearest to which: wales, powered, ibn, and, reactivity, medieval, UNK, who,
+Nearest to who: he, unsuitable, which, ll, authorizes, experimentation, nine, topics,
+Nearest to into: archie, at, on, in, formal, northernmost, art, kissed,
+Nearest to two: one, nine, eight, archie, zero, atheist, six, borders,
+Nearest to over: four, rhode, encourage, hakama, larynx, sugars, appointed, verse,
+Nearest to eight: nine, one, zero, archie, phi, three, gb, six,
+Nearest to so: mujahidin, agave, er, supernatural, gods, ik, varieties, vocabulary,
+Nearest to th: one, morel, nine, accused, eight, says, phi, russians,
+Nearest to after: conservative, gb, combinations, seven, enquiry, ada, amo, infection,
+Nearest to united: bckgr, pads, humans, arabia, norway, tissue, brandy, vs,
+Nearest to history: encouraged, embassy, sampling, agave, shown, condemned, persuaded, regarding,
+Nearest to a: the, UNK, graphic, and, phi, julius, disagreement, discover,
+Average loss at step  12000 :  13.8117261068
+Average loss at step  14000 :  11.6496697338
+Average loss at step  16000 :  10.1257020642
+Average loss at step  18000 :  8.386493334
+Average loss at step  20000 :  8.05226853347
+Nearest to of: and, in, for, nine, on, agouti, gum, circ,
+Nearest to between: of, from, to, and, zero, atomic, agouti, abortion,
+Nearest to may: illustrious, paint, would, achaemenid, cricketer, seven, albuquerque, to,
+Nearest to about: nine, somalia, luke, dasyprocta, denver, eight, followers, investment,
+Nearest to which: that, and, agouti, who, powered, wales, ibn, dasyprocta,
+Nearest to who: he, which, trigonometric, alphorn, it, authorizes, operatorname, and,
+Nearest to into: on, in, at, archie, agouti, with, northernmost, and,
+Nearest to two: one, zero, three, nine, eight, five, six, seven,
+Nearest to over: four, rhode, sugars, encourage, larynx, operatorname, verse, hakama,
+Nearest to eight: nine, zero, three, six, seven, five, four, two,
+Nearest to so: antwerp, er, outlawing, moab, skit, horizons, agave, tehran,
+Nearest to th: morel, eight, one, seven, zero, nine, accused, intercept,
+Nearest to after: for, in, conservative, seven, congregation, levite, acetyl, hadith,
+Nearest to united: agouti, dasyprocta, prentice, pads, gollancz, bckgr, wise, norway,
+Nearest to history: dasyprocta, operatorname, fleece, agouti, diss, encouraged, sampling, eustace,
+Nearest to a: the, this, UNK, dasyprocta, circ, obedience, one, disagreement,
+Average loss at step  22000 :  7.14217954552
+Average loss at step  24000 :  6.93105540836
+Average loss at step  26000 :  6.71349273252
+Average loss at step  28000 :  6.44807593966
+Average loss at step  30000 :  5.92221533155
+Nearest to of: in, and, for, dasyprocta, circ, nine, eight, agouti,
+Nearest to between: from, with, to, of, atomic, sponsors, agouti, through,
+Nearest to may: would, can, achaemenid, illustrious, paint, might, seven, but,
+Nearest to about: nine, luke, somalia, eight, denver, airshows, six, investment,
+Nearest to which: that, who, agouti, and, also, this, dasyprocta, but,
+Nearest to who: he, which, it, trigonometric, alphorn, also, authorizes, and,
+Nearest to into: in, on, with, at, from, archie, agouti, caves,
+Nearest to two: four, three, six, one, eight, five, seven, zero,
+Nearest to over: larynx, rhode, sugars, four, five, encourage, amalthea, six,
+Nearest to eight: nine, six, seven, four, five, zero, three, two,
+Nearest to so: antwerp, er, outlawing, moab, skit, tehran, rhys, loudness,
+Nearest to th: morel, seven, eight, five, accused, six, intercept, two,
+Nearest to after: in, for, at, seven, and, conservative, on, congregation,
+Nearest to united: agouti, dasyprocta, baumgarten, prentice, pads, gollancz, wise, of,
+Nearest to history: dasyprocta, operatorname, fleece, diss, agouti, sampling, encouraged, eustace,
+Nearest to a: the, amalthea, dasyprocta, obedience, this, circ, phi, doubles,
+Average loss at step  32000 :  5.97720458102
+Average loss at step  34000 :  5.77156000865
+Average loss at step  36000 :  5.82584424162
+Average loss at step  38000 :  5.5331258204
+Average loss at step  40000 :  5.22568844557
+Nearest to of: zero, in, and, for, circ, agouti, dasyprocta, agave,
+Nearest to between: with, from, of, zero, in, atomic, to, through,
+Nearest to may: would, can, might, achaemenid, could, to, seven, paint,
+Nearest to about: luke, somalia, denver, origami, morphisms, modify, four, alger,
+Nearest to which: that, who, this, also, agouti, but, and, dasyprocta,
+Nearest to who: he, which, trigonometric, alphorn, also, it, and, they,
+Nearest to into: on, in, with, from, at, zero, archie, agouti,
+Nearest to two: one, three, four, six, five, eight, seven, zero,
+Nearest to over: larynx, sugars, rhode, seven, four, encourage, five, amalthea,
+Nearest to eight: six, nine, seven, four, zero, three, five, one,
+Nearest to so: er, antwerp, argued, moab, skit, judaism, rhys, varieties,
+Nearest to th: seven, morel, eight, one, zero, six, four, two,
+Nearest to after: in, for, seven, at, four, on, conservative, mideast,
+Nearest to united: agouti, dasyprocta, baumgarten, pads, gollancz, prentice, bckgr, wise,
+Nearest to history: dasyprocta, prisms, operatorname, fleece, agouti, diss, sampling, eustace,
+Nearest to a: the, amalthea, zero, disagreement, dasyprocta, circ, obedience, this,
+Average loss at step  42000 :  5.36802132857
+Average loss at step  44000 :  5.23384427333
+Average loss at step  46000 :  5.22209340799
+Average loss at step  48000 :  5.19792047513
+Average loss at step  50000 :  4.98603096724
+Nearest to of: in, for, original, agave, eight, dasyprocta, agouti, circ,
+Nearest to between: with, in, from, to, through, four, sponsors, atomic,
+Nearest to may: would, can, might, could, will, achaemenid, to, must,
+Nearest to about: luke, alger, denver, in, origami, somalia, seven, videogame,
+Nearest to which: that, this, also, who, agouti, but, it, one,
+Nearest to who: which, he, trigonometric, they, also, alphorn, and, anu,
+Nearest to into: in, on, from, with, at, seven, archie, to,
+Nearest to two: three, four, one, six, five, seven, dasyprocta, eight,
+Nearest to over: sugars, larynx, seven, eight, four, rhode, six, three,
+Nearest to eight: six, seven, nine, four, five, three, one, zero,
+Nearest to so: er, antwerp, argued, moab, skit, rhys, judaism, varieties,
+Nearest to th: morel, seven, eight, one, five, six, four, tetrarchy,
+Nearest to after: for, in, seven, before, six, three, mideast, on,
+Nearest to united: agouti, dasyprocta, baumgarten, gollancz, prentice, pads, wise, bckgr,
+Nearest to history: dasyprocta, operatorname, prisms, fleece, agouti, diss, sampling, eustace,
+Nearest to a: the, amalthea, archaeopteryx, disagreement, obedience, this, dasyprocta, circ,
+Average loss at step  52000 :  5.05670475841
+Average loss at step  54000 :  5.1871486721
+Average loss at step  56000 :  5.03637748969
+Average loss at step  58000 :  5.04678003895
+Average loss at step  60000 :  4.94021137559
+Nearest to of: in, ursus, and, nine, original, dasyprocta, including, six,
+Nearest to between: with, in, from, through, of, atomic, sponsors, to,
+Nearest to may: would, can, might, could, will, should, must, achaemenid,
+Nearest to about: michelob, luke, six, alger, denver, videogame, origami, four,
+Nearest to which: that, this, also, but, who, what, agouti, it,
+Nearest to who: he, which, trigonometric, they, also, alphorn, there, voris,
+Nearest to into: on, from, in, at, with, archie, agouti, to,
+Nearest to two: three, four, one, six, five, dasyprocta, ursus, operatorname,
+Nearest to over: sugars, larynx, seven, eight, six, agouti, hittite, rhode,
+Nearest to eight: nine, six, seven, four, five, zero, three, ursus,
+Nearest to so: er, skit, argued, antwerp, agave, mckinney, judaism, moab,
+Nearest to th: morel, eight, seven, six, four, five, one, zero,
+Nearest to after: before, six, for, michelob, in, at, from, five,
+Nearest to united: agouti, dasyprocta, gollancz, biomes, baumgarten, pads, bckgr, prentice,
+Nearest to history: microbats, fleece, prisms, dasyprocta, operatorname, ursus, agouti, diss,
+Nearest to a: the, pulau, michelob, ssbn, amalthea, ursus, dasyprocta, obedience,
+Average loss at step  62000 :  5.01404551101
+Average loss at step  64000 :  4.83543432826
+Average loss at step  66000 :  4.59104331636
+Average loss at step  68000 :  4.97448536837
+Average loss at step  70000 :  4.89339001238
+Nearest to of: ursus, cebus, for, in, and, aargau, nine, dasyprocta,
+Nearest to between: with, from, through, in, to, sponsors, atomic, burgeoning,
+Nearest to may: can, would, could, might, will, must, should, achaemenid,
+Nearest to about: alger, michelob, luke, videogame, six, origami, denver, four,
+Nearest to which: that, this, what, also, who, but, it, agouti,
+Nearest to who: which, he, trigonometric, they, also, alphorn, and, there,
+Nearest to into: from, on, in, with, against, at, agouti, archie,
+Nearest to two: three, four, six, five, one, eight, seven, ursus,
+Nearest to over: sugars, larynx, eight, agouti, hittite, four, miriam, six,
+Nearest to eight: six, nine, seven, four, five, three, zero, ursus,
+Nearest to so: mitral, skit, microcebus, argued, antwerp, er, agave, varieties,
+Nearest to th: morel, six, eight, seven, nine, one, four, five,
+Nearest to after: before, in, at, when, for, michelob, four, during,
+Nearest to united: agouti, dasyprocta, gollancz, baumgarten, biomes, pads, microcebus, bckgr,
+Nearest to history: fleece, microbats, prisms, operatorname, dasyprocta, diss, ursus, version,
+Nearest to a: the, pulau, michelob, ssbn, obedience, ursus, disagreement, dasyprocta,
+Average loss at step  72000 :  4.75993344903
+Average loss at step  74000 :  4.79826712441
+Average loss at step  76000 :  4.737395015
+Average loss at step  78000 :  4.80357999098
+Average loss at step  80000 :  4.81097333562
+Nearest to of: ursus, cebus, in, nine, dasyprocta, circ, original, agouti,
+Nearest to between: with, from, through, in, of, cyg, smashing, atomic,
+Nearest to may: can, would, could, might, will, must, should, neglect,
+Nearest to about: alger, luke, michelob, videogame, four, fachhochschule, six, origami,
+Nearest to which: that, this, what, also, it, who, but, agouti,
+Nearest to who: he, which, they, trigonometric, also, alphorn, there, macroscopic,
+Nearest to into: from, in, on, to, with, against, at, agouti,
+Nearest to two: three, four, six, five, one, seven, eight, operatorname,
+Nearest to over: sugars, larynx, through, agouti, miriam, four, lauder, hittite,
+Nearest to eight: nine, seven, six, five, four, three, zero, ursus,
+Nearest to so: mitral, argued, skit, microcebus, antwerp, agave, er, microsite,
+Nearest to th: seven, morel, six, zero, eight, five, balalaika, tetrarchy,
+Nearest to after: before, during, when, from, in, michelob, five, at,
+Nearest to united: agouti, baumgarten, biomes, dasyprocta, gollancz, prentice, pads, sheik,
+Nearest to history: fleece, iit, prisms, microbats, dasyprocta, operatorname, version, diss,
+Nearest to a: the, pulau, iit, michelob, obedience, amalthea, busan, ursus,
+Average loss at step  82000 :  4.75967754591
+Average loss at step  84000 :  4.76214063978
+Average loss at step  86000 :  4.76416846621
+Average loss at step  88000 :  4.74674840772
+Average loss at step  90000 :  4.73394619906
+Nearest to of: in, original, including, ursus, cebus, aargau, circ, dasyprocta,
+Nearest to between: with, through, in, from, smashing, cyg, eight, malthus,
+Nearest to may: can, would, could, might, will, must, should, cannot,
+Nearest to about: alger, videogame, michelob, luke, fachhochschule, heijenoort, only, jati,
+Nearest to which: that, this, what, also, but, who, agouti, it,
+Nearest to who: he, which, they, trigonometric, also, alphorn, and, there,
+Nearest to into: from, on, in, through, to, against, with, wideband,
+Nearest to two: three, four, one, five, six, seven, eight, dasyprocta,
+Nearest to over: sugars, larynx, peacocks, through, miriam, agouti, equalled, hittite,
+Nearest to eight: seven, five, nine, six, four, three, zero, ursus,
+Nearest to so: mitral, argued, microcebus, skit, bye, antwerp, agave, varieties,
+Nearest to th: seven, five, morel, eight, nine, four, balalaika, tetrarchy,
+Nearest to after: before, when, during, from, michelob, in, while, five,
+Nearest to united: agouti, dasyprocta, baumgarten, biomes, pads, gollancz, prentice, bckgr,
+Nearest to history: iit, fleece, dasyprocta, microbats, operatorname, ursus, prisms, version,
+Nearest to a: the, pulau, michelob, ssbn, amalthea, obedience, ursus, iit,
+Average loss at step  92000 :  4.66389603484
+Average loss at step  94000 :  4.73642027056
+Average loss at step  96000 :  4.69501350474
+Average loss at step  98000 :  4.60300658023
+Average loss at step  100000 :  4.69777281344
+Nearest to of: including, ursus, in, original, cebus, agave, dasyprocta, agouti,
+Nearest to between: with, through, from, in, cyg, eight, malthus, smashing,
+Nearest to may: can, would, could, might, will, must, should, cannot,
+Nearest to about: alger, videogame, luke, only, michelob, four, heijenoort, fachhochschule,
+Nearest to which: that, this, what, also, but, agouti, however, who,
+Nearest to who: he, which, they, also, trigonometric, alphorn, finally, and,
+Nearest to into: from, on, through, constituci, against, in, with, eight,
+Nearest to two: four, three, six, five, one, seven, eight, ursus,
+Nearest to over: sugars, larynx, through, peacocks, equalled, agouti, miriam, lauder,
+Nearest to eight: seven, six, nine, five, four, three, zero, ursus,
+Nearest to so: mitral, argued, microcebus, skit, antwerp, bye, agave, but,
+Nearest to th: morel, nine, five, seven, balalaika, six, tetrarchy, eight,
+Nearest to after: before, when, during, from, in, while, michelob, at,
+Nearest to united: agouti, baumgarten, biomes, dasyprocta, prentice, jagie, pads, sheik,
+Nearest to history: iit, fleece, microbats, dasyprocta, operatorname, ursus, version, prisms,
+Nearest to a: the, pulau, michelob, ssbn, obedience, ursus, iit, busan,
+Please install sklearn, matplotlib, and scipy to show embeddings.
