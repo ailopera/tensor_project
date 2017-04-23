@@ -40,7 +40,22 @@ def read_data(filename):
 	#Return the data
 	return data
 
-# Functions to building the word dictionary
+# FUNCTIONS TO BUILD THE WORD DICTIONARY
+def build_dataset(words):
+	# Create counts list, set counts for 'UNK' token to -1 (undefined)
+	count = [['UNK', -1]]
+	# add counts of the 49,999 most common tokens in 'words'
+	# NOTE: The collections module implements specialized container datatypes providing alternatives to Python's general 
+	# purpose built-in containers, dict, list, set, and tuple. Counter is a dict subclass for counting hashable objexts.
+	count.extend(collections.Counter(words).most_common(vocabulary_size - 1))
+	# Create the dictionary data structure
+	dictionary = {}
+	# Give a unique integer ID to each token in the dictionary (TODO: No lo entiendo)
+	for word, _ in count:
+		dictionary[word] = len(dictionary)
+	# Create a list data structure for the data
+	data = []
+
 
 
 
@@ -57,4 +72,6 @@ print('data size: ', len(words))
 # of (input, output) pairs as described above for the Skip-Gram Model. We'll also replace rare words in the dictionary 
 # with the token UNK, as is standard in this kind of NLP task.
 
-
+# Output is the word from the context predicted. So a single input produces differents tuples of (input, output) 
+# 3. Build te dictionary and replace rare words with the "UNK" token.
+vocabulary_size = 50000
