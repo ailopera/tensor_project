@@ -168,4 +168,55 @@ batch, labels = generate_batch(batch_size=8, num_skips=2, skip_window=1)
 for i in range(8):
 	print(batch[i], reverse_dictionary[batch[i]], '->', labels[i,0], reverse_dictionary[labels[i, 0]])
 
+# We set up some hyperparameters and set up the computation graph
+
+# 5.  Hyperparameters
+batch_size = 128
+embedding_size = 128 # Dimension of the embedding vector
+skip_window = 1 # How many words to consider to left ad right
+num_skips = 2 # How many times to reuse an input to generate a label
+
+# We choose random validation dataset to sample nearest neighbors
+# here, we limit the validation samples to the words that have a low
+# numeric ID, which are alse the most frequently occuring words
+valid_size = 16 #Size of random set of words to evaluate similarity on
+valid_examples = np.random.choice(valid_window, valid_size, replace=False)
+num_sampled = 64 # Number of negative examples to sample
+
+
+# Create computation graph
+graph = tf.Graph()
+
+with graph.as_default():
+	# input data
+	train_inputs = tf.placeholder(tf.int32, shape=[batch_size])
+	train_labels = tf.placeholder(tf.int32, shape=[batch_size, 1])
+	valid_dataset = tf.constant(valid_examples, dtype=tf.int32)
+
+	# Operations and variables
+	# Look up embeddings for inputs
+	embeddings = tf.Variable(tf.random_uniform([vocabulary_size, embedding_size], -1.0, 1.0))
+	embed = tf.nn.embedding_lookup(embeddings, train_inputs)
+
+	#Construct the variables for the NCE loss
+	nce_weights = tf.Variable(tf.truncated_normal([vocabulary_size, embedding_size], stddev=1.0 / math.sqrt(embedding_size)))
+	nce_biases = tf.Variable(tf.zeros([vocabulary_size]))
+
+	# Compute the average NCE loss for the batch.
+	# tf.nce_loss automatically draws a new sample of the negative labels each time we evaluate the loss.
+	loss = tf.reduce_mean(tf.nn.nce_loss(weights=nce_weights, biases = nce_biases,
+	labels=train_labels, inputs=embed, num_sampled=num_sampled, num_classes=vocabulary_size))
+
+	# Construct the SGD optimizer using a learning rate of 1.0
+	optimizer = tf.train.GradientDescentOptimizer(1.0).minimize(loss)
+
+	# Compute the cosine similarity between minibatch examples and all embeddings
+	norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), 1, keep_dims=True))
+	normalized_embeddings = embeddings / norm
+	valid_embeddings = tf.nn.embedding_lookup(normalized_embeddings, valid_dataset)
+	similarity = tf.matmul(valid_embeddings, normalized_embeddings, transpose_b=True)
+	
+	# Add variable initializer
+	init = tf.initialize_all_variables()
+
 
