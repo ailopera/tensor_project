@@ -132,14 +132,32 @@ def generate_bach(batch_size, num_skips, skip_window):
 	return batch, labels
 
 
+#Function that plots the resulting embedding trained
+def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
+	assert low_dim_embs.shape[0] >= len(labels), "More labels than embeddings"
+	# Set plot size in inches 
+	plt.figure(figsize=(18,18))
+	# Loop through all labels
+	for i, label in enumerate(labels):
+		# get the embedding vectors
+		x, y = low_dim_embs[i,:]
+		# plot them in a scatterplot
+		plt.scatter(x, y)
+		#annotations
+		plt.annotate(label, xy=(x,y), xytext=(5,2), textcoords='offset points', ha='right', va='bottom')
+	# Save the figure out
+	plt.savefig(filename)
+
 
 ##################
 # Execution Code #
 ##################
 # 1. Download the filename 
+print(">>> STEP 1. Downloading data...")
 file_ = download('text8.zip', 31344016)
 # 2. Read the data into the words variable
 words = read_data(file_)
+print(">>> STEP 2. Reading the data into the words variable...")
 print('>>> Data size: ', len(words))
 
 ## Now that we've read in the raw text and converting it into a list of string, we'll need to convert this list into a dictionary
@@ -148,6 +166,7 @@ print('>>> Data size: ', len(words))
 
 # Output is the word from the context predicted. So a single input produces differents tuples of (input, output) 
 # 3. Build the dictionary and replace rare words with the "UNK" token.
+print(">>> STEP 3: Building the dictionary and replacing rare words...")
 vocabulary_size = 50000
 # Build the dataset
 data, count, dictionary, reverse_dictionary = build_dataset(words)
@@ -160,6 +179,7 @@ print('>>> Sample data: ', data[:10], [reverse_dictionary[i] for i in data[:10]]
 
 # 4. Generate minibatches for model training
 # We use a function that allows us to generate mini-batches or training the skip-gram model.
+print(">>> STEP 4. Generate minibatches for model training.")
 data_index = 0
 # Get a minibatch
 batch, labels = generate_batch(batch_size=8, num_skips=2, skip_window=1)
@@ -170,7 +190,7 @@ for i in range(8):
 
 # We set up some hyperparameters and set up the computation graph
 
-# 5.  Hyperparameters
+# 5.  Hyperparameters (parámetros del algoritmo de aprendizaje)
 batch_size = 128
 embedding_size = 128 # Dimension of the embedding vector
 skip_window = 1 # How many words to consider to left ad right
@@ -178,15 +198,19 @@ num_skips = 2 # How many times to reuse an input to generate a label
 
 # We choose random validation dataset to sample nearest neighbors
 # here, we limit the validation samples to the words that have a low
-# numeric ID, which are alse the most frequently occuring words
+# numeric ID, which are also the most frequently occuring words
 valid_size = 16 #Size of random set of words to evaluate similarity on
+valid_window = 100 # Only pick development samples from the first 'valid_window' words
 valid_examples = np.random.choice(valid_window, valid_size, replace=False)
 num_sampled = 64 # Number of negative examples to sample
 
 
 # Create computation graph
+# NOTE: A graph contains a set of tf-Operation objects, which represent units of computation;
+# and tf.Tensor objects, which represetn the units of data that flow between operations
 graph = tf.Graph()
 
+#NOTE: Graph.as_default is a context manager, which overrides the current default graph for the lifetime of the context
 with graph.as_default():
 	# input data
 	train_inputs = tf.placeholder(tf.int32, shape=[batch_size])
@@ -220,3 +244,70 @@ with graph.as_default():
 	init = tf.initialize_all_variables()
 
 
+# 6. Training the model
+# Steps to train the model
+print(">>> STEP 6. Training the model")
+num_steps = 100001
+with tf.Session(graph=graph) as session:
+	# We must initialize all variables before using them
+	init.run()
+	print('initialized.')
+
+	# Loop thiugh all training steps and keep track of loss
+	average_loss = 0
+	for step in xrange(num_steps):
+		# generate a minibatch of training data
+		batch_inputs, batch_labels = generate_batch(batch_size, num_skips, skip_window)
+		feed_dict = {train_inputs: batch_inputs, train_labels: batch_labels}
+		
+		# We perform a single update step by evaluating the optimizer operation (including it
+		# in the list of returned values of session.run())
+		_, loss_val = session.run([optimizer, loss], feed_dict=feed_dict)
+		average_loss += loss_val
+
+		# print average loss every 2,000 steps
+		if step % 2000 == 0:
+			if step > 0:
+				average_loss /= 2000
+			# The average loss is an stimate of the loss over the last 2000 batches.
+			print("Average loss at step ", step, ": ", average_loss)
+			print("-------------------------------------------------")
+			average_loss = 0
+		
+		# Computing cosine similarity (expensive!)
+		if step % 10000 == 0:
+			sim = similarity.eval()
+			for i in xrange(valid_size):
+				# get a single validation sample
+				valid_word = reverse_dictionary[valid_examples[i]]
+				# Number of nearest neighbors 
+				top_k = 8
+				# Computing nearest neighbors
+				nearest = (-sim[i,:]).argsort()[1:top_k + 1]
+				log_str = "nearest to %s:" % valid_word
+				for k in xrange(top_k):
+					close_word = reverse_dictionary[nearest[k]]
+					log_str = "%s %s," % (log_str, close_word)
+				print(log_str)
+				print("#######################################")
+	final_embeddings = normalized_embeddings.eval()
+
+# 7. Visualizing the embeddings
+try:
+	# import t-SNE and matplotlib.pyplot
+	from sklearn.manifold import TSNE
+	import matplotlib.pyplot as plt
+	
+	%matplotlib inline
+	# Create the t-SNE object with 2 components, PCA initialization, and 5000 iterations
+	tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
+	# plot only so many words in the embedding
+	plot_only = 500
+	# fit the TSNE dimensionality reduction technique to the word vector embedding
+	low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
+	# get the words associated with the points
+	labels = [reverse_dictionary[i] for i in xrange(plot_only)]
+	# call the plotting function
+	plot_with_labels(low_dim_embs, labels)
+except ImportError:
+	print("Please install sklearn, matplotlib, and scipy to visualize embeddings.")
