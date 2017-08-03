@@ -52,5 +52,7 @@ with open(trainStancesPath, 'w') as trainStancesClean:
 
 
 # TODO's
+#Hay que hacer un POS taggging de las palabras para que se haga bien el lemmatizer
+# Dejar comentada la parte del codigo de stemming (para poder comparar más tarde)
 # - Quitar codigo javascript presente en el cuerpo de las noticias
 # BF_STATIC.timequeue.push(function () { document.getElementById(""update_article_update_time_4050373"").innerHTML = UI.dateFormat.get_formatted_date('2014-10-17 18:18:33 -0400', 'update'); });" (EN PRINCIPIO PODRIA ELIMINARSE A MANO)
