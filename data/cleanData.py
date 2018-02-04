@@ -90,7 +90,7 @@ def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False):
             writer.writerow(cleanBodyLine)
 
             # We log partially the process
-            if i%100== 0 and printLogs:
+            if i%1000== 0 and printLogs:
                 print(">>>> Iteration ", i, " of ", trainFile.shape[0])
                 print("0. Original Body: ")
                 print(line[textTag])

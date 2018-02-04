@@ -75,7 +75,8 @@ with open(trainStancesPath, 'wb') as trainStancesClean:
         writer.writerow(cleanLine)
 
         # We log partially the process
-        if i%100== 0:
+        # if i%100== 0:
+        if True:
             print ">>>> Iteration ", i, " of ", train_stances.shape[1]
             print ">>>> Processed line: ", str(cleanLine)
             print ">>>> Headline words ", headlineWords

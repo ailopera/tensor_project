@@ -7,13 +7,14 @@ from cleanData import cleanTextData
 #          outputFilePath:"./fnc-1-original/cleanDatasets/train_bodies_clean.csv"
 ### STANCES ###
 inputStancesPath = "./fnc-1-original/train_stances.csv"
+#inputStancesPath = "./fnc-1-original/train_stances_example.csv"
 outputStancesPath = "./fnc-1-original/cleanDatasets/train_stances_clean.csv"
 print(">>> Cleaning out Stances Data")
-cleanTextData(True,inputStancesPath, outputStancesPath, True)
+cleanTextData(True,inputStancesPath, outputStancesPath, False)
 
 
 # ### BODIES ###
-# inputBodiesPath = "./fnc-1-original/train_bodies.csv"
-# outputBodiesPath = "./fnc-1-original/cleanDatasets/train_bodies_clean.csv"
-# print(">>> Cleaning out Body Data")
-# cleanTextData(False,inputBodiesPath, outputBodiesPath, True)
+inputBodiesPath = "./fnc-1-original/train_bodies.csv"
+outputBodiesPath = "./fnc-1-original/cleanDatasets/train_bodies_clean.csv"
+print(">>> Cleaning out Body Data")
+cleanTextData(False,inputBodiesPath, outputBodiesPath, False)
