@@ -102,7 +102,7 @@ def cleanTextBodies(generateCSV):
                 print("##################################################")
 
             #Append the processed Body to list of processed texts and increase iterations
-            cleanedBodies.append(cleanBodyLine)
+            cleanedBodies.append(cleanBodyLine["articleBody"])
             i = i + 1 
     return cleanedBodies
     

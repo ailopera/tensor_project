@@ -2,11 +2,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import cleanBodies
 
+# Script ilustrativo de la creacion de Bag of Words 
+
 #INPUT_DIR = "./fnc-1-original/cleanDatasets/"
 #INPUT_DATA_PATH = 'train_bodies_clean.csv'
 cleanTrainBodies = cleanBodies.cleanTextBodies(False)
 MAX_FEATURES = 5000
-print("Creating the bag of words...\n")
+print(type(cleanTrainBodies)," | ",cleanTrainBodies[1], type(cleanTrainBodies[1]) )
+print(">>> Creating the bag of words...\n")
 
 
 # Initialize the "CountVectorizer" object, which is scikit-learn's bag of words tool
@@ -26,12 +29,13 @@ print(">>> train_data_features.shape: ", train_data_features.shape)
 
 #Take a look at the words in the vocabulary
 vocab = vectorizer.get_feature_names()
-print(">>> Feature names (Vocabulary)")
+print(">>> Feature names (Vocabulary)", vocab)
 
 # We can also print the counts of each word in the vocabulary
 #Sum up the counts of each vocabulary word
 dist = np.sum(train_data_features,axis=0)
 
 # For each on, print the vocabulary word and the number of times it appears in the training set
+print(">>> Count of occurrences of each word")
 for tag,count in zip(vocab,dist):
     print count,tag
