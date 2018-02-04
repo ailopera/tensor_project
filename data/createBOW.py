@@ -1,12 +1,12 @@
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
-import cleanBodies
+import cleanData
 
 # Script ilustrativo de la creacion de Bag of Words 
 
 #INPUT_DIR = "./fnc-1-original/cleanDatasets/"
 #INPUT_DATA_PATH = 'train_bodies_clean.csv'
-cleanTrainBodies = cleanBodies.cleanTextBodies(False)
+cleanTrainBodies = cleanBodies.cleanTextData(False)
 MAX_FEATURES = 5000
 print(type(cleanTrainBodies)," | ",cleanTrainBodies[1], type(cleanTrainBodies[1]) )
 print(">>> Creating the bag of words...\n")
