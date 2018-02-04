@@ -18,7 +18,7 @@ vectorizer = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None,
 
 # fittransform() does two functions:
 # - First, it fits the model an learns the vocabulary
-# - Second, it trahnsforms our training data into feature vectors.
+# - Second, it transforms our training data into feature vectors.
 # The input to fit_transform should be a list of strings
 train_data_features = vectorizer.fit_transform(cleanTrainBodies)
 
@@ -29,6 +29,7 @@ print(">>> train_data_features.shape: ", train_data_features.shape)
 
 #Take a look at the words in the vocabulary
 vocab = vectorizer.get_feature_names()
+vectorizer.
 print(">>> Feature names (Vocabulary)", vocab)
 
 # We can also print the counts of each word in the vocabulary
