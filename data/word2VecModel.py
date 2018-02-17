@@ -2,12 +2,16 @@ import pandas as pd
 import ntlk.data
 import logging
 from gensim.models import word2vec
+from bs4 import BeautifulSoup
+
 #Script que genera el modelo de word2Vec
 
 
 def news_to_wordlist(news, remove_stopwords=False):
     # This time we won't remove the stopwords and numbers
 
+    # 0. Remove HTML tags
+    body = BeatifulSoup(news).get_text() 
     # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
     # body = re.sub("[0-9]+", "NUM", news)
     # body = re.sub("[^a-zA-Z]", " ", body)
@@ -21,9 +25,9 @@ def news_to_wordlist(news, remove_stopwords=False):
     bodyWords = body.split()
     
     # 5. Remove stop-words from body
-    if remove_stopwords:
-        stopSet = set(stopwords.words("english"))
-        bodyWords = [word for word in bodyWords if not word in stopSet]
+    # if remove_stopwords:
+        # stopSet = set(stopwords.words("english"))
+        # bodyWords = [word for word in bodyWords if not word in stopSet]
         
     # # 6. POS tagging and Lemmatize body
     # posTagging = nltk.pos_tag(bodyWords)
