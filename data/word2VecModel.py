@@ -101,7 +101,7 @@ def makeWord2VecModel(trainStance):
     # Utilizaremos el punkTokenizer de nltk
 
     #Download the puntk tokenizer for sentence splitting
-    ntlk.download()
+    nltk.download()
 
     # Load the puntk tokenizer
     tokenizer = ntlk.data.load('tokenizer/punkt/english.pickle')
@@ -120,4 +120,4 @@ def makeWord2VecModel(trainStance):
     trainWord2Vec(sentences)
 
 if __name__ == "__main__":
-    cleanTextData(True)
+    makeWord2VecModel(True)
