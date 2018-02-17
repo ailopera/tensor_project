@@ -82,11 +82,12 @@ def trainWord2Vec(sentences):
     model.save(model_name)
 
 
-def makeWord2VecModel(textTag):
+def makeWord2VecModel(trainStance):
     basePath = "./fnc-1-original/"
     outputDir = basePath + "cleanDatasets/"
     inputFilePath = basePath + "train_bodies.csv" 
     inputUnlabeledFile = basePath + "test_stances_unlabeled.csv"
+    textTag = 'articleBody' if trainStance==False else 'Headline'
     # Leemos los ficheros etiquetados y sin etiquetar
     trainFile = pd.read_csv(inputFilePath,header=0,delimiter=",", quoting=1)
     print(">>> Read file ", inputFilePath , "shape:", trainFile.shape)
@@ -117,3 +118,6 @@ def makeWord2VecModel(textTag):
     print ("> First Sentence : ", sentences[0])
     print ("> Second Sentence : ", sentences[1])
     trainWord2Vec(sentences)
+
+if __name__ == "__main__":
+    cleanTextData(True)
