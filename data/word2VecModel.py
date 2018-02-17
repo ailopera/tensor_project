@@ -1,5 +1,5 @@
 import pandas as pd
-import ntlk.data
+import nltk.data
 import logging
 from gensim.models import word2vec
 from bs4 import BeautifulSoup
