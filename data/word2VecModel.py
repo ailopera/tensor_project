@@ -3,7 +3,9 @@ import nltk.data
 import logging
 from gensim.models import word2vec
 from bs4 import BeautifulSoup
-
+# from nltk import word_tokenize, sent_tokenize
+# nltk.download()
+tokenizer = nltk.data.load('nltk:tokenizers/punkt/english.pickle')
 #Script que genera el modelo de word2Vec
 
 
@@ -11,7 +13,7 @@ def news_to_wordlist(news, remove_stopwords=False):
     # This time we won't remove the stopwords and numbers
 
     # 0. Remove HTML tags
-    body = BeatifulSoup(news).get_text() 
+    body = BeautifulSoup(news).get_text() 
     # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
     # body = re.sub("[0-9]+", "NUM", news)
     # body = re.sub("[^a-zA-Z]", " ", body)
@@ -78,14 +80,18 @@ def trainWord2Vec(sentences):
 
     # It can be helpful to create a meaningful model name and
     # save the model for later use. You can load it later using Word2Vec.load()
-    model_name = "300features_40minwords_10context"
+    model_name = "300features_40minwords_10contextBODIES"
     model.save(model_name)
 
 
 def makeWord2VecModel(trainStance):
     basePath = "./fnc-1-original/"
     outputDir = basePath + "cleanDatasets/"
-    inputFilePath = basePath + "train_bodies.csv" 
+    if trainStance:
+        inputFilePath = basePath + "train_stances.csv" 
+    else:
+        inputFilePath = basePath + "train_bodies.csv" 
+    
     inputUnlabeledFile = basePath + "test_stances_unlabeled.csv"
     textTag = 'articleBody' if trainStance==False else 'Headline'
     # Leemos los ficheros etiquetados y sin etiquetar
@@ -101,10 +107,10 @@ def makeWord2VecModel(trainStance):
     # Utilizaremos el punkTokenizer de nltk
 
     #Download the puntk tokenizer for sentence splitting
-    nltk.download()
+    #nltk.download('puntk')
 
     # Load the puntk tokenizer
-    tokenizer = ntlk.data.load('tokenizer/punkt/english.pickle')
+    #tokenizer = nltk.data.load('tokenizer/punkt/english.pickle')
 
     sentences = []
     print("> Parsing sentences from training set")
@@ -120,4 +126,4 @@ def makeWord2VecModel(trainStance):
     trainWord2Vec(sentences)
 
 if __name__ == "__main__":
-    makeWord2VecModel(True)
+    makeWord2VecModel(False)
