@@ -1,12 +1,39 @@
 import pandas as pd
+import re
 import nltk.data
 import logging
 from gensim.models import word2vec
 from bs4 import BeautifulSoup
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+WordNetLemmatizer = WordNetLemmatizer()
+
 # from nltk import word_tokenize, sent_tokenize
 # nltk.download()
 tokenizer = nltk.data.load('nltk:tokenizers/punkt/english.pickle')
 #Script que genera el modelo de word2Vec
+
+
+
+# AUXILIAR FUNCTIONS #
+# Determines whether a tag belongs to a verb
+def isVerbTag(tag):
+    return tag in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
+
+# Does the lemmatizing of a specific pos recognition (word, tag)
+# NOTA: Tenemos que hacer un postagging previo, ya que necesitamos "ayudar" al lemmatizer
+# y decirle aquellas palabras que son verbos
+def lemmatizeWord(posTag):
+    word = posTag[0]
+    tag = posTag[1]
+    # print "word: ", word, " tag: ", tag
+    if isVerbTag(tag):
+        #print word," ES UN VERBO --- lemmatize: ", WordNetLemmatizer.lemmatize(word,pos='v')
+        return WordNetLemmatizer.lemmatize(word,pos='v')
+    else:
+        #print word," ES OTRA PALABRA"
+        return WordNetLemmatizer.lemmatize(word)
+
 
 
 def news_to_wordlist(news, remove_stopwords=False):
@@ -32,12 +59,13 @@ def news_to_wordlist(news, remove_stopwords=False):
         # bodyWords = [word for word in bodyWords if not word in stopSet]
         
     # # 6. POS tagging and Lemmatize body
-    # posTagging = nltk.pos_tag(bodyWords)
-    # # bodyWords = list(map(WordNetLemmatizer.lemmatize,bodyWords))
-    # bodyLemmatized = []
-    # for taggedWord in posTagging:
-    #     bodyLemmatized.append(lemmatizeWord(taggedWord))
-    
+    posTagging = nltk.pos_tag(bodyWords)
+    bodyWords = list(map(WordNetLemmatizer.lemmatize,bodyWords))
+    bodyLemmatized = []
+    for taggedWord in posTagging:
+        bodyLemmatized.append(lemmatizeWord(taggedWord))
+    bodyWords = bodyLemmatized
+
     #Returns a list of words
     return(bodyWords)
 
@@ -65,7 +93,7 @@ def trainWord2Vec(sentences):
 
     # Set values for various parameters
     num_features = 300  # Word vector dimensionality
-    min_word_count = 40 # Minimum word count
+    min_word_count = 15 # Minimum word count
     num_workers = 4 # Number of threads to run in parallel
     context = 10 # Context window size
     downsampling = 1e-3 #Downsample setting for frequent words 
