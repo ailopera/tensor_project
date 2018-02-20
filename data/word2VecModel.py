@@ -15,8 +15,8 @@ def news_to_wordlist(news, remove_stopwords=False):
     # 0. Remove HTML tags
     body = BeautifulSoup(news).get_text() 
     # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
-    # body = re.sub("[0-9]+", "NUM", news)
-    # body = re.sub("[^a-zA-Z]", " ", body)
+    body = re.sub("[0-9]+", "NUM", news)
+    body = re.sub("[^a-zA-Z]", " ", body)
     
     # 2. Convert to lower case all characters in body
     body = body.lower()
