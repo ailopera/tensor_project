@@ -1,8 +1,10 @@
+import sys
 import numpy as np
 import gensim
 from gensim.models import Word2Vec
 import word2VecModel
 from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
 
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
 # (si forman parte del vocabulario del modelo)
@@ -34,7 +36,7 @@ def getAvgFeatureVecs(news, model, num_features):
 	counter = 0
 
 	# Reservamos espacio para un array de dos dimensiones, por velocidad
-	newsFeatureVecs = np.zeros((len(news)), num_features, dtype="float32")
+	newsFeatureVecs = np.zeros((len(news), num_features), dtype="float32")
 
 	# Iteramos sobre las noticias
 	for report in news:
@@ -49,15 +51,17 @@ def getAvgFeatureVecs(news, model, num_features):
 	return newsFeatureVecs
 
 
-def makeVectorAverage():
+if __name__ == "__main__":
 	basePath = "./fnc-1-original/"
-	
-	model = gensim.models.Word2Vec.load("300features_40minwords_10contextBODIES")
+	num_features = 300
+	model_name = sys.argv[1]
+	model = Word2Vec.load(model_name)
 	#Primero las convertimos en lista de palabras
 	trainBodiesPath = basePath + "train_stances.csv"
 	trainBodies = pd.read_csv(trainBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_train_news = []
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
+	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
 	for report in trainBodies["Headline"]:
 		clean_train_news.append(word2VecModel.news_to_wordlist(report,remove_stopwords=True))
 

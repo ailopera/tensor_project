@@ -2,6 +2,7 @@ import pandas as pd
 import re
 import nltk.data
 import logging
+#from gensim import models
 from gensim.models import word2vec
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
@@ -40,7 +41,7 @@ def news_to_wordlist(news, remove_stopwords=False):
     # This time we won't remove the stopwords and numbers
 
     # 0. Remove HTML tags
-    body = BeautifulSoup(news).get_text() 
+    body = BeautifulSoup(news,"html.parser").get_text() 
     # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
     body = re.sub("[0-9]+", "NUM", news)
     body = re.sub("[^a-zA-Z]", " ", body)
@@ -88,7 +89,7 @@ def news_to_sentences(news, tokenizer, remove_stopwords=False):
     # So this returns a list of lists
     return sentences
 
-def trainWord2Vec(sentences):
+def trainWord2Vec(sentences,archiveTag):
     logging.basicConfig(format='%s(asctime)s: %(levelname)s : %(message)s', level=logging.INFO)
 
     # Set values for various parameters
@@ -108,17 +109,19 @@ def trainWord2Vec(sentences):
 
     # It can be helpful to create a meaningful model name and
     # save the model for later use. You can load it later using Word2Vec.load()
-    model_name = "300features_40minwords_10contextBODIES"
+    model_name = str(num_features) + "features_" + str(min_word_count) + "minwords_" + str(context) + "context" + archiveTag
     model.save(model_name)
-
+    #models.Word2Vec.save_word2vec_format(model_name)
 
 def makeWord2VecModel(trainStance):
     basePath = "./fnc-1-original/"
     outputDir = basePath + "cleanDatasets/"
     if trainStance:
         inputFilePath = basePath + "train_stances.csv" 
+        fileTag = "STANCES"
     else:
         inputFilePath = basePath + "train_bodies.csv" 
+        fileTag = "BODIES"
     
     inputUnlabeledFile = basePath + "test_stances_unlabeled.csv"
     textTag = 'articleBody' if trainStance==False else 'Headline'
@@ -151,7 +154,9 @@ def makeWord2VecModel(trainStance):
 
     print ("> First Sentence : ", sentences[0])
     print ("> Second Sentence : ", sentences[1])
-    trainWord2Vec(sentences)
+    trainWord2Vec(sentences, fileTag)
 
 if __name__ == "__main__":
-    makeWord2VecModel(False)
+  #  makeWord2VecModel(False) # Para entrenar el fichero con los cuerpos de noticias
+   
+   makeWord2VecModel(True) # Para entrenar el fichero con los titulares de noticias
