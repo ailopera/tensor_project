@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import gensim
-from gensim.models import Word2Vec
+from gensim.models import Word2Vec, KeyedVectors
 import word2VecModel
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
@@ -15,7 +15,7 @@ def makeFeatureVec(words, model, num_features):
 	nwords = 0.
 	
 	#Indexwords is a list that contains the names of the words in the model's vocabulary. Convert it to a set, for speed
-	index2word_set = set(model.index2word)
+	index2word_set = set(model.wv.index2word)
 
 	#Loop over each word in the review and, if it is in the model's vocabulary, 
 	# add its feature vector to the total
@@ -42,7 +42,7 @@ def getAvgFeatureVecs(news, model, num_features):
 	for report in news:
 		# Print a status message every 1000th new
 		if counter%1000. == 0.:
-			print("> Report %d of %d", counter, len(news))
+			print("> Report", counter," of ", len(news))
 		
 		# Call thhe function (defined above) that makes average feature vectors
 		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features)
@@ -55,14 +55,20 @@ if __name__ == "__main__":
 	basePath = "./fnc-1-original/"
 	num_features = 300
 	model_name = sys.argv[1]
+	
+	#model = KeyedVectors.load_word2vec_format(model_name)
 	model = Word2Vec.load(model_name)
+	
 	#Primero las convertimos en lista de palabras
 	trainBodiesPath = basePath + "train_stances.csv"
 	trainBodies = pd.read_csv(trainBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_train_news = []
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
-	for report in trainBodies["Headline"]:
+	#for report in trainBodies['Headline']:
+
+    	for index,line in trainBodies.iterrows():
+		report = line['Headline']
 		clean_train_news.append(word2VecModel.news_to_wordlist(report,remove_stopwords=True))
 
 	trainDataVecs = getAvgFeatureVecs(clean_train_news, model, num_features)
@@ -71,7 +77,9 @@ if __name__ == "__main__":
 	print("> Creating average feature vecs for test reviews")
 	testBodies = basePath + "test_stances.csv"
 	clean_test_news = []
-	for report in testBodies["Headline"]:
+	#for report in testBodies['Headline']:
+    	for index,line in trainBodies.iterrows():
+		report = line['Headline']
 		clean_test_news.append(word2VecModel.news_to_wordlist(report,remove_stopwords=True))
 
 	testDataVecs = getAvgFeatureVecs(clean_test_news, model, num_features)
