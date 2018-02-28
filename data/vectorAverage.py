@@ -52,7 +52,7 @@ def getAvgFeatureVecs(news, model, num_features):
 
 
 if __name__ == "__main__":
-	basePath = "./fnc-1-original/"
+	basePath = "./fnc-1-original/cleanDatasets"
 	num_features = 300
 	model_name = sys.argv[1]
 	
