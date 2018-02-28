@@ -67,8 +67,8 @@ if __name__ == "__main__":
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
 	#for report in trainBodies['Headline']:
 
-        for index,line in trainBodies.iterrows():
-	        report = line['Headline']
+	for index,line in trainBodies.iterrows():
+		report = line['Headline']
 		clean_train_news.append(word2VecModel.news_to_wordlist(report,remove_stopwords=True))
 
 	trainDataVecs = getAvgFeatureVecs(clean_train_news, model, num_features)
@@ -78,8 +78,8 @@ if __name__ == "__main__":
 	testBodies = basePath + "test_stances.csv"
 	clean_test_news = []
 	#for report in testBodies['Headline']:
-        for index,line in trainBodies.iterrows():
-                report = line['Headline']
+	for index,line in testBodies.iterrows():
+		report = line['Headline']
 		clean_test_news.append(word2VecModel.news_to_wordlist(report,remove_stopwords=True))
 
 	testDataVecs = getAvgFeatureVecs(clean_test_news, model, num_features)
