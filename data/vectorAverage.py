@@ -75,7 +75,8 @@ if __name__ == "__main__":
 
 	# Hacemos lo mismo con los datos de test
 	print("> Creating average feature vecs for test reviews")
-	testBodies = basePath + "test_stances.csv"
+	testBodiesPath = basePath + "test_stances.csv"
+	testBodies = pd.read_csv(testBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_test_news = []
 	#for report in testBodies['Headline']:
 	for index,line in testBodies.iterrows():
