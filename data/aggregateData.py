@@ -56,16 +56,16 @@ if __name__ == "__main__":
         for index, line in cleanedStanceData.iterrows():
             # Buscamos el cuerpo asociado
             bodyId = line["Body ID"]
-            associatedBody = cleanedBodyData.loc[iris_data['Body ID'] == bodyId, 'Body ID']
-            if len(associatedBody) !== 1:
+            associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId, 'Body ID']
+            if len(associatedBody) != 1:
                 print(">> ERROR: He encontrado ", len(associatedBody), " elementos")
             else: 
                 aggregatedLine = {
                     "Headline": line["Headline"],
-                    "ArticleBody": associatedBody[0]["ArticleID"]
-                    "Stance": line["Stance"]
-                    "BodyIDS": bodyId
-                    "BodyIDB": associatedBody[0]["Body ID"]
+                    "ArticleBody": associatedBody[0]["ArticleID"],
+                    "Stance": line["Stance"],
+                    "BodyIDS": bodyId,
+                    "BodyIDB": associatedBody[0]["Body ID"],
                 }
                 # Escribimos la línea en el fichero
                 writer.writerow(aggregatedLine)
