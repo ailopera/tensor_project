@@ -4,6 +4,7 @@
 import pandas as pd
 import sys
 import cleanData
+import csv
 
 if __name__ == "__main__":
     
@@ -41,11 +42,11 @@ if __name__ == "__main__":
     cleanedStanceData = pd.read_csv(outputStanceFile, header=0,delimiter=",", quoting=1)
     cleanedBodyData = pd.read_csv(outputBodyFile, header=0,delimiter=",", quoting=1)
 
-    aggregatedFile = outputPath + "_aggregated.csv"
+    aggregatedFile = outputPath + baseFilename + "_data_aggregated.csv"
     
     # bodyFileDict = loadBodyDict(cleanedBodyData)
     print(">> Escribiendo resultados en ", aggregatedFile)
-    with open(aggregatedFile, 'wb') as aggregatedData:
+    with open(aggregatedFile, 'w') as aggregatedData:
         fieldnames = ["Headline","ArticleBody", "Stance", "BodyIDS","BodyIDB"]
         
         writer = csv.DictWriter(aggregatedData, fieldnames=fieldnames)
