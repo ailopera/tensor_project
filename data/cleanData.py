@@ -46,7 +46,7 @@ def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cle
     cleanedBodies = []
 
     # Open a new file to write the results
-    with open(outputFilePath, 'wb') as trainBodiesClean:
+    with open(outputFilePath, 'w') as trainBodiesClean:
         fieldnames = ["Headline","Body ID","Stance"] if stanceData else ['Body ID', 'articleBody']
         writer = csv.DictWriter(trainBodiesClean, fieldnames=fieldnames)
         writer.writeheader()
