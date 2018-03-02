@@ -31,7 +31,7 @@ def lemmatizeWord(posTag):
 # Body -> textTag: "articleBody"
 #          outputFilePath:"./fnc-1-original/cleanDatasets/train_bodies_clean.csv"
 
-def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False):
+def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cleanStopWords = True):
     # Read the dataset
     #INPUT_FILE = "train_bodies_example.csv"
     # INPUT_FILE = "train_bodies.csv"
@@ -67,9 +67,10 @@ def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False):
             # 4. Tokenize body
             bodyWords = body.split()
             
-            # 5. Remove stop-words from body
-            stopSet = set(stopwords.words("english"))
-            bodyWords = [word for word in bodyWords if not word in stopSet]
+            # 5. Remove stop-words from body, if specified
+            if cleanStopWords:
+                stopSet = set(stopwords.words("english"))
+                bodyWords = [word for word in bodyWords if not word in stopSet]
             
             # 6. POS tagging and Lemmatize body
             posTagging = nltk.pos_tag(bodyWords)
