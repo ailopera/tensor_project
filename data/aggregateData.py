@@ -1,38 +1,36 @@
 # Pequeno script que hace un agregado de los datos de entrada, 
 # para tratarlos más adelante
 
-import pandas as pandas
+import pandas as pd
 import sys
 import cleanData
 
 if __name__ == "__main__":
     
     baseFilename = sys.argv[1]
-    basePath = "./fnc-1-original/"
-
     if baseFilename == "competition":
-        filePath = basePath + "competition_test_$file"
+        filePath = "competition_test_$file"
     elif baseFilename == "train":
-        filePath = basePath + "train_$file"
+        filePath = "train_$file"
     elif baseFilename == "test":
-        filePath = basePath + "test_$file"
+        filePath = "test_$file"
     else:
         print("> Wrong name supplied. Must be competition, train or test")
         exit()
 
-    
-    outputPath = basePath + "/aggregatedDatasets/"
+    inputPath = "./fnc-1-original/"
+    outputPath = inputPath + "/aggregatedDatasets/"
 
     # Cargamos ficheros de stances y bodies 
     stancesPrefixPath = filePath.replace('$file','stances')
     bodiesPrefixPath = filePath.replace('$file','bodies')
 
     #Limpiamos fichero de bodies y stances
-    inputBodyFile = bodiesPrefixPath + ".csv"
-    inputStanceFile = stancesPrefixPath + ".csv"
+    inputBodyFile = inputPath + bodiesPrefixPath + ".csv"
+    inputStanceFile = inputPath + stancesPrefixPath + ".csv"
     
-    outputBodyFile = bodiesPrefixPath + "_clean.csv"
-    outputStanceFile = stancesPrefixPath + "_clean.csv"
+    outputBodyFile = outputPath + bodiesPrefixPath + "_clean.csv"
+    outputStanceFile = outputPath + stancesPrefixPath + "_clean.csv"
     
     print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
     cleanData.cleanTextData(False,inputBodyFile,outputBodyFile,True)
