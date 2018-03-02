@@ -8,18 +8,20 @@ import cleanData
 if __name__ == "__main__":
     
     baseFilename = sys.argv[1]
+    basePath = "./fnc-1-original/"
+
     if baseFilename == "competition":
-        filePath = "competition_test_$file"
+        filePath = basePath + "competition_test_$file"
     elif baseFilename == "train":
-        filePath = "train_$file"
+        filePath = basePath + "train_$file"
     elif baseFilename == "test":
-        filePath = "test_$file"
+        filePath = basePath + "test_$file"
     else:
         print("> Wrong name supplied. Must be competition, train or test")
         exit()
 
-    basePath = "./fnc-1-original"
-    outputPath = basePath + "/aggregatedDatasets"
+    
+    outputPath = basePath + "/aggregatedDatasets/"
 
     # Cargamos ficheros de stances y bodies 
     stancesPrefixPath = filePath.replace('$file','stances')
@@ -41,10 +43,10 @@ if __name__ == "__main__":
     cleanedStanceData = pd.read_csv(outputStanceFile, header=0,delimiter=",", quoting=1)
     cleanedBodyData = pd.read_csv(outputBodyFile, header=0,delimiter=",", quoting=1)
 
-    aggregatedFile = filePath + "_aggregated.csv"
+    aggregatedFile = outputPath + "_aggregated.csv"
     
     # bodyFileDict = loadBodyDict(cleanedBodyData)
-
+    print(">> Escribiendo resultados en ", aggregatedFile)
     with open(aggregatedFile, 'wb') as aggregatedData:
         fieldnames = ["Headline","ArticleBody", "Stance", "BodyIDS","BodyIDB"]
         
