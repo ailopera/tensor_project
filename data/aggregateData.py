@@ -33,10 +33,10 @@ if __name__ == "__main__":
     outputBodyFile = outputPath + bodiesPrefixPath + "_clean.csv"
     outputStanceFile = outputPath + stancesPrefixPath + "_clean.csv"
     
-    print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
-    cleanData.cleanTextData(False,inputBodyFile,outputBodyFile,True)
-    print(">> Limpiando fichero de bodies ", inputStanceFile, " y generando fichero ", outputStanceFile)
-    cleanData.cleanTextData(True,inputStanceFile,outputStanceFile,True)
+    # print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
+    # cleanData.cleanTextData(False,inputBodyFile,outputBodyFile,True)
+    # print(">> Limpiando fichero de bodies ", inputStanceFile, " y generando fichero ", outputStanceFile)
+    # cleanData.cleanTextData(True,inputStanceFile,outputStanceFile,True)
 
     # Abrimos el fichero de stances y lo vamos recorriendo para hacer el agregado de los datos
     cleanedStanceData = pd.read_csv(outputStanceFile, header=0,delimiter=",", quoting=1)
