@@ -42,6 +42,9 @@ if __name__ == "__main__":
     cleanedStanceData = pd.read_csv(outputStanceFile, header=0,delimiter=",", quoting=1)
     cleanedBodyData = pd.read_csv(outputBodyFile, header=0,delimiter=",", quoting=1)
 
+    # Creamos un indice para poder buscar en base a el mas adelante
+    cleanedBodyData.set_index("Body ID")
+
     aggregatedFile = outputPath + baseFilename + "_data_aggregated.csv"
     
     # bodyFileDict = loadBodyDict(cleanedBodyData)
@@ -55,7 +58,8 @@ if __name__ == "__main__":
         for index, line in cleanedStanceData.iterrows():
             # Buscamos el cuerpo asociado
             bodyId = line["Body ID"]
-            associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId, 'Body ID']
+            # associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId, 'Body ID']
+            associatedBody = cleanedBodyData.loc[bodyId]
             if len(associatedBody) != 1:
                 print(">> ERROR: He encontrado ", len(associatedBody), " elementos")
             else: 

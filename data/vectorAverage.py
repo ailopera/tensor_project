@@ -52,7 +52,7 @@ def getAvgFeatureVecs(news, model, num_features):
 
 
 if __name__ == "__main__":
-	basePath = "./fnc-1-original/cleanDatasets"
+	basePath = "./fnc-1-original/aggregatedDatasets"
 	num_features = 300
 	model_name = sys.argv[1]
 	
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 	model = Word2Vec.load(model_name)
 	
 	#Primero las convertimos en lista de palabras
-	trainBodiesPath = basePath + "train_stances.csv"
+	trainBodiesPath = basePath + "train_data_aggregated.csv"
 	trainBodies = pd.read_csv(trainBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_train_news = []
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
 	# Hacemos lo mismo con los datos de test
 	print("> Creating average feature vecs for test reviews")
-	testBodiesPath = basePath + "test_stances.csv"
+	testBodiesPath = basePath + "test_data_aggregated.csv"
 	testBodies = pd.read_csv(testBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_test_news = []
 	#for report in testBodies['Headline']:
