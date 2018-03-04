@@ -53,7 +53,7 @@ def getAvgFeatureVecs(news, model, num_features):
 
 
 if __name__ == "__main__":
-	basePath = "./fnc-1-original/aggregatedDatasets"
+	basePath = "./fnc-1-original/aggregatedDatasets/"
 	num_features = 300
 	stances_model_name = sys.argv[1]
 	bodies_model_name = sys.argv[2]
@@ -73,12 +73,12 @@ if __name__ == "__main__":
 	print(">> Generating word2vec model and applying vector average for train data...")
 	for index,line in trainBodies.iterrows():
 		headline = line['Headline']
-		articleBody = line['articleBody']
+		articleBody = line['ArticleBody']
 		clean_train_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
 		clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
-	trainDataVecs['headline'] = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
-	trainDataVecs['articleBody'] = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
+	trainDataVecs['Headline'] = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
+	trainDataVecs['ArticleBody'] = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
 
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec model and applying vector average for test data...")
@@ -90,11 +90,11 @@ if __name__ == "__main__":
 	#for report in testBodies['Headline']:
 	for index,line in testBodies.iterrows():
 		headline = line['Headline']
-		articleBody = line['articleBody']
+		articleBody = line['ArticleBody']
 		clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
 		clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
-	testDataVecs["articleBody"] = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
+	testDataVecs["ArticleBody"] = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
 	testDataVecs["Headline"] = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
 
 
