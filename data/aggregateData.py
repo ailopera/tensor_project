@@ -61,19 +61,20 @@ if __name__ == "__main__":
             # associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId, 'Body ID']
             associatedBody = cleanedBodyData.loc[bodyId]
             print(">>> type(associatedBody): ", type(associatedBody))
-            if len(associatedBody) == 0:
-                print(">> ERROR: He encontrado ", len(associatedBody), " elementos")
-                print(">> Associated Body: ", associatedBody)
-            else: 
-                print(">> Associated Body: ", associatedBody)
-                aggregatedLine = {
-                    "Headline": line["Headline"],
-                    "ArticleBody": associatedBody[0]["ArticleID"],
-                    "Stance": line["Stance"],
-                    "BodyIDS": bodyId,
-                    "BodyIDB": associatedBody[0]["Body ID"],
-                }
-                # Escribimos la línea en el fichero
-                writer.writerow(aggregatedLine)
-                print(">> ROW: ", aggregatedLine)
+            # if len(associatedBody) == 0:
+            #     print(">> ERROR: He encontrado ", len(associatedBody), " elementos")
+            #     print(">> Associated Body: ", associatedBody)
+            # else: 
+            print(">> Associated Body: ", associatedBody)
+            aggregatedLine = {
+                "Headline": line["Headline"],
+                "ArticleBody": associatedBody["ArticleID"],
+                "Stance": line["Stance"],
+                "BodyIDS": bodyId,
+                "BodyIDB": associatedBody["Body ID"],
+            }
+            # Escribimos la línea en el fichero
+            writer.writerow(aggregatedLine)
+            print(">> ROW: ", aggregatedLine)
+
             print("-------------------------------------")
