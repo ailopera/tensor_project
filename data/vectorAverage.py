@@ -26,6 +26,10 @@ def makeFeatureVec(words, model, num_features):
 			featureVec = np.add(featureVec, model[word])
 	
 	# Divide the result by the number of words to get the average
+	print("[DEBUG] isInfinite featureVec: ", np.isfinite(featureVec).all())
+	print("[DEBUG] isInfinite nwords: ", np.isfinite(nwords).all())
+	print("[DEBUG] nwords: ", nwords)
+	print("[DEBUG] featureVec: ", featureVec)
 	featureVec = np.divide(featureVec, nwords)
 	return featureVec
 
@@ -63,8 +67,8 @@ if __name__ == "__main__":
 	stances_model = Word2Vec.load(stances_model_name)
 	
 	#Primero las convertimos en lista de palabras
-	trainBodiesPath = basePath + "train_data_aggregated.csv"
-	trainBodies = pd.read_csv(trainBodiesPath,header=0,delimiter=",", quoting=1)
+	trainDataPath = basePath + "train_data_aggregated.csv"
+	trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 	clean_train_headlines = []
 	clean_train_articleBodies = []
 	trainDataVecs = {}
@@ -72,7 +76,7 @@ if __name__ == "__main__":
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
 	#for report in trainBodies['Headline']:
 	print(">> Generating word2vec model and applying vector average for train data...")
-	for index,line in trainBodies.iterrows():
+	for index,line in trainData.iterrows():
 		headline = line['Headline']
 		articleBody = line['ArticleBody']
 		clean_train_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
@@ -83,13 +87,13 @@ if __name__ == "__main__":
 
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec model and applying vector average for test data...")
-	testBodiesPath = basePath + "test_data_aggregated.csv"
-	testBodies = pd.read_csv(testBodiesPath,header=0,delimiter=",", quoting=1)
+	testDataPath = basePath + "test_data_aggregated.csv"
+	testData = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 	clean_test_articleBodies = []
 	clean_test_headlines = []
 	testDataVecs = {}
 	#for report in testBodies['Headline']:
-	for index,line in testBodies.iterrows():
+	for index,line in testData.iterrows():
 		headline = line['Headline']
 		articleBody = line['ArticleBody']
 		clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
@@ -103,22 +107,24 @@ if __name__ == "__main__":
 	#TODO: falta tener en cuenta los cuerpos de la noticia
 	forest = RandomForestClassifier(n_estimators=100)
 	print("> Fitting a random fores to labeled training data...")
-	forest = forest.fit(trainDataVecs, train["Stance"])
+	forest = forest.fit(trainDataVecs, trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
 	prediction = forest.predict(testDataVecs)
 
 	#  Evaluate the results
-	train_accuracy = accuracy_score(train['Stance'])
-	test_accuracy = accuracy_score(test['Stance'])
-	confussion_matrix = confusion_matrix(test['Stance'], prediction)
+	train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
+	test_accuracy = accuracy_score(testData['Stance'], prediction)
+	confussion_matrix = confusion_matrix(testData['Stance'], prediction)
 
 	print(">> Accuracy achieved with the train set: ", train_accuracy)
 	print(">> Accuracy achieved with the test set: ", test_accuracy)
 	print(">> Confussion matrix: ", confusion_matrix)
 
 	# Write the test results
+	outputFile = "Word2Vec_AverageVectors.csv"
+	print(">> Generating output file : ", outputFile)
 	output = pd.Dataframe(data={"id": test["id"], "stance": prediction})
-	output.to_csv("Word2Vec_AverageVectors.csv", index=False, quoting=3)
+	output.to_csv(outputFile, index=False, quoting=3)
 
