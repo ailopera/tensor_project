@@ -43,7 +43,7 @@ if __name__ == "__main__":
     cleanedBodyData = pd.read_csv(outputBodyFile, header=0,delimiter=",", quoting=1)
 
     # Creamos un indice para poder buscar en base a el mas adelante
-    cleanedBodyData.set_index("Body ID")
+    #cleanedBodyData.set_index("Body ID")
 
     aggregatedFile = outputPath + baseFilename + "_data_aggregated.csv"
     
@@ -59,7 +59,8 @@ if __name__ == "__main__":
             # Buscamos el cuerpo asociado
             bodyId = line["Body ID"]
             # associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId, 'Body ID']
-            associatedBody = cleanedBodyData.loc[bodyId]
+            #associatedBody = cleanedBodyData.loc[bodyId]
+            associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId]
             print(">>> type(associatedBody): ", type(associatedBody))
             # if len(associatedBody) == 0:
             #     print(">> ERROR: He encontrado ", len(associatedBody), " elementos")
@@ -68,7 +69,7 @@ if __name__ == "__main__":
             print(">> Associated Body: ", associatedBody)
             aggregatedLine = {
                 "Headline": line["Headline"],
-                "ArticleBody": associatedBody["ArticleID"],
+                "ArticleBody": associatedBody["articleBody"],
                 "Stance": line["Stance"],
                 "BodyIDS": bodyId,
                 "BodyIDB": associatedBody["Body ID"],
