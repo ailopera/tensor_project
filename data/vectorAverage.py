@@ -55,11 +55,12 @@ def getAvgFeatureVecs(news, model, num_features):
 if __name__ == "__main__":
 	basePath = "./fnc-1-original/aggregatedDatasets"
 	num_features = 300
-	stances_model = sys.argv[1]
-	bodies_model = sys.argv[2]
+	stances_model_name = sys.argv[1]
+	bodies_model_name = sys.argv[2]
 	
 	#model = KeyedVectors.load_word2vec_format(model_name)
-	model = Word2Vec.load(model_name)
+	bodies_model = Word2Vec.load(bodies_model_name)
+	stances_model = Word2Vec.load(stances_model_name)
 	
 	#Primero las convertimos en lista de palabras
 	trainBodiesPath = basePath + "train_data_aggregated.csv"
@@ -77,7 +78,7 @@ if __name__ == "__main__":
 		clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
 	trainDataVecs['headline'] = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
-	trainDataVecs['articleBody'] = getAvgFeatureVecs(clean_train_, bodies_model, num_features)
+	trainDataVecs['articleBody'] = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
 
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec model and applying vector average for test data...")
