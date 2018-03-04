@@ -60,7 +60,8 @@ if __name__ == "__main__":
             bodyId = line["Body ID"]
             # associatedBody = cleanedBodyData.loc[cleanedBodyData['Body ID'] == bodyId, 'Body ID']
             associatedBody = cleanedBodyData.loc[bodyId]
-            if len(associatedBody) != 1:
+            print(">>> type(associatedBody): ", type(associatedBody))
+            if len(associatedBody) == 0:
                 print(">> ERROR: He encontrado ", len(associatedBody), " elementos")
                 print(">> Associated Body: ", associatedBody)
             else: 
@@ -74,4 +75,5 @@ if __name__ == "__main__":
                 }
                 # Escribimos la línea en el fichero
                 writer.writerow(aggregatedLine)
+                print(">> ROW: ", aggregatedLine)
             print("-------------------------------------")
