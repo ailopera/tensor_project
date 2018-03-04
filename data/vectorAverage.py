@@ -67,6 +67,7 @@ if __name__ == "__main__":
 	trainBodies = pd.read_csv(trainBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_train_headlines = []
 	clean_train_articleBodies = []
+	trainDataVecs = {}
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
 	#for report in trainBodies['Headline']:
@@ -86,7 +87,7 @@ if __name__ == "__main__":
 	testBodies = pd.read_csv(testBodiesPath,header=0,delimiter=",", quoting=1)
 	clean_test_articleBodies = []
 	clean_test_headlines = []
-
+	testDataVecs = {}
 	#for report in testBodies['Headline']:
 	for index,line in testBodies.iterrows():
 		headline = line['Headline']
