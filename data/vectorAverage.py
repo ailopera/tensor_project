@@ -107,12 +107,15 @@ if __name__ == "__main__":
 	#TODO: falta tener en cuenta los cuerpos de la noticia
 	forest = RandomForestClassifier(n_estimators=100)
 	print("> Fitting a random fores to labeled training data...")
-	features = ["ArticleBody", "Headline"]
-	forest = forest.fit(trainDataVecs[features], trainData["Stance"])
+	
+	trainDataFrame = pd.DataFrame(trainDataVecs.items(), columns=['Headline', 'ArticleBody'])
+	features = trainDataFrame.columns[:2]
+	forest = forest.fit(trainDataFrame[features], trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
-	prediction = forest.predict(testDataVecs[features])
+	testDataFrame = pd.DataFrame(testDataVecs.items(), columns=['Headline', 'ArticleBody'])
+	prediction = forest.predict(testDataFrame[features])
 
 	#  Evaluate the results
 	train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
