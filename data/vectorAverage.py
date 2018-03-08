@@ -108,13 +108,14 @@ if __name__ == "__main__":
 	forest = RandomForestClassifier(n_estimators=100)
 	print("> Fitting a random fores to labeled training data...")
 	
-	trainDataFrame = pd.DataFrame(trainDataVecs.items(), columns=['Headline', 'ArticleBody'])
-	features = trainDataFrame.columns[:2]
+	trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
+	# features = trainDataFrame.columns[:2]
+	features = ['Headline', 'ArticleBody']
 	forest = forest.fit(trainDataFrame[features], trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
-	testDataFrame = pd.DataFrame(testDataVecs.items(), columns=['Headline', 'ArticleBody'])
+	testDataFrame = pd.DataFrame.from_dict(testDataVecs)
 	prediction = forest.predict(testDataFrame[features])
 
 	#  Evaluate the results
