@@ -89,8 +89,8 @@ if __name__ == "__main__":
 	# 	clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
 	num_cores = multiprocessing.cpu_count()
-	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['Headline']) for index,line in trainData.iterrows()))
-	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['ArticleBody']) for index,line in trainData.iterrows()))
+	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in trainData['Headline'])
+	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
 
 	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
 	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
@@ -110,8 +110,8 @@ if __name__ == "__main__":
 	# 	clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
 	# 	clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
-	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['Headline']) for index,line in testData.iterrows()))
-	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['ArticleBody']) for index,line in testData.iterrows()))
+	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in testData['Headline'])
+	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
 	
 	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
