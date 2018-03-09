@@ -125,16 +125,18 @@ if __name__ == "__main__":
 	print(">> TRAIN Lens: ArticleBody", len(trainDataVecsArticleBody), " Headline: ", len(trainDataVecsHeadline))
 	print(">> TEST Lens: ArticleBody", len(testDataVecsArticleBody), " Headline: ", len(testDataVecsHeadline))
 	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
-	# trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
+	trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
 	# features = trainDataFrame.columns[:2]
 	features = ['Headline', 'ArticleBody']
-	forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
+	# forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
+	forest = forest.fit(trainDataFrame, trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
 	# testDataFrame = pd.DataFrame.from_dict(testDataVecs)
-	# testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
-	prediction = forest.predict(testDataVecsArticleBody)
+	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
+	# prediction = forest.predict(testDataVecsArticleBody)
+	prediction = forest.predict(testDataFrame)
 
 	#  Evaluate the results
 	# train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
@@ -149,6 +151,6 @@ if __name__ == "__main__":
 	# Write the test results
 	outputFile = "Word2Vec_AverageVectors.csv"
 	print(">> Generating output file : ", outputFile)
-	output = pd.Dataframe(data={"id": test["id"], "stance": prediction})
+	output = pd.DataFrame(data={"id": test["id"], "stance": prediction})
 	output.to_csv(outputFile, index=False, quoting=3)
 
