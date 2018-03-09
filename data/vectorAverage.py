@@ -137,7 +137,8 @@ if __name__ == "__main__":
 	prediction = forest.predict(testDataVecsArticleBody)
 
 	#  Evaluate the results
-	train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
+	# train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
+	train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecsArticleBody))
 	test_accuracy = accuracy_score(testData['Stance'], prediction)
 	confussion_matrix = confusion_matrix(testData['Stance'], prediction)
 
