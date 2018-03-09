@@ -89,8 +89,8 @@ if __name__ == "__main__":
 	# 	clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
 	num_cores = multiprocessing.cpu_count()
-	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in trainData['Headline'])
-	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
+	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['Headline'])
+	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
 
 	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
 	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
@@ -110,8 +110,8 @@ if __name__ == "__main__":
 	# 	clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
 	# 	clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
-	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in testData['Headline'])
-	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
+	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['Headline'])
+	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
 	
 	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
@@ -124,16 +124,16 @@ if __name__ == "__main__":
 	print("> Fitting a random fores to labeled training data...")
 	
 	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
-	trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
+	# trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
 	# features = trainDataFrame.columns[:2]
 	features = ['Headline', 'ArticleBody']
-	forest = forest.fit(trainDataFrame[features], trainData["Stance"])
+	forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
 	# testDataFrame = pd.DataFrame.from_dict(testDataVecs)
-	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
-	prediction = forest.predict(testDataFrame[features])
+	# testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
+	prediction = forest.predict(testDataVecsArticleBody)
 
 	#  Evaluate the results
 	train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
