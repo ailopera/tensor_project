@@ -98,7 +98,7 @@ if __name__ == "__main__":
 	#  Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec model and applying vector average for test data...")
-	testDataPath = basePath + "test_data_aggregated.csv"
+	testDataPath = basePath + "test_data_aggregated_mini.csv"
 	testData = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 	clean_test_articleBodies = []
 	clean_test_headlines = []
@@ -122,7 +122,8 @@ if __name__ == "__main__":
 	#TODO: falta tener en cuenta los cuerpos de la noticia
 	forest = RandomForestClassifier(n_estimators=100)
 	print("> Fitting a random fores to labeled training data...")
-	
+	print(">> TRAIN Lens: ArticleBody", len(trainDataVecsArticleBody), " Headline: ", len(trainDataVecsHeadline))
+	print(">> TEST Lens: ArticleBody", len(testDataVecsArticleBody), " Headline: ", len(testDataVecsHeadline))
 	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
 	# trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
 	# features = trainDataFrame.columns[:2]
