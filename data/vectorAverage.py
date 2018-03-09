@@ -73,7 +73,7 @@ if __name__ == "__main__":
 	stances_model = Word2Vec.load(stances_model_name)
 	
 	#Primero las convertimos en lista de palabras
-	trainDataPath = basePath + "train_data_aggregated.csv"
+	trainDataPath = basePath + "train_data_aggregated_mini.csv"
 	trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 	clean_train_headlines = []
 	clean_train_articleBodies = []
