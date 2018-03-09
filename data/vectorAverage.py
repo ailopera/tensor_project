@@ -59,7 +59,8 @@ def getAvgFeatureVecs(news, model, num_features):
 	return newsFeatureVecs	
 
 def makeWordList(text):
-	return word2VecModel.news_to_wordlist(text,remove_stopwords=True)
+	wordList =  word2VecModel.news_to_wordlist(text,remove_stopwords=True)
+	return wordList
 
 if __name__ == "__main__":
 	basePath = "./fnc-1-original/aggregatedDatasets/"
