@@ -82,9 +82,10 @@ if __name__ == "__main__":
 		clean_train_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
 		clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
-	trainDataVecs['Headline'] = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
-	trainDataVecs['ArticleBody'] = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
+	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
+	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
 
+	#  Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec model and applying vector average for test data...")
 	testDataPath = basePath + "test_data_aggregated.csv"
@@ -99,8 +100,9 @@ if __name__ == "__main__":
 		clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
 		clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
-	testDataVecs["ArticleBody"] = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
-	testDataVecs["Headline"] = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
+	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
+	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
+
 
 
 	# Creamos un modelo de random fores con los datos de entrenamiento, usando 100 árboles
@@ -108,14 +110,16 @@ if __name__ == "__main__":
 	forest = RandomForestClassifier(n_estimators=100)
 	print("> Fitting a random fores to labeled training data...")
 	
-	trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
+	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
+	trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody})
 	# features = trainDataFrame.columns[:2]
 	features = ['Headline', 'ArticleBody']
 	forest = forest.fit(trainDataFrame[features], trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
-	testDataFrame = pd.DataFrame.from_dict(testDataVecs)
+	# testDataFrame = pd.DataFrame.from_dict(testDataVecs)
+	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody})
 	prediction = forest.predict(testDataFrame[features])
 
 	#  Evaluate the results
