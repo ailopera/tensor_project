@@ -7,6 +7,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix 
 import pandas as pd
 
+from joblib import Parallel, delayed
+import multiprocessing
+
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
 # (si forman parte del vocabulario del modelo)
 def makeFeatureVec(words, model, num_features):
@@ -53,8 +56,10 @@ def getAvgFeatureVecs(news, model, num_features):
 		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features)
 		
 		counter = counter + 1
-	return newsFeatureVecs
+	return newsFeatureVecs	
 
+def makeWordList(text):
+	return word2VecModel.news_to_wordlist(text,remove_stopwords=True)
 
 if __name__ == "__main__":
 	basePath = "./fnc-1-original/aggregatedDatasets/"
@@ -76,11 +81,15 @@ if __name__ == "__main__":
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
 	#for report in trainBodies['Headline']:
 	print(">> Generating word2vec model and applying vector average for train data...")
-	for index,line in trainData.iterrows():
-		headline = line['Headline']
-		articleBody = line['ArticleBody']
-		clean_train_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
-		clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
+	# for index,line in trainData.iterrows():
+	# 	headline = line['Headline']
+	# 	articleBody = line['ArticleBody']
+	# 	clean_train_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
+	# 	clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
+
+	num_cores = multiprocessing.cpu_count()
+	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['Headline'] for index,line in trainData.iterrows()))
+	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['ArticleBody'] for index,line in trainData.iterrows()))
 
 	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
 	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
@@ -94,12 +103,15 @@ if __name__ == "__main__":
 	clean_test_headlines = []
 	testDataVecs = {}
 	#for report in testBodies['Headline']:
-	for index,line in testData.iterrows():
-		headline = line['Headline']
-		articleBody = line['ArticleBody']
-		clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
-		clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
+	# for index,line in testData.iterrows():
+	# 	headline = line['Headline']
+	# 	articleBody = line['ArticleBody']
+	# 	clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
+	# 	clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
+	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['Headline'] for index,line in testData.iterrows()))
+	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 50)(delayed(makeWordList)(line['ArticleBody'] for index,line in testData.iterrows()))
+	
 	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
 
@@ -111,7 +123,7 @@ if __name__ == "__main__":
 	print("> Fitting a random fores to labeled training data...")
 	
 	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
-	trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody})
+	trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
 	# features = trainDataFrame.columns[:2]
 	features = ['Headline', 'ArticleBody']
 	forest = forest.fit(trainDataFrame[features], trainData["Stance"])
@@ -119,7 +131,7 @@ if __name__ == "__main__":
 	# Test & extract results
 	print("> Predicting test dataset...")
 	# testDataFrame = pd.DataFrame.from_dict(testDataVecs)
-	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody})
+	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
 	prediction = forest.predict(testDataFrame[features])
 
 	#  Evaluate the results
