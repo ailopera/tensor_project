@@ -65,12 +65,13 @@ def makeWordList(text):
 if __name__ == "__main__":
 	basePath = "./fnc-1-original/aggregatedDatasets/"
 	num_features = 300
-	stances_model_name = sys.argv[1]
-	bodies_model_name = sys.argv[2]
+	model_name = sys.argv[1]
+	# stances_model_name = sys.argv[1]
+	# bodies_model_name = sys.argv[2]
 	
-	#model = KeyedVectors.load_word2vec_format(model_name)
-	bodies_model = Word2Vec.load(bodies_model_name)
-	stances_model = Word2Vec.load(stances_model_name)
+	model = KeyedVectors.load_word2vec_format(model_name)
+	# bodies_model = Word2Vec.load(bodies_model_name)
+	# stances_model = Word2Vec.load(stances_model_name)
 	
 	#Primero las convertimos en lista de palabras
 	trainDataPath = basePath + "train_data_aggregated_mini.csv"
@@ -92,8 +93,8 @@ if __name__ == "__main__":
 	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['Headline'])
 	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
 
-	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, stances_model, num_features)
-	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, bodies_model, num_features)
+	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, model, num_features)
+	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, model, num_features)
 
 	#  Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
@@ -113,13 +114,13 @@ if __name__ == "__main__":
 	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['Headline'])
 	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
 	
-	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, stances_model, num_features)
-	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, bodies_model, num_features)
+	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, model, num_features)
+	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features)
 
 
 
 	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
-	#TODO: falta tener en cuenta los cuerpos de la noticia
+	#TODO: falta tener en cuenta los cuerpos de la noticia (con el modelo de random foret no es posible, habría que utilizar otro algoritmo)
 	forest = RandomForestClassifier(n_estimators=100)
 	print("> Fitting a random forest to labeled training data...")
 	print(">> TRAIN Lens: ArticleBody", len(trainDataVecsArticleBody), " Headline: ", len(trainDataVecsHeadline))
@@ -130,16 +131,16 @@ if __name__ == "__main__":
 	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
 	# trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
 	# features = trainDataFrame.columns[:2]
-	features = ['Headline', 'ArticleBody']
-	# forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
-	forest = forest.fit([trainDataVecsHeadline, trainDataVecsArticleBody], trainData["Stance"])
+	# features = ['Headline', 'ArticleBody']
+	forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
+	# forest = forest.fit([trainDataVecsHeadline, trainDataVecsArticleBody], trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
 	# testDataFrame = pd.DataFrame.from_dict(testDataVecs)
-	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
-	# prediction = forest.predict(testDataVecsArticleBody)
-	prediction = forest.predict([testDataVecsHeadline, testDataVecsArticleBody])
+	# testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
+	prediction = forest.predict(testDataVecsArticleBody)
+	# prediction = forest.predict([testDataVecsHeadline, testDataVecsArticleBody])
 
 	#  Evaluate the results
 	# train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))

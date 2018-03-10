@@ -113,23 +113,28 @@ def trainWord2Vec(sentences,archiveTag):
     model.save(model_name)
     #models.Word2Vec.save_word2vec_format(model_name)
 
-def makeWord2VecModel(trainStance):
+# def makeWord2VecModel(trainStance):
+def makeWord2VecModel():
     basePath = "./fnc-1-original/"
-    outputDir = basePath + "cleanDatasets/"
-    if trainStance:
-        inputFilePath = basePath + "train_stances.csv" 
-        fileTag = "STANCES"
-    else:
-        inputFilePath = basePath + "train_bodies.csv" 
-        fileTag = "BODIES"
+    outputDir = basePath + "cleanDatasets/aggregatedDatasets/"
+    # if trainStance:
+    #     inputFilePath = basePath + "train_stances.csv" 
+    #     fileTag = "STANCES"
+    # else:
+    #     inputFilePath = basePath + "train_bodies.csv" 
+        # fileTag = "BODIES"
     
-    inputUnlabeledFile = basePath + "test_stances_unlabeled.csv"
-    textTag = 'articleBody' if trainStance==False else 'Headline'
+    inputFilePath = basePath + "train_data_aggregated.csv"
+    fileTag = "ALL"
+    
+    # textTag = 'articleBody' if trainStance==False else 'Headline'
     # Leemos los ficheros etiquetados y sin etiquetar
     trainFile = pd.read_csv(inputFilePath,header=0,delimiter=",", quoting=1)
     print(">>> Read file ", inputFilePath , "shape:", trainFile.shape)
+    
     # Si tuvieramos datos sin etiquetar podriamos utilizarlos igualmente en el entrenamiento
     # ya que word2vec no requiere de datos etiquetados
+    # inputUnlabeledFile = basePath + "test_stances_unlabeled.csv"
     # unlabeled_train = pd.read_csv(inputUnlabeledFile, header=0,delimiter=",", quoting=1)
     # print(">>> Read file ", inputUnlabeledFile , "shape:", unlabeled_train.shape)
 
@@ -146,8 +151,12 @@ def makeWord2VecModel(trainStance):
     sentences = []
     print("> Parsing sentences from training set")
 
+    # Recorremos el fichero de titulares y cuerpos de noticias para crear el modelo
     for index,line in trainFile.iterrows():
-        sentences += news_to_sentences(line[textTag], tokenizer)
+        sentences += news_to_sentences(line['articleBody'], tokenizer)
+    
+    for index,line in trainFile.iterrows():
+        sentences += news_to_sentences(line['Headline'], tokenizer)
     
     # Check how many sentences we have in total
     print("> #Sentences: ", len(sentences))
