@@ -1,9 +1,11 @@
 import gensim
 from gensim.models import Word2Vec
 import sys
-#model = gensim.models.Word2Vec.load("300features_40minwords_10contextBODIES")
 inputPath = sys.argv[1] 
-model = gensim.models.Word2Vec.load("300features_15minwords_10contextALL")
+#model = gensim.models.Word2Vec.load("300features_15minwords_10contextALL")
+#model = gensim.models.Word2Vec.load(inputPath)
+model = gensim.models.KeyedVectors.load_word2vec_format(inputPath, binary=True)
+
 # Paso 1: Exploración inicial del modelo
 # The doesht_math function will try to deduce which word in a set is most dissimilar form the others
 print(">>> DOESNT MATCH QUESTIONS")
