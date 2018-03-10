@@ -118,28 +118,28 @@ if __name__ == "__main__":
 
 
 
-	# Creamos un modelo de random fores con los datos de entrenamiento, usando 100 árboles
+	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
 	#TODO: falta tener en cuenta los cuerpos de la noticia
 	forest = RandomForestClassifier(n_estimators=100)
-	print("> Fitting a random fores to labeled training data...")
+	print("> Fitting a random forest to labeled training data...")
 	print(">> TRAIN Lens: ArticleBody", len(trainDataVecsArticleBody), " Headline: ", len(trainDataVecsHeadline))
 	print(trainDataVecsArticleBody)
 	print("-----------------------------")
 	print(trainDataVecsHeadline)
 	print(">> TEST Lens: ArticleBody", len(testDataVecsArticleBody), " Headline: ", len(testDataVecsHeadline))
 	# trainDataFrame = pd.DataFrame.from_dict(trainDataVecs)
-	trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
+	# trainDataFrame = pd.DataFrame({'Headline': trainDataVecsHeadline, 'ArticleBody': trainDataVecsArticleBody}, index=[0])
 	# features = trainDataFrame.columns[:2]
 	features = ['Headline', 'ArticleBody']
 	# forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
-	forest = forest.fit(trainDataFrame, trainData["Stance"])
+	forest = forest.fit([trainDataVecsHeadline, trainDataVecsArticleBody], trainData["Stance"])
 
 	# Test & extract results
 	print("> Predicting test dataset...")
 	# testDataFrame = pd.DataFrame.from_dict(testDataVecs)
 	testDataFrame = pd.DataFrame.from_dict({'Headline': testDataVecsHeadline, 'ArticleBody': testDataVecsArticleBody}, index=[0])
 	# prediction = forest.predict(testDataVecsArticleBody)
-	prediction = forest.predict(testDataFrame)
+	prediction = forest.predict([testDataVecsHeadline, testDataVecsArticleBody])
 
 	#  Evaluate the results
 	# train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
