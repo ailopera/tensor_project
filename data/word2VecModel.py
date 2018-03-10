@@ -50,6 +50,7 @@ def news_to_wordlist(news, remove_stopwords=False):
     body = body.lower()
     
     # 3. TODO: Remove javascript code & URLS
+    body = re.sub('https?:\/\/.*[\r\n]*', " ", body)
     
     # 4. Tokenize body
     bodyWords = body.split()

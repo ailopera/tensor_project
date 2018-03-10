@@ -62,7 +62,8 @@ def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cle
             # 2. Convert to lower case all characters in body
             body = body.lower()
             
-            # 3. TODO: Remove javascript code
+            # 3. TODO: Remove javascript code & URLs
+            body = re.sub('https?:\/\/.*[\r\n]*', " ", body)
             
             # 4. Tokenize body
             bodyWords = body.split()
