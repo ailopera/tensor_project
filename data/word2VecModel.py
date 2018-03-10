@@ -126,7 +126,7 @@ def makeWord2VecModel():
     
     inputFilePath = basePath + "train_data_aggregated.csv"
     fileTag = "ALL"
-    
+
     # textTag = 'articleBody' if trainStance==False else 'Headline'
     # Leemos los ficheros etiquetados y sin etiquetar
     trainFile = pd.read_csv(inputFilePath,header=0,delimiter=",", quoting=1)
@@ -167,5 +167,4 @@ def makeWord2VecModel():
 
 if __name__ == "__main__":
   #  makeWord2VecModel(False) # Para entrenar el fichero con los cuerpos de noticias
-   
-   makeWord2VecModel(True) # Para entrenar el fichero con los titulares de noticias
+   makeWord2VecModel()
