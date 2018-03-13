@@ -30,4 +30,5 @@ init = tf.global_variables_initializer() # preparamos un nodo init
 with tf.Session() as sess:
     init.run() # Inicializa todas las variables
     result = f.eval()
+    print("> Resultado: ", result)
 
