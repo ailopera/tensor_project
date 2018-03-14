@@ -36,37 +36,41 @@ def lemmatizeWord(posTag):
         return WordNetLemmatizer.lemmatize(word)
 
 
-
-def news_to_wordlist(news, remove_stopwords=False):
+# Si no se especifica que limpie el texto, simplemente spliteamos el texto
+def news_to_wordlist(news, remove_stopwords=False,clean_text=True):
     # This time we won't remove the stopwords and numbers
+    if clean_text:
+        # 0. Remove HTML tags
+        body = BeautifulSoup(news,"html.parser").get_text() 
+        # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
+        body = re.sub("[0-9]+", "NUM", news)
+        body = re.sub("[^a-zA-Z]", " ", body)
+        
+        # 2. Convert to lower case all characters in body
+        body = body.lower()
+        
+        # 3. TODO: Remove javascript code & URLS
+        body = re.sub('https?:\/\/.*[\r\n]*', " ", body)
+    else:
+        body = news
 
-    # 0. Remove HTML tags
-    body = BeautifulSoup(news,"html.parser").get_text() 
-    # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
-    body = re.sub("[0-9]+", "NUM", news)
-    body = re.sub("[^a-zA-Z]", " ", body)
-    
-    # 2. Convert to lower case all characters in body
-    body = body.lower()
-    
-    # 3. TODO: Remove javascript code & URLS
-    body = re.sub('https?:\/\/.*[\r\n]*', " ", body)
-    
+
     # 4. Tokenize body
     bodyWords = body.split()
     
     # 5. Remove stop-words from body
-    # if remove_stopwords:
-        # stopSet = set(stopwords.words("english"))
-        # bodyWords = [word for word in bodyWords if not word in stopSet]
+    if remove_stopwords and clean_text:
+        stopSet = set(stopwords.words("english"))
+        bodyWords = [word for word in bodyWords if not word in stopSet]
         
-    # # 6. POS tagging and Lemmatize body
-    posTagging = nltk.pos_tag(bodyWords)
-    bodyWords = list(map(WordNetLemmatizer.lemmatize,bodyWords))
-    bodyLemmatized = []
-    for taggedWord in posTagging:
-        bodyLemmatized.append(lemmatizeWord(taggedWord))
-    bodyWords = bodyLemmatized
+    if clean_text:
+        # # 6. POS tagging and Lemmatize body
+        posTagging = nltk.pos_tag(bodyWords)
+        bodyWords = list(map(WordNetLemmatizer.lemmatize,bodyWords))
+        bodyLemmatized = []
+        for taggedWord in posTagging:
+            bodyLemmatized.append(lemmatizeWord(taggedWord))
+        bodyWords = bodyLemmatized
 
     #Returns a list of words
     return(bodyWords)

@@ -59,7 +59,7 @@ def getAvgFeatureVecs(news, model, num_features):
 	return newsFeatureVecs	
 
 def makeWordList(text):
-	wordList =  word2VecModel.news_to_wordlist(text,remove_stopwords=True)
+	wordList =  word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
 	return wordList
 
 if __name__ == "__main__":
@@ -117,8 +117,6 @@ if __name__ == "__main__":
 	
 	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, model, num_features)
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features)
-
-
 
 	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
 	#TODO: falta tener en cuenta los cuerpos de la noticia (con el modelo de random foret no es posible, habría que utilizar otro algoritmo)
