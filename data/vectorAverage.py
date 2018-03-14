@@ -28,11 +28,6 @@ def makeFeatureVec(words, model, num_features):
 			nwords = nwords + 1
 			featureVec = np.add(featureVec, model[word])
 	
-	# Divide the result by the number of words to get the average
-	# print("[DEBUG] isInfinite featureVec: ", np.isfinite(featureVec).all())
-	# print("[DEBUG] isInfinite nwords: ", np.isfinite(nwords).all())
-	# print("[DEBUG] nwords: ", nwords)
-	# print("[DEBUG] featureVec: ", featureVec)
 	featureVec = np.divide(featureVec, nwords)
 	return featureVec
 
