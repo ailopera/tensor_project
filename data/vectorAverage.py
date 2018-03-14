@@ -49,8 +49,8 @@ def getAvgFeatureVecs(news, model, num_features):
 	# Iteramos sobre las noticias
 	for report in news:
 		# Print a status message every 1000th new
-		if counter%1000. == 0.:
-			print("> Report", counter," of ", len(news))
+		# if counter%100. == 0.:
+		print("> Report", counter," of ", len(news))
 		
 		# Call thhe function (defined above) that makes average feature vectors
 		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features)
