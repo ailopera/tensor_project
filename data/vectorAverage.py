@@ -70,7 +70,7 @@ if __name__ == "__main__":
 	# bodies_model_name = sys.argv[2]
 	
 	# model = KeyedVectors.load_word2vec_format(model_name)
-	model = gensim.models.KeyedVectors.load_word2vec_format(inputPath, binary=True)
+	model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
 	# bodies_model = Word2Vec.load(bodies_model_name)
 	# stances_model = Word2Vec.load(stances_model_name)
 	
