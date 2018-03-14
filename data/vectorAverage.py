@@ -37,6 +37,7 @@ def makeFeatureVec(words, model, num_features):
 	return featureVec
 
 
+
 def getAvgFeatureVecs(news, model, num_features):
 	# Dado un conjunto de noticias (cada una es una lista de palabras), calcula 
 	# El vector de medias para cada una y devuelve un vector de dos dimensiones
@@ -47,16 +48,20 @@ def getAvgFeatureVecs(news, model, num_features):
 	newsFeatureVecs = np.zeros((len(news), num_features), dtype="float32")
 
 	# Iteramos sobre las noticias
-	for report in news:
-		# Print a status message every 1000th new
-		# if counter%100. == 0.:
-		print("> Report", counter," of ", len(news))
+	# for report in news:
+	# 	# Print a status message every 1000th new
+	# 	# if counter%100. == 0.:
+	# 	# print("> Report", counter," of ", len(news))
 		
-		# Call thhe function (defined above) that makes average feature vectors
-		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features)
-		
-		counter = counter + 1
+	# 	# Call thhe function (defined above) that makes average feature vectors
+	# 	newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features)
+		# counter = counter + 1
+
+	# Version paralela del computo de vectores de caracteristicas
+	num_cores = multiprocessing.cpu_count()
+	newsFeatureVecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeFeatureVec)(report, model, num_features) for report in news)
 	return newsFeatureVecs	
+
 
 def makeWordList(text):
 	wordList =  word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
@@ -75,7 +80,8 @@ if __name__ == "__main__":
 	# stances_model = Word2Vec.load(stances_model_name)
 	
 	#Primero las convertimos en lista de palabras
-	trainDataPath = basePath + "train_data_aggregated_mini.csv"
+	# trainDataPath = basePath + "train_data_aggregated_mini.csv"
+	trainDataPath = basePath + "train_data_aggregated.csv"
 	trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 	clean_train_headlines = []
 	clean_train_articleBodies = []
@@ -83,7 +89,7 @@ if __name__ == "__main__":
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
 	#for report in trainBodies['Headline']:
-	print(">> Generating word2vec model and applying vector average for train data...")
+	print(">> Generating word2vec input model and applying vector average for train data...")
 	# for index,line in trainData.iterrows():
 	# 	headline = line['Headline']
 	# 	articleBody = line['ArticleBody']
@@ -94,13 +100,16 @@ if __name__ == "__main__":
 	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['Headline'])
 	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
 
+	print(">> Getting feature vectors for train headlines...")
 	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, model, num_features)
+	print(">> Getting feature vectors for train articleBodies...")
 	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, model, num_features)
 
 	#  Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
-	print(">> Generating word2vec model and applying vector average for test data...")
-	testDataPath = basePath + "test_data_aggregated_mini.csv"
+	print(">> Generating word2vec input model and applying vector average for test data...")
+	# testDataPath = basePath + "test_data_aggregated_mini.csv"
+	testDataPath = basePath + "test_data_aggregated.csv"
 	testData = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 	clean_test_articleBodies = []
 	clean_test_headlines = []
@@ -115,7 +124,9 @@ if __name__ == "__main__":
 	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['Headline'])
 	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
 	
+	print(">> Getting feature vectors for test articleBodies...")
 	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, model, num_features)
+	print(">> Getting feature vectors for test headlines...")
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features)
 
 	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
