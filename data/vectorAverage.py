@@ -1,3 +1,7 @@
+# Ejecucion
+# - Utilizando el modelo entrenado con nuestros datos: python vectorAverage.py 300features_10minwords_10contextALL
+# - Utilizando modelo oficial: python vectorAverage.py ~/GoogleNews-vectors-negative300.bin
+
 import sys
 import numpy as np
 import gensim
@@ -169,7 +173,7 @@ if __name__ == "__main__":
 	print(">> Confussion matrix: ", confusion_matrix)
 
 	print("------------------ Random Forest Based on Headline ------------------------------")
-	prediction = forest.predict(testDataVecsArticleBody)
+	prediction = forest.predict(trainDataVecsHeadline)
 	train_accuracy_headlines = accuracy_score(trainData['Stance'], forest.predict(trainDataVecsHeadline))
 	test_accuracy = accuracy_score(testData['Stance'], prediction)
 	confussion_matrix = confusion_matrix(testData['Stance'], prediction)
