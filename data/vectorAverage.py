@@ -42,19 +42,23 @@ def getAvgFeatureVecs(news, model, num_features, index2word_set):
 	# Reservamos espacio para un array de dos dimensiones, por velocidad
 	newsFeatureVecs = np.zeros((len(news), num_features), dtype="float32")
 
+	#Indexwords is a list that contains the names of the words in the model's vocabulary. Convert it to a set, for speed
+	index2word_set = set(model.wv.index2word)
+	
 	# Iteramos sobre las noticias
-	# for report in news:
-	# 	# Print a status message every 1000th new
-	# 	# if counter%100. == 0.:
-	# 	# print("> Report", counter," of ", len(news))
+	for report in news:
+		# Print a status message every 1000th new
+		if counter%100. == 0.:
+			print("> Report", counter," of ", len(news))
 		
-	# 	# Call thhe function (defined above) that makes average feature vectors
-	# 	newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features)
-		# counter = counter + 1
+		# Call thhe function (defined above) that makes average feature vectors
+		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
+		counter = counter + 1
 
 	# Version paralela del computo de vectores de caracteristicas
-	num_cores = multiprocessing.cpu_count()
-	newsFeatureVecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeFeatureVec)(report, model, num_features, index2word_set) for report in news)
+	# num_cores = multiprocessing.cpu_count()
+	# newsFeatureVecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeFeatureVec)(report, model, num_features, index2word_set) for report in news)
+
 	return newsFeatureVecs	
 
 
@@ -97,12 +101,12 @@ if __name__ == "__main__":
 
 	# Cargamos el modelo de word2vec en un set
 	#Indexwords is a list that contains the names of the words in the model's vocabulary. Convert it to a set, for speed
-	index2word_set = set(model.wv.index2word)
+	# index2word_set = set(model.wv.index2word)
 
 	print(">> Getting feature vectors for train headlines...")
-	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, model, num_features, index2word_set)
+	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, model, num_features)
 	print(">> Getting feature vectors for train articleBodies...")
-	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, model, num_features, index2word_set)
+	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, model, num_features)
 
 	#  Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
@@ -124,9 +128,9 @@ if __name__ == "__main__":
 	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
 	
 	print(">> Getting feature vectors for test articleBodies...")
-	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, model, num_features, index2word_set)
+	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, model, num_features)
 	print(">> Getting feature vectors for test headlines...")
-	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features,index2word_set)
+	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features)
 
 	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
 	#TODO: falta tener en cuenta los cuerpos de la noticia (con el modelo de random foret no es posible, habría que utilizar otro algoritmo)
