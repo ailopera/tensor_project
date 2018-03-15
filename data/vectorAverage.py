@@ -33,7 +33,7 @@ def makeFeatureVec(words, model, num_features, index2word_set):
 
 
 
-def getAvgFeatureVecs(news, model, num_features, index2word_set):
+def getAvgFeatureVecs(news, model, num_features):
 	# Dado un conjunto de noticias (cada una es una lista de palabras), calcula 
 	# El vector de medias para cada una y devuelve un vector de dos dimensiones
 
