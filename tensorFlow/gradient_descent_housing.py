@@ -19,7 +19,11 @@ y_pred = tf.matmul(X, theta, name="predictions")
 error = y_pred - y
 mse = tf.reduce_mean(tf.square(error), name="mse")
 
-gradients = 2/m * tf.matmul(tf.transpose(X),error)
+
+# gradients = 2/m * tf.matmul(tf.transpose(X),error)
+# Otra opcion para calcular el gradiente es utilizar autodiff, que commputa el gradiente automaticamente
+gradients = tf.gradients(mse,[theta])
+
 # Con assign creamos un nodo que asignara un nuevo valor a la variable
 # En nuestro caso este nodo implementa el paso del batch gradient descent
 training_op = tf.assign(theta, theta - learning_rate * gradients)
