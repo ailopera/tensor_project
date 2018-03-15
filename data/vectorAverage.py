@@ -157,17 +157,28 @@ if __name__ == "__main__":
 
 	#  Evaluate the results
 	# train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
+	# Creo dos modelos aparte como solucion temporal ya que con el random forest no es posible pasar los dos textos como features
 	train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecsArticleBody))
+	
 	test_accuracy = accuracy_score(testData['Stance'], prediction)
 	confussion_matrix = confusion_matrix(testData['Stance'], prediction)
 
-	print(">> Accuracy achieved with the train set: ", train_accuracy)
+	print("------------------ Random Forest Based on ArticleBodies ------------------------------")
+	print(">> Accuracy achieved with the train set (using only article bodies): ", train_accuracy)	
 	print(">> Accuracy achieved with the test set: ", test_accuracy)
 	print(">> Confussion matrix: ", confusion_matrix)
 
-	# Write the test results
-	outputFile = "Word2Vec_AverageVectors.csv"
-	print(">> Generating output file : ", outputFile)
-	output = pd.DataFrame(data={"id": test["id"], "stance": prediction})
-	output.to_csv(outputFile, index=False, quoting=3)
+	print("------------------ Random Forest Based on Headline ------------------------------")
+	prediction = forest.predict(testDataVecsArticleBody)
+	train_accuracy_headlines = accuracy_score(trainData['Stance'], forest.predict(trainDataVecsHeadline))
+	test_accuracy = accuracy_score(testData['Stance'], prediction)
+	confussion_matrix = confusion_matrix(testData['Stance'], prediction)
+	print(">> Accuracy achieved with the train set: ", train_accuracy_headlines)
+	print(">> Accuracy achieved with the test set: ", test_accuracy)
+	
+	# # Write the test results
+	# outputFile = "Word2Vec_AverageVectors.csv"
+	# print(">> Generating output file : ", outputFile)
+	# output = pd.DataFrame(data={"id": test["id"], "stance": prediction})
+	# output.to_csv(outputFile, index=False, quoting=3)
 
