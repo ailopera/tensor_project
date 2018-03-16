@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.datasets import fetch_california_housing
-
+import tensorflow as tf
 # Ejemplo de implementacion de gradient descent
 housing = fetch_california_housing()
 m,n = housing.data.shape
