@@ -5,7 +5,7 @@ import tensorflow as tf
 housing = fetch_california_housing()
 m,n = housing.data.shape
 
-housing_data_plus_bias= np.c_[np.ones((m,1)), housing.data]
+housing_data_plus_bias=np.c_[np.ones((m,1)), housing.data]
 
 n_epochs = 1000
 learning_rate = 0.1
@@ -17,7 +17,7 @@ n_batches = int(np.ceil(m/batch_size))
 # En este programa vamos a implementar un Mini-batch Gradient Descent
 # Si en una de las dimensiones ponemos None, estamos queriendo decir que puede ser de cualquier tamaño
 X = tf.placeholder(tf.float32, shape=(None, n+1), name="x")
-Y = tf.placeholder(tf.float32, shape=(None, n+1))
+y = tf.placeholder(tf.float32, shape=(None, n+1))
 theta = tf.Variable(tf.random_uniform([n+1,1], -1.0, 1.0), name="theta")
 
 y_pred = tf.matmul(X, theta, name="predictions")
