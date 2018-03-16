@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.datasets import fetch_california_housing
 import tensorflow as tf
+from sklearn.preprocessing import StandardScaler
+
 # Ejemplo de implementacion de gradient descent
 housing = fetch_california_housing()
 m,n = housing.data.shape
@@ -19,6 +21,11 @@ y_pred = tf.matmul(X, theta, name="predictions")
 error = y_pred - y
 mse = tf.reduce_mean(tf.square(error), name="mse")
 
+# El gradiente descendiente requiere reescalar los vectores de features.
+# El escalado se puede hacer tanto con scikit learn como con tensorflow
+scaler = StandardScaler()
+scaled_housing_data = scaler.fit_transform(housing.data)
+scaled_housing_data_plus_bias = np.c_[np.ones((m,1)), scaled_housing_data]
 
 # gradients = 2/m * tf.matmul(tf.transpose(X),error)
 # Otra opcion para calcular el gradiente es utilizar autodiff, que commputa el gradiente automaticamente
