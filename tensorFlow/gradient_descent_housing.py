@@ -22,6 +22,8 @@ mse = tf.reduce_mean(tf.square(error), name="mse")
 
 # gradients = 2/m * tf.matmul(tf.transpose(X),error)
 # Otra opcion para calcular el gradiente es utilizar autodiff, que commputa el gradiente automaticamente
+# La funcion del gradiente toma como parametro un operando (en nuestro caso mse) y una lista de variables (en nuestro caso theta)
+# y crea una lista de operandos (uno por variable) para computar el gradiente del operando con respecto a cada varaible
 gradients = tf.gradients(mse,[theta])
 
 # Con assign creamos un nodo que asignara un nuevo valor a la variable
