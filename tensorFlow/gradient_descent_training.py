@@ -35,8 +35,14 @@ y = tf.placeholder(tf.float32, shape=(None, 1), name="y")
 
 theta = tf.Variable(tf.random_uniform([n+1,1], -1.0, 1.0, seed=42), name="theta")
 y_pred = tf.matmul(X, theta, name="predictions")
-error = y_pred - y
-mse = tf.reduce_mean(tf.square(error), name="mse")
+
+# error = y_pred - y
+# mse = tf.reduce_mean(tf.square(error), name="mse")
+
+# Podemos crear namespaces para hacer una agrupacion un poco mas logica de las variables:
+with tf.name_scope("loss") as scope:
+    error = y_pred - y
+    mse = tf.reduce_mean(tf.square(error), name="mse")
 
 # Otra de las opciones para calcular gradientes es la de utilizar un optimizador
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
