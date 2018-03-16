@@ -4,6 +4,7 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
 # Ejemplo de implementacion de gradient descent
+### FASE de Creacion ###
 housing = fetch_california_housing()
 m,n = housing.data.shape
 
@@ -38,11 +39,15 @@ optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
 # optimizer = tf.train.momentumOptimizer(learning_rate(learning_rate=learning_rate)
 training_op = optimizer.minimize(mse)
 
-
+# Inicializador de las variables x e y
 init = tf.global_variables_initializer()
 
-# En la fase de ejecución, obtenemos los mini-batches uno a uno, proveemos le valor de X e Y
-# con el parametro de feed_dict, àra cuando evaluamos un nodo que depende de otro
+# Una vez entrenado el modelo podemos guardar sus parametros
+# Tambien resulta util para guardar checkpoints del trabajo realizado por si el servidor se cae
+# Para ello creamos un nodo de guarda al final de la fase de construccion, despues de crear todos los nodos
+saver = tf.train.Saver()
+
+
 def fetch_batch(epoch,batch_index, batch_size):
     # Cargamos los datos del disco
     np.random.seed(epoch * n_batches + batch_index)
@@ -51,12 +56,31 @@ def fetch_batch(epoch,batch_index, batch_size):
     y_batch = housing.target.reshape(-1, 1)[indices]
     return X_batch, y_batch
 
+
+### FASE de ejecucion ###
+# En la fase de ejecución, obtenemos los mini-batches uno a uno, proveemos le valor de X e Y
+# con el parametro de feed_dict, para cuando evaluamos un nodo que depende de otro
+
+# En la fase de ejecucion simplemente llamamos a la funcion save, con la referencia de la sesion y la ruta del fichero checkpoint
 with tf.Session() as sess:
     sess.run(init)
 
     # Ejecutamos n_epoch iteraciones de entrenamiento
+    # for epoch in range(n_epochs):
+    #     for batch_index in range(n_batches):
+    #         X_batch, y_batch = fetch_batch(epoch, batch_index, batch_size)
+    #         sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
+    #     best_theta = theta.eval()
+
     for epoch in range(n_epochs):
-        for batch_index in range(n_batches):
-            X_batch, y_batch = fetch_batch(epoch, batch_index, batch_size)
-            sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
-        best_theta = theta.eval()
+        if epoch % 100 == 0: #Hacemos un checkpoint cada 100 epochs
+            print("Epoch", epoch, "MSE =", mse.eval())
+            save_path = saver.save(sess,"./my_model.ckpt")
+        sess.run(training_op)
+    best_theta = theta.eval()
+    save_path = saver.save(sess, "./my_model_final.ckpt")
+
+
+# Para restaurar un modelo:
+# with tf.Session() as sess:
+#     server.restore(sess, "./my_model_final.ckpt")
