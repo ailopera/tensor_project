@@ -4,7 +4,7 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 from datetime import datetime
 
-now = datetime.utcnow().strftime(%Y%m%d%H%M%S)
+now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
 root_logdir = "tf_logs"
 logdir = "{}/run-{}/".format(root_logdir, now)
 
