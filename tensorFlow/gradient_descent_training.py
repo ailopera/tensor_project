@@ -2,6 +2,11 @@ import numpy as np
 from sklearn.datasets import fetch_california_housing
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
+from datetime import datetime
+
+now = datetime.utcnow().strftime(%Y%m%d%H%M%S)
+root_logdir = "tf_logs"
+logdir = "{}/run-{}/".format(root_logdir, now)
 
 # Ejemplo de implementacion de gradient descent
 ### FASE de Creacion ###
@@ -57,6 +62,12 @@ def fetch_batch(epoch,batch_index, batch_size):
     return X_batch, y_batch
 
 
+# Para poder visualizar los datos en tensorboard:
+# Creamos un nodo que evalua el valor de mse y lo escribbe en un log compatible con tensorboard llamado summary
+mse_summary = tf.summary.scalar('MSE', mse)
+# Creamos un filewriter para poder escribir summaries en logfiles, en el directorio de logs
+file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+
 ### FASE de ejecucion ###
 # En la fase de ejecución, obtenemos los mini-batches uno a uno, proveemos le valor de X e Y
 # con el parametro de feed_dict, para cuando evaluamos un nodo que depende de otro
@@ -74,6 +85,10 @@ with tf.Session() as sess:
 
         for batch_index in range(n_batches):
             X_batch, y_batch = fetch_batch(epoch, batch_index, batch_size)
+            if batch_index % 10 == 0:
+                summary_str = mse_summary.eval(feed_dict={X: X_batch, y: y_batch})
+                step = epoch * n_batches + batch_index
+                file_writer.add_summary(summary_str, step)
             sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
         best_theta = theta.eval()
     # save_path = saver.save(sess, "./my_model_final.ckpt")
@@ -82,3 +97,4 @@ with tf.Session() as sess:
 # Para restaurar un modelo:
 # with tf.Session() as sess:
 #     server.restore(sess, "./my_model_final.ckpt")
+file_writer.close()
