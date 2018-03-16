@@ -67,16 +67,16 @@ with tf.Session() as sess:
 
     # Ejecutamos n_epoch iteraciones de entrenamiento
     for epoch in range(n_epochs):
-        if epoch % 100 == 0: #Hacemos un checkpoint cada 100 epochs
-            print("Epoch", epoch, "MSE =", mse.eval())
-            save_path = saver.save(sess,"./my_model.ckpt")
+        # if epoch % 100 == 0: #Hacemos un checkpoint cada 100 epochs
+        #     print("Epoch", epoch, "MSE =", mse.eval())
+        #     save_path = saver.save(sess,"./my_model.ckpt")
         # sess.run(training_op)
 
         for batch_index in range(n_batches):
             X_batch, y_batch = fetch_batch(epoch, batch_index, batch_size)
             sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
         best_theta = theta.eval()
-    save_path = saver.save(sess, "./my_model_final.ckpt")
+    # save_path = saver.save(sess, "./my_model_final.ckpt")
 
 
 # Para restaurar un modelo:
