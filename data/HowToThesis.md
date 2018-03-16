@@ -11,3 +11,8 @@ gcloud alpha app	        Commands related to managing App Engine deployments in 
 
 - Connect to my instance
 gcloud compute --project "deep-learning-media-filter" ssh --zone "us-central1-c" "instance-1"
+
+## TensorFlow
+
+- Arrancar virtualenv: source activate tensorflow
+- Arrancar tensorboard: tensorboard --logdir tf_logs/

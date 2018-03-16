@@ -22,7 +22,7 @@ scaled_housing_data_plus_bias = np.c_[np.ones((m,1)), scaled_housing_data]
 
 
 n_epochs = 1000
-learning_rate = 0.1
+learning_rate = 0.01
 
 batch_size = 100
 n_batches = int(np.ceil(m/batch_size))
@@ -47,6 +47,13 @@ training_op = optimizer.minimize(mse)
 # Inicializador de las variables x e y
 init = tf.global_variables_initializer()
 
+# Para poder visualizar los datos en tensorboard:
+# Creamos un nodo que evalua el valor de mse y lo escribbe en un log compatible con tensorboard llamado summary
+mse_summary = tf.summary.scalar('MSE', mse)
+# Creamos un filewriter para poder escribir summaries en logfiles, en el directorio de logs
+file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+
+
 # Una vez entrenado el modelo podemos guardar sus parametros
 # Tambien resulta util para guardar checkpoints del trabajo realizado por si el servidor se cae
 # Para ello creamos un nodo de guarda al final de la fase de construccion, despues de crear todos los nodos
@@ -62,11 +69,6 @@ def fetch_batch(epoch,batch_index, batch_size):
     return X_batch, y_batch
 
 
-# Para poder visualizar los datos en tensorboard:
-# Creamos un nodo que evalua el valor de mse y lo escribbe en un log compatible con tensorboard llamado summary
-mse_summary = tf.summary.scalar('MSE', mse)
-# Creamos un filewriter para poder escribir summaries en logfiles, en el directorio de logs
-file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
 
 ### FASE de ejecucion ###
 # En la fase de ejecución, obtenemos los mini-batches uno a uno, proveemos le valor de X e Y
