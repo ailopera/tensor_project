@@ -22,4 +22,4 @@ X = tf.placeholder(tf.float32, shape=(None, n_features), name="X")
 relus = [relu(X) for i in range(5)]
 output = tf.add_n(relus, name="output")
 
-file_writer = tf.summary.fileWriter("logs/relu2", tf.get_default_graph())
+file_writer = tf.summary.FileWriter("logs/relu2", tf.get_default_graph())
