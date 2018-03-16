@@ -25,9 +25,9 @@ n_batches = int(np.ceil(m/batch_size))
 # En este programa vamos a implementar un Mini-batch Gradient Descent
 # Si en una de las dimensiones ponemos None, estamos queriendo decir que puede ser de cualquier tamaño
 X = tf.placeholder(tf.float32, shape=(None, n+1), name="x")
-y = tf.placeholder(tf.float32, shape=(None, n+1))
-theta = tf.Variable(tf.random_uniform([n+1,1], -1.0, 1.0), name="theta")
+y = tf.placeholder(tf.float32, shape=(None, 1), name="y")
 
+theta = tf.Variable(tf.random_uniform([n+1,1], -1.0, 1.0, seed=42), name="theta")
 y_pred = tf.matmul(X, theta, name="predictions")
 error = y_pred - y
 mse = tf.reduce_mean(tf.square(error), name="mse")
@@ -44,7 +44,7 @@ init = tf.global_variables_initializer()
 # En la fase de ejecución, obtenemos los mini-batches uno a uno, proveemos le valor de X e Y
 # con el parametro de feed_dict, àra cuando evaluamos un nodo que depende de otro
 def fetch_batch(epoch,batch_index, batch_size):
-    # TODO: Cargamos los datos del disco
+    # Cargamos los datos del disco
     np.random.seed(epoch * n_batches + batch_index)
     indices = np.random.randint(m, size=batch_size)
     X_batch = scaled_housing_data_plus_bias[indices]
