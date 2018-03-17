@@ -23,7 +23,7 @@ feature_columns = tf.contrib.learn.infer_real_valued_columns_from_input(X_train)
 
 # Creamos un clasificador con dos capas ocultas (una con 300 y la otra con 100 neuronas)
 #  Y una capa de salida softmax con 10 neuronas (una por clase)
-dnn_clf = tf.contrib.leard.DNNClassifier(hidden_units=[300,100], n_classes=10, feature_columns=feature_columns, config=config)
+dnn_clf = tf.contrib.learn.DNNClassifier(hidden_units=[300,100], n_classes=10, feature_columns=feature_columns, config=config)
 dnn_clf = tf.contrib.learn.SkCompat(dnn_clf)
 
 file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
