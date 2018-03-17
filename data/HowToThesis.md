@@ -15,4 +15,5 @@ gcloud compute --project "deep-learning-media-filter" ssh --zone "us-central1-c"
 ## TensorFlow
 
 - Arrancar virtualenv: source activate tensorflow
+- Salir de una sesion de virtualenv: deactivate
 - Arrancar tensorboard: tensorboard --logdir tf_logs/
