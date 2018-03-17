@@ -35,6 +35,7 @@ dnn_clf.fit(x=X_train, y=y_train, batch_size=50, steps=40000)
 # y_pred = list(dnn_clf.predict(X_test))
 y_pred = dnn_clf.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred['classes'])
+y_pred_proba = y_pred['probabilities']
 log_loss = log_loss(y_test, y_pred_proba)
 
 print("> Accuracy: ", accuracy)
