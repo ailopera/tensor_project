@@ -51,7 +51,7 @@ file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
 # Cargamos el dataset
 mnist = input_data.read_data_sets("/tmp/data/")
 n_epochs = 20
-n_batches = 50
+batch_size = 50
 
 with tf.Session() as sess:
     init.run()
