@@ -43,7 +43,7 @@ def neuron_layer(X, n_neurons, name, activation=None):
     with tf.name_scope(name):
         # 2. Obtenemos el numero de entradas a partir del shape de X. 
         # La primera dimension indica el numero de instancias, la segunda el numero de entradas
-        n_inputs = int(X.get_shape([1]))
+        n_inputs = int(X.get_shape()[1])
         # 3. Creamos una variable W que contendra la matriz de pesos para cada conexion entrada-neurona
         # La inicializamos de forma aleatoria, con una distribucion truncada normal Gaussiana, con la desviacion estandar proporcionada
         # Esta desviacion hace que el algoritmo converga mucho mas rapido
