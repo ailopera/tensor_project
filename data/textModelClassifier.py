@@ -21,10 +21,11 @@ def modelClassifier(input_features, target, test_features, test_targets):
     n_hidden2 = 100 # Numero de neuronas de la segunda capa oculta
     n_outputs = 4 # Numero de salidas/clases a predecir
 
-    print("> Shape de los datos de entrada: ", shape(input_features))
+    print("> Shape de los datos de entrada (entrenamiento): ", shape(input_features))
+    print("> Shape de los datos de entrada (test): ", shape(test_features))
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
     print("> Numero de instancias de entrenamiento: ", train_samples)
-    
+
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
 

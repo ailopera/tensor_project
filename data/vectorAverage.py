@@ -116,7 +116,8 @@ if __name__ == "__main__":
 
 	trainDataInputs = []
 	for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
-		trainSample = sample[0].extend(sample[1])
+		# trainSample = sample[0].extend(sample[1])
+		trainSample = np.append(sample[0],sample[1])
 		trainDataInputs.append(trainSample)
 
 	#  Escribimos en un fichero los datos de entrenamiento
@@ -145,7 +146,8 @@ if __name__ == "__main__":
 
 	testDataInputs = []
 	for sample in zip(testDataVecsHeadline, testDataVecsArticleBody):
-		testSample = sample[0].extend(sample[1])
+		# testSample = sample[0].extend(sample[1])
+		testSample = np.append(sample[0],sample[1])
 		testDataInputs.append(testSample)
 
 	print("> Tamaño de los datos de entrada (entrenamiento): ", trainData)
