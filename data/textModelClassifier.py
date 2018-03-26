@@ -13,16 +13,16 @@ logdir = "{}/run-{}-{}/".format(root_logdir,tag, now)
 
 def modelClassifier(input_features, target, test_features, test_targets):
     ### Definicion de la red ###
-    train_samples = shape(input_features)[0] # Numero de ejemplos
+    train_samples = input_features.shape[0] # Numero de ejemplos
 
     # Hiperparametros del modelo
-    n_inputs = shape(input_features)[1] #Tamaño de la entrada
+    n_inputs = input_features.shape[1] #Tamaño de la entrada
     n_hidden1 = 300 # Numero de neuronas de la primera capa oculta
     n_hidden2 = 100 # Numero de neuronas de la segunda capa oculta
     n_outputs = 4 # Numero de salidas/clases a predecir
 
-    print("> Shape de los datos de entrada (entrenamiento): ", shape(input_features))
-    print("> Shape de los datos de entrada (test): ", shape(test_features))
+    print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
+    print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
     print("> Numero de instancias de entrenamiento: ", train_samples)
 
@@ -91,7 +91,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
 
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
-    training_shape = shape(train_data)[0]
+    training_shape = train_data.shape[0]
     minibatch_indexes = random.sample(range(0,training_shape), batch_size)
     # Tomamos las muestras de los datos de entrada
     minibatch_data = []

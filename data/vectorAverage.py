@@ -151,7 +151,7 @@ if __name__ == "__main__":
 		testDataInputs.append(testSample)
 
 	print("> Tamaño de los datos de entrada (entrenamiento): ", trainData)
-	print("> Tamaño de los datos de entrada (test): ", testData)
+	print("> Tamaño de los datos de entrada (test): ", testData.shape)
 	
 	# Llamamos al clasificador con los datos compuestos
 	textModelClassifier.modelClassifier(trainDataInputs,trainData['Stance'],testDataInputs,testData['Stance'])
