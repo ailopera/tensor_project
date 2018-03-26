@@ -14,6 +14,8 @@ import pandas as pd
 from joblib import Parallel, delayed
 import multiprocessing
 
+import textModelClassifier
+
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
 # (si forman parte del vocabulario del modelo)
 def makeFeatureVec(words, model, num_features, index2word_set):
@@ -112,6 +114,11 @@ if __name__ == "__main__":
 	print(">> Getting feature vectors for train articleBodies...")
 	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, model, num_features)
 
+	trainDataInputs = []
+	for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
+		trainSample = sample[0].extend(sample[1])
+		trainDataInputs.append(trainSample)
+
 	#  Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec input model and applying vector average for test data...")
@@ -136,3 +143,13 @@ if __name__ == "__main__":
 	print(">> Getting feature vectors for test headlines...")
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features)
 
+	testDataInputs = []
+	for sample in zip(testDataVecsHeadline, testDataVecsArticleBody):
+		testSample = sample[0].extend(sample[1])
+		testDataInputs.append(testSample)
+
+	print("> Tamaño de los datos de entrada (entrenamiento): ", trainData)
+	print("> Tamaño de los datos de entrada (test): ", testData)
+	
+	# Llamamos al clasificador con los datos compuestos
+	textModelClassifier.modelClassifier(trainDataInputs,trainData['Stance'],testDataInputs,testData['Stance'])
