@@ -11,7 +11,7 @@ root_logdir = "logs"
 tag = "tensorClassifierWithDense"
 logdir = "{}/run-{}-{}/".format(root_logdir,tag, now)
 
-def modelClasiffier(input_features, target, test_features, test_targets):
+def modelClassifier(input_features, target, test_features, test_targets):
     ### Definicion de la red ###
     train_samples = shape(input_features)[0] # Numero de ejemplos
 
