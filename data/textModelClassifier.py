@@ -46,7 +46,7 @@ def convert_to_int_classes(targetList):
 def modelClassifier(input_features, target, test_features, test_targets):
     # Convertimos a enteros las clases
     train_labels = convert_to_int_classes(target)
-    test_labels = convert_to_int_classes(test_target)
+    test_labels = convert_to_int_classes(test_targets)
     
     # Pequeño logging para comprobar que se estan generando bien 
     for i in range(20):
