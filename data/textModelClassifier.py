@@ -72,7 +72,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
         init.run()
         # Realizamos el entrenamiento fijando en n_epochs
         for epoch in range(n_epochs):
-            for iteration in range(iterations):
+            for iteration in range(n_iterations):
                 # X_batch, y_batch = mnist.train.next_batch(batch_size)
                 X_batch, y_batch = next_batch(batch_size, train_data, target_data)
                 sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
