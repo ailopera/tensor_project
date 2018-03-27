@@ -6,11 +6,6 @@ from tensorflow.examples.tutorials.mnist import input_data
 from datetime import datetime
 import random
 
-now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-root_logdir = "logs"
-tag = "tensorClassifierWithDense"
-logdir = "{}/run-{}-{}/".format(root_logdir,tag, now)
-
 ### Funciones auxiliares
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
@@ -44,6 +39,11 @@ def convert_to_int_classes(targetList):
 
 ### Clasificador ###
 def modelClassifier(input_features, target, test_features, test_targets):
+    now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    root_logdir = "logs"
+    tag = "tensorClassifierWithDense"
+    logdir = "{}/run-{}-{}/".format(root_logdir,tag, now)
+
     # Convertimos a enteros las clases
     train_labels = convert_to_int_classes(target)
     test_labels = convert_to_int_classes(test_targets)

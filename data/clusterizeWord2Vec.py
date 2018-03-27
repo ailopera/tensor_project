@@ -1,11 +1,41 @@
 from sklearn.cluster import KMeans
 import time
 
+
+# Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
+# para convertir las noticias en una bolsa de centroides. 
+# esta funcion devuelve un array numpy por cada review, cada una con tantas features como clusteres
+def create_bag_of_centroids(wordlist, word_centroid_map).
+    # The number of clisters is equal to the highest cluster index
+    # in the word / centroid map
+    num_centroids = max(word_centroid_map.values()) + 1
+
+    # Preallocate the bag of centroids vector (for speed)
+    bag_of_centroids = np.zeros(num_centroids, dtype="float32")
+
+    # Loop over the words in the review. If the word is in the vocabulary,
+    # find which clustter it belongs to, and increment that cluster count by one
+    for word in wordlist:
+        if word in word_centroid_map:
+            index = word_centroid_map[word]
+            bag_of_centroids[index] += 1
+    
+    # Return the "bag of centroids"
+    return bag_of_centroids
+
+
+
 start = time.time() # Start time
+
+# Cargamos el modelo
+model_name = sys.argv[1]
+
+# model = KeyedVectors.load_word2vec_format(model_name)
+model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
 
 # Set "k" (num_clusters) to be 1/5th of the vocabulary size, or an
 # average of 5 words per cluster
-word_vectors = model.syn0
+word_vectors = model.wv.syn0
 
 num_clusters = word_vectors.shape[0] / 5
 
@@ -36,56 +66,48 @@ for cluster in xrange(0,10):
 # TODO: Adaptarlo a mi código
 # Creamos el modelo de bag of centroids 
 # Reservamos un array para el conjunto de entrenamiento de bag of centroids (por razones de velocidad)
-train_centroids = np.zeros((train["Article Id"].size, num_clusters), dtype="float32")
+# 
 
+trainDataPath = basePath + "train_data_aggregated.csv"
+trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
+
+train_centroids = np.zeros((trainData.shape[0], num_clusters), dtype="float32")
+print(">> Generating bag of centroids for training data...")
 # Transformamos el set de entrenamiento a bolsa de centroides
-counter = 0
-for report in clean_train_reviews:
-    train_centroids[counter] = create_bag_of_centroids(review, word_centroid_map)
-    counter += 1
+for report in trainData:
+    train_articleBody = create_bag_of_centroids(report['ArticleBody'], word_centroid_map)
+    train_body = create_bag_of_centroids(report['Headline'], word_centroid_map)
+    train_sample = np.append(train_articleBody, train_body)
+    train_centroids.append(train_sample)
 
+
+
+testDataPath = basePath + "test_data_aggregated.csv"
+testData = pd.read_csv(testDataPath, header=0, delimiter=",", quoting=1)
 #  Transformamos el set test a bolsa de centroids
-test_centroids = np.zeros((test["Article Id"].size, num_clusters), dtype="float32")
-
+test_centroids = np.zeros((testData.shape, num_clusters), dtype="float32")
+print(">> Generating bag of centroids for testing data...")
 # Transformamos el set de entrenamiento a bolsa de centroides
-counter = 0
-for report in clean_test_reviews:
-    test_centroids[counter] = create_bag_of_centroids(review, word_centroid_map)
-    counter += 1
+for report in testData:
+    test_articleBody = create_bag_of_centroids(report['ArticleBody'], word_centroid_map)
+    test_body = create_bag_of_centroids(report['Headline'], word_centroid_map)
+    test_sample = np.append(test_articleBody, test_body)
+    test_centroids.append(test_sample)
 
 
 # Utilizamos un modelo de random forest para ver como se comporta el modelo creado
-forest = RandomForestClassifier(n_estimators=100)
+# forest = RandomForestClassifier(n_estimators=100)
 
-print("Fitting a random fores to labeled training data...")
-forest = forest.fit(train_centroids, train["Stance"])
-result = forest.predict(test_centroids)
+# print("Fitting a random fores to labeled training data...")
+# forest = forest.fit(train_centroids, train["Stance"])
+# result = forest.predict(test_centroids)
 
-# Escribimos los resultados
-output = pd.Dataframe(data={"id": test["id"], "sentiment": result})
-output.to_csv("BagOfcentroids.csv", index=False, quoting=3)
+# # Escribimos los resultados
+# output = pd.Dataframe(data={"id": test["id"], "sentiment": result})
+# output.to_csv("BagOfcentroids.csv", index=False, quoting=3)
 
-
-# Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
-# para convertir las noticias en una bolsa de centroides. 
-# esta funcion devuelve un array numpy por cada review, cada una con tantas features como clusteres
-def create_bag_of_centroids(wordlist, word_centroid_map).
-    # The number of clisters is equal to the highest cluster index
-    # in the word / centroid map
-    num_centroids = max(word_centroid_map.values()) + 1
-
-    # Preallocate the bag of centroids vector (for speed)
-    bag_of_centroids = np.zeros(num_centroids, dtype="float32")
-
-    # Loop over the words in the review. If the word is in the vocabulary,
-    # find which clustter it belongs to, and increment that cluster count by one
-    for word in wordlist:
-        if word in word_centroid_map:
-            index = word_centroid_map[word]
-            bag_of_centroids[index] += 1
-    
-    # Return the "bag of centroids"
-    return bag_of_centroids
+# Llamamos al clasificador con los datos compuestos
+textModelClassifier.modelClassifier(train_centroids, trainData['Stance'], test_centroids, testData['Stance'])
 
 
 
