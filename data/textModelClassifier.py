@@ -62,7 +62,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
     n_epochs = 20
     batch_size = 50
 
-    
+    n_iterations = round(train_samples / batch_size)
 
     # Entrenamos el modelo. Usamos minibatch gradient descent 
     # (en cada iteracion aplicamos el gradiente descendiente sobre una submuestra aleatoria de los datos de entrenamiento)
@@ -72,7 +72,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
         init.run()
         # Realizamos el entrenamiento fijando en n_epochs
         for epoch in range(n_epochs):
-            for iteration in range(train_samples / batch_size):
+            for iteration in range(iterations):
                 # X_batch, y_batch = mnist.train.next_batch(batch_size)
                 X_batch, y_batch = next_batch(batch_size, train_data, target_data)
                 sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
