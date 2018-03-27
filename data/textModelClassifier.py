@@ -39,7 +39,7 @@ def convert_to_int_classes(targetList):
     for elem in targetList:
         int_classes.append(map[elem])
         
-    return np.array(int_clasess)
+    return np.array(int_classes)
 
 
 ### Clasificador ###
