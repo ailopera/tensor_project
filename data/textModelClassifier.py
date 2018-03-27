@@ -11,7 +11,48 @@ root_logdir = "logs"
 tag = "tensorClassifierWithDense"
 logdir = "{}/run-{}-{}/".format(root_logdir,tag, now)
 
+### Funciones auxiliares
+# Toma N muestras de forma aleatoria a partir de los datos de entrada 
+def next_batch(batch_size, train_data, target_data):
+    training_shape = train_data.shape[0]
+    minibatch_indexes = random.sample(range(0,training_shape), batch_size)
+    # Tomamos las muestras de los datos de entrada
+    minibatch_data = []
+    minibatch_targets = []
+    for index in minibatch_indexes:
+        sample = train_data[index]
+        sample_target = target_data[index]
+        minibatch_data.append(sample)
+        minibatch_targets.append(sample_target)
+
+    return np.array(minibatch_data),np.array(minibatch_targets)
+
+
+def convert_to_int_classes(targetList):
+    map = {
+        "agree": 0,
+        "disagree": 1,
+        "discuss": 2,
+        "unrelated": 3
+    }
+    int_classes = []
+    for elem in targetList:
+        int_classes.append(map[elem])
+        
+    return np.array(int_clasess)
+
+
+### Clasificador ###
 def modelClassifier(input_features, target, test_features, test_targets):
+    # Convertimos a enteros las clases
+    train_labels = convert_to_int_classes(target)
+    test_labels = convert_to_int_classes(test_target)
+    
+    # Pequeño logging para comprobar que se estan generando bien 
+    for i in range(20):
+        print(">> String label: ", target[i])
+        print(">> Int label: ", train_labels[i])
+
     ### Definicion de la red ###
     train_samples = input_features.shape[0] # Numero de ejemplos
 
@@ -74,12 +115,12 @@ def modelClassifier(input_features, target, test_features, test_targets):
         for epoch in range(n_epochs):
             for iteration in range(n_iterations):
                 # X_batch, y_batch = mnist.train.next_batch(batch_size)
-                X_batch, y_batch = next_batch(batch_size, input_features, target)
+                X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                 sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
             
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-            acc_test = accuracy.eval(feed_dict={X: test_features, y: test_targets})
+            acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
             print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
 
             # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
@@ -89,17 +130,3 @@ def modelClassifier(input_features, target, test_features, test_targets):
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
 
-# Toma N muestras de forma aleatoria a partir de los datos de entrada 
-def next_batch(batch_size, train_data, target_data):
-    training_shape = train_data.shape[0]
-    minibatch_indexes = random.sample(range(0,training_shape), batch_size)
-    # Tomamos las muestras de los datos de entrada
-    minibatch_data = []
-    minibatch_targets = []
-    for index in minibatch_indexes:
-        sample = train_data[index]
-        sample_target = target_data[index]
-        minibatch_data.append(sample)
-        minibatch_targets.append(sample_target)
-
-    return np.array(minibatch_data),np.array(minibatch_targets)
