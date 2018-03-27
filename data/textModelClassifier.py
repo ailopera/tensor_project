@@ -95,11 +95,11 @@ def next_batch(batch_size, train_data, target_data):
     minibatch_indexes = random.sample(range(0,training_shape), batch_size)
     # Tomamos las muestras de los datos de entrada
     minibatch_data = []
-    minibatch_target = []
+    minibatch_targets = []
     for index in minibatch_indexes:
         sample = train_data[index]
         sample_target = target_data[index]
         minibatch_data.append(sample)
-        minibatch_target.append(sample_target)
+        minibatch_targets.append(sample_target)
 
-    return minibatch_data,minibatch_targets
+    return np.array(minibatch_data),np.array(minibatch_targets)
