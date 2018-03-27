@@ -1,11 +1,17 @@
 from sklearn.cluster import KMeans
 import time
+import sys
+import gensim
+from gensim.models import Word2Vec, KeyedVectors
+import numpy as np
+import pandas as pd
+import textModelClassifier
 
 
 # Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
 # para convertir las noticias en una bolsa de centroides. 
 # esta funcion devuelve un array numpy por cada review, cada una con tantas features como clusteres
-def create_bag_of_centroids(wordlist, word_centroid_map).
+def create_bag_of_centroids(wordlist, word_centroid_map):
     # The number of clisters is equal to the highest cluster index
     # in the word / centroid map
     num_centroids = max(word_centroid_map.values()) + 1
@@ -37,7 +43,7 @@ model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
 # average of 5 words per cluster
 word_vectors = model.wv.syn0
 
-num_clusters = word_vectors.shape[0] / 5
+num_clusters = round(word_vectors.shape[0] / 5)
 
 # Inicializa un objeto de k-means y lo usa para extraer centroides
 kmeans_clustering = KMeans(n_clusters= num_clusters)
@@ -60,10 +66,9 @@ for cluster in xrange(0,10):
     for i in xrange(0,len(word_centroid_map.values())):
         if(word_centroid_map.values()[i] == cluster):
             words.append(word_centroid_map.keys()[i])
-    print words
+    print(words)
     
 
-# TODO: Adaptarlo a mi código
 # Creamos el modelo de bag of centroids 
 # Reservamos un array para el conjunto de entrenamiento de bag of centroids (por razones de velocidad)
 # 
