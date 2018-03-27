@@ -150,7 +150,7 @@ if __name__ == "__main__":
 		testSample = np.append(sample[0],sample[1])
 		testDataInputs.append(testSample)
 
-	print("> Tamaño de los datos de entrada (entrenamiento): ", trainData)
+	print("> Tamaño de los datos de entrada (entrenamiento): ", trainData.shape)
 	print("> Tamaño de los datos de entrada (test): ", testData.shape)
 	
 	# Llamamos al clasificador con los datos compuestos
