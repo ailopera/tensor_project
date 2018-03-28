@@ -6,7 +6,7 @@ from gensim.models import Word2Vec, KeyedVectors
 import numpy as np
 import pandas as pd
 import textModelClassifier
-
+import multiprocessing
 
 # Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
 # para convertir las noticias en una bolsa de centroides. 
@@ -46,7 +46,8 @@ word_vectors = model.wv.syn0
 num_clusters = round(word_vectors.shape[0] / 5)
 
 # Inicializa un objeto de k-means y lo usa para extraer centroides
-kmeans_clustering = KMeans(n_clusters= num_clusters)
+n_jobs = multiprocessing.cpu_count()
+kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=n_jobs)
 # En idx guardamos el cluster asociado a cada palabra
 idx = kmeans_clustering.fit_predict(word_vectors)
 
