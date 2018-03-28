@@ -90,7 +90,7 @@ with tf.name_scope("eval"):
     accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
 # Creamos un nodo para inicializar todas las variables y un nodo de guarda para guardar nuestro modelo entrenado en disco
-init = tf.global_variabless_initializer()
+init = tf.global_variables_initializer()
 saver = tf.train.Saver()
 
 # Escribimos el grafo
