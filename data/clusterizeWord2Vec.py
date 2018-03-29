@@ -43,8 +43,12 @@ model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
 # average of 5 words per cluster
 word_vectors = model.wv.syn0
 
-num_clusters = round(word_vectors.shape[0] / 20)
+cluster_size = 100
+num_clusters = round(word_vectors.shape[0] / cluster_size)
 print("> Creando clusteres a partir del modelo cargado...")
+print("> Tamaño del cluster: ", cluster_size)
+print("> Numero de clusteres: ", num_clusters)
+
 # Inicializa un objeto de k-means y lo usa para extraer centroides
 n_jobs = multiprocessing.cpu_count()
 kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=1)
