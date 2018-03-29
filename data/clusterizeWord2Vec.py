@@ -46,6 +46,7 @@ word_vectors = model.wv.syn0
 cluster_size = 100
 num_clusters = round(word_vectors.shape[0] / cluster_size)
 print("> Creando clusteres a partir del modelo cargado...")
+print("> Numero de terminos del modelo: ", word_vectors.shape[0])
 print("> Tamaño del cluster: ", cluster_size)
 print("> Numero de clusteres: ", num_clusters)
 
@@ -57,11 +58,10 @@ idx = kmeans_clustering.fit_predict(word_vectors)
 
 end = time.time()
 elapsed = end - start
-print("Time taken for K means clustering: ", elapsed, " seconds.")
+print("> Tiempo empleado en realizar el clustering de kmeans: ", elapsed, " seconds.")
 
 #Creamos un diccionario de word/index, que mapea cada palabra del vocabulario con su cluster asociado
 word_centroid_map = dict(zip(model.index2word, idx))
-
 
 # Exploramos un poco los clusteres creados (los 10 primeros)
 for cluster in xrange(0,10):
@@ -73,11 +73,10 @@ for cluster in xrange(0,10):
             words.append(word_centroid_map.keys()[i])
     print(words)
     
-
 # Creamos el modelo de bag of centroids 
 # Reservamos un array para el conjunto de entrenamiento de bag of centroids (por razones de velocidad)
-# 
 
+train_formatting_start = time.time()
 trainDataPath = basePath + "train_data_aggregated.csv"
 trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 
@@ -90,6 +89,7 @@ for report in trainData:
     train_sample = np.append(train_articleBody, train_body)
     train_centroids.append(train_sample)
 
+train_formatting_end = time.time()
 
 
 testDataPath = basePath + "test_data_aggregated.csv"
@@ -104,6 +104,9 @@ for report in testData:
     test_sample = np.append(test_articleBody, test_body)
     test_centroids.append(test_sample)
 
+test_formatting_end = time.time()
+print("> Tiempo empleado en formatear los datos de entrenamiento: ", train_formatting_end - train_formatting_start)
+print("> Tiempo empleado en formatear los datos de test: ", test_formatting_end - train_formatting_end)
 
 # Utilizamos un modelo de random forest para ver como se comporta el modelo creado
 # forest = RandomForestClassifier(n_estimators=100)
@@ -117,7 +120,8 @@ for report in testData:
 # output.to_csv("BagOfcentroids.csv", index=False, quoting=3)
 
 # Llamamos al clasificador con los datos compuestos
+classify_start = time.time()
 textModelClassifier.modelClassifier(train_centroids, trainData['Stance'], test_centroids, testData['Stance'])
-
-
+classify_end = time.time()
+print("> Tiempo empleado en ejecutar el clasificador: ", classify_end - classify_start)
 
