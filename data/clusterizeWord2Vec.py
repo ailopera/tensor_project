@@ -43,8 +43,8 @@ model = KeyedVectors.load_word2vec_format(model_name)
 # average of 5 words per cluster
 word_vectors = model.wv.syn0
 
-num_clusters = round(word_vectors.shape[0] / 5)
-
+num_clusters = round(word_vectors.shape[0] / 20)
+print("> Creando clusteres a partir del modelo cargado...")
 # Inicializa un objeto de k-means y lo usa para extraer centroides
 n_jobs = multiprocessing.cpu_count()
 kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=n_jobs)
