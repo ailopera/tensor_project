@@ -2,7 +2,26 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix 
 
+def convert_to_int_classes(targetList):
+    map = {
+        "agree": 0,
+        "disagree": 1,
+        "discuss": 2,
+        "unrelated": 3
+    }
+    int_classes = []
+    for elem in targetList:
+        int_classes.append(map[elem])
+        
+    return np.array(int_classes)
+
+
 def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTargets):
+	# Convertimos a enteros las clases
+    train_labels = convert_to_int_classes(trainTargets)
+    test_labels = convert_to_int_classes(testTargets)
+
+
 	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
 	forest = RandomForestClassifier(n_estimators=100)
 
@@ -31,9 +50,9 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
 	#  Evaluate the results
 	# train_accuracy = accuracy_score(trainData['Stance'], forest.predict(trainDataVecs))
 	# Creo dos modelos aparte como solucion temporal ya que con el random forest no es posible pasar los dos textos como features
-	train_accuracy = accuracy_score(trainTargets, forest.predict(trainDataFeatures))
-	test_accuracy = accuracy_score(testTargets, prediction)
-	confussion_matrix = confusion_matrix(testTargets, prediction)
+	train_accuracy = accuracy_score(train_labels, forest.predict(trainDataFeatures))
+	test_accuracy = accuracy_score(test_labels, prediction)
+	confussion_matrix = confusion_matrix(test_labels, prediction)
 	
 	print(">> Accuracy achieved with the train set (using only article bodies): ", train_accuracy)	
 	print(">> Accuracy achieved with the test set: ", test_accuracy)
