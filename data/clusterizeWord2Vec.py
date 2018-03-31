@@ -52,8 +52,11 @@ print("> Numero de clusteres: ", num_clusters)
 
 # Inicializa un objeto de k-means y lo usa para extraer centroides
 n_jobs = multiprocessing.cpu_count()
-kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=1)
+# kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=1)
+kmeans_clustering = MiniBatchKMeans(n_clusters= num_clusters)
 # En idx guardamos el cluster asociado a cada palabra
+# print("> Tiempo empleado en inicializar modelo Kmeans")
+print("> Inicio fit_predict...")
 idx = kmeans_clustering.fit_predict(word_vectors)
 
 end = time.time()
