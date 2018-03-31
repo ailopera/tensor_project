@@ -16,6 +16,7 @@ import time
 import csv
 
 import textModelClassifier
+from randomForestClassifier import randomClassifier
 
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
 # (si forman parte del vocabulario del modelo)
@@ -165,7 +166,10 @@ if __name__ == "__main__":
 	
 	# Llamamos al clasificador con los datos compuestos
 	start = time.time()
-	textModelClassifier.modelClassifier(np.array(trainDataInputs),trainData['Stance'],np.array(testDataInputs),testData['Stance'])
+	# Modelo basado en un MultiLayer Perceptron
+	# textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+	# Modelo basado en un randomForest sencillo
+	randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testdata['Stance'])
 	end = time.time()
 	modelExecutionTime = end - start
 	print("> Time spent on fiting and predicting: ", modelExecutionTime)
