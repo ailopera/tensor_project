@@ -43,7 +43,7 @@ model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
 # average of 5 words per cluster
 word_vectors = model.wv.syn0
 
-cluster_size = 100
+cluster_size = 200
 num_clusters = round(word_vectors.shape[0] / cluster_size)
 print("> Creando clusteres a partir del modelo cargado...")
 print("> Numero de terminos del modelo: ", word_vectors.shape[0])
