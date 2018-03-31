@@ -1,6 +1,7 @@
 # Crea un clasificador random para testear los modelos de representacion de textos
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix 
+import numpy as np
 
 def convert_to_int_classes(targetList):
     map = {
