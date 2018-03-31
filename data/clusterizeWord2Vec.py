@@ -1,4 +1,4 @@
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans
 import time
 import sys
 import gensim
@@ -67,11 +67,11 @@ print("> Tiempo empleado en realizar el clustering de kmeans: ", elapsed, " seco
 word_centroid_map = dict(zip(model.index2word, idx))
 
 # Exploramos un poco los clusteres creados (los 10 primeros)
-for cluster in xrange(0,10):
+for cluster in range(0,10):
     print("\nCluster ", cluster)
     # Imprimimos todas las palabras del cluster
     words = []
-    for i in xrange(0,len(word_centroid_map.values())):
+    for i in range(0,len(word_centroid_map.values())):
         if(word_centroid_map.values()[i] == cluster):
             words.append(word_centroid_map.keys()[i])
     print(words)
