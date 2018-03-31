@@ -56,7 +56,7 @@ def getAvgFeatureVecs(news, model, num_features):
 	# Iteramos sobre las noticias
 	for report in news:
 		# Print a status message every 1000th new
-		if counter%100. == 0.:
+		if counter%1000. == 0.:
 			print("> Report", counter," of ", len(news))
 		
 		# Call thhe function (defined above) that makes average feature vectors
@@ -169,7 +169,7 @@ if __name__ == "__main__":
 	# Modelo basado en un MultiLayer Perceptron
 	# textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	# Modelo basado en un randomForest sencillo
-	randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testdata['Stance'])
+	randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	end = time.time()
 	modelExecutionTime = end - start
 	print("> Time spent on fiting and predicting: ", modelExecutionTime)
