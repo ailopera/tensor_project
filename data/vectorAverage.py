@@ -10,9 +10,10 @@ import word2VecModel
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix 
 import pandas as pd
-
 from joblib import Parallel, delayed
 import multiprocessing
+import time
+import csv
 
 import textModelClassifier
 
@@ -76,14 +77,18 @@ if __name__ == "__main__":
 	basePath = "./fnc-1-original/aggregatedDatasets/"
 	num_features = 300
 	model_name = sys.argv[1]
+	executionDesc = "Vector Average"
 	# stances_model_name = sys.argv[1]
 	# bodies_model_name = sys.argv[2]
 	
 	# model = KeyedVectors.load_word2vec_format(model_name)
+	start = time.time()
 	model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
-	# bodies_model = Word2Vec.load(bodies_model_name)
-	# stances_model = Word2Vec.load(stances_model_name)
+	end = time.time()
+	loadModelTime = end - start
+	print("> Tiempo empleado en cargar el modelo: ", loadModelTime)
 	
+
 	#Primero las convertimos en lista de palabras
 	# trainDataPath = basePath + "train_data_aggregated_mini.csv"
 	trainDataPath = basePath + "train_data_aggregated.csv"
@@ -91,36 +96,38 @@ if __name__ == "__main__":
 	clean_train_headlines = []
 	clean_train_articleBodies = []
 	trainDataVecs = {}
+
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
-	#for report in trainBodies['Headline']:
 	print(">> Generating word2vec input model and applying vector average for train data...")
-	# for index,line in trainData.iterrows():
-	# 	headline = line['Headline']
-	# 	articleBody = line['ArticleBody']
-	# 	clean_train_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
-	# 	clean_train_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
-
 	num_cores = multiprocessing.cpu_count()
-	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['Headline'])
+	start = time.time()
+	clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['Headline'])	
 	clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
+	end = time.time()
+	trainDataFormattingTime = end - start
+	print("> Time spent on formatting training data: ", trainDataFormattingTime)
 
 	# Cargamos el modelo de word2vec en un set
 	#Indexwords is a list that contains the names of the words in the model's vocabulary. Convert it to a set, for speed
 	# index2word_set = set(model.wv.index2word)
 
 	print(">> Getting feature vectors for train headlines...")
+	start = time.time()
 	trainDataVecsHeadline = getAvgFeatureVecs(clean_train_headlines, model, num_features)
 	print(">> Getting feature vectors for train articleBodies...")
 	trainDataVecsArticleBody = getAvgFeatureVecs(clean_train_articleBodies, model, num_features)
-
+	end = time.time()
+	trainFeatureVecsTime = end - start
+	print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
+	
+	# Creamos un vector de 1x600 que contiene el titular y el cuerpo de noticia asociado, para alimentar el modelo de Machine Learning
 	trainDataInputs = []
 	for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
-		# trainSample = sample[0].extend(sample[1])
 		trainSample = np.append(sample[0],sample[1])
 		trainDataInputs.append(trainSample)
 
-	#  Escribimos en un fichero los datos de entrenamiento
+	# Escribimos en un fichero los datos de entrenamiento
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec input model and applying vector average for test data...")
 	# testDataPath = basePath + "test_data_aggregated_mini.csv"
@@ -129,24 +136,27 @@ if __name__ == "__main__":
 	clean_test_articleBodies = []
 	clean_test_headlines = []
 	testDataVecs = {}
-	#for report in testBodies['Headline']:
-	# for index,line in testData.iterrows():
-	# 	headline = line['Headline']
-	# 	articleBody = line['ArticleBody']
-	# 	clean_test_headlines.append(word2VecModel.news_to_wordlist(headline,remove_stopwords=True))
-	# 	clean_test_articleBodies.append(word2VecModel.news_to_wordlist(articleBody,remove_stopwords=True))
 
+	start = time.time()
 	clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['Headline'])
 	clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
-	
+	end = time.time()
+	testDataFormattingTime = end - start
+	print(">> Time spent on formatting testing data: ", testDataFormattingTime)
+
+
 	print(">> Getting feature vectors for test articleBodies...")
+	start = time.time()
 	testDataVecsArticleBody = getAvgFeatureVecs(clean_test_articleBodies, model, num_features)
 	print(">> Getting feature vectors for test headlines...")
 	testDataVecsHeadline = getAvgFeatureVecs(clean_test_headlines, model, num_features)
-
+	end = time.time()
+	testDataFeatureVecsTime = end - start
+	print(">> Time spent on getting feature vectors for training data...", testDataFeatureVecsTime)
+	
+	# Creamos un vector de 1x600 que contiene el titular y el cuerpo de noticia asociado, para alimentar el modelo de Machine Learning
 	testDataInputs = []
 	for sample in zip(testDataVecsHeadline, testDataVecsArticleBody):
-		# testSample = sample[0].extend(sample[1])
 		testSample = np.append(sample[0],sample[1])
 		testDataInputs.append(testSample)
 
@@ -154,4 +164,30 @@ if __name__ == "__main__":
 	print("> Tamaño de los datos de entrada (test): ", testData.shape)
 	
 	# Llamamos al clasificador con los datos compuestos
+	start = time.time()
 	textModelClassifier.modelClassifier(np.array(trainDataInputs),trainData['Stance'],np.array(testDataInputs),testData['Stance'])
+	end = time.time()
+	modelExecutionTime = end - start
+	print("> Time spent on fiting and predicting: ", modelExecutionTime)
+
+
+	# Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
+	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime","trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "trainInstances", "testInstances"]
+	with open('executionData.csv', 'a') as csv_file:
+		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+		executionData = {"date": time.time().strftime("%Y-%m-%d %H:%M"),
+		 "executionDesc": executionDesc, 
+		 "textModelFeatures": trainData.shape[0], 
+		 "modelName": model_name,
+		 "loadModelTime": loadModelTime,
+		 "trainDataFormattingTime": trainDataFormattingTime,
+		 "trainDataFeatureVecsTime": trainFeatureVecsTime,
+		 "testDataFormattingTime": testDataFormattingTime,
+		 "testDataFeatureVecsTime": testDataFeatureVecsTime,
+		 "trainInstances": testData.shape[1],
+		 "testInstances": testData.shape[0]}
+
+		newFile = os.stat('executionData.csv').st_size == 0
+		if newFile:
+			writer.writeheader()
+		writer.writerow(executionData)
