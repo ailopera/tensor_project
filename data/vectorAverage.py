@@ -39,6 +39,7 @@ def makeFeatureVec(words, model, num_features, index2word_set, log=False):
 	if log:
 		print("> Feature vec: ", featureVec)
 		print("> NWords: ", nwords)
+		print("----------------------------")
 
 	featureVec = np.divide(featureVec, nwords)
 	return featureVec
