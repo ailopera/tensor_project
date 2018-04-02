@@ -66,7 +66,7 @@ def getAvgFeatureVecs(news, model, num_features):
 		log = True if counter < 1000 else False
 		
 		# Call the function (defined above) that makes average feature vectors
-		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
+		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set, log)
 		counter = counter + 1
 
 	# Version paralela del computo de vectores de caracteristicas
