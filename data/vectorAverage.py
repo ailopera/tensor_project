@@ -20,7 +20,7 @@ from randomForestClassifier import randomClassifier
 
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
 # (si forman parte del vocabulario del modelo)
-def makeFeatureVec(words, model, num_features, index2word_set):
+def makeFeatureVec(words, model, num_features, index2word_set, log=False):
 	#Function to average all of the word vectors in a given paragraph
 	#Pre-initialize an empty numpy array (for speed)
 	featureVec = np.zeros((num_features,), dtype="float32")
@@ -36,6 +36,10 @@ def makeFeatureVec(words, model, num_features, index2word_set):
 			nwords = nwords + 1
 			featureVec = np.add(featureVec, model[word])
 	
+	if log:
+		print("> Feature vec: ", featureVec)
+		print("> NWords: ", nwords)
+
 	featureVec = np.divide(featureVec, nwords)
 	return featureVec
 
@@ -59,7 +63,9 @@ def getAvgFeatureVecs(news, model, num_features):
 		if counter%1000. == 0.:
 			print("> Report", counter," of ", len(news))
 		
-		# Call thhe function (defined above) that makes average feature vectors
+		log = True if counter < 1000 else False
+		
+		# Call the function (defined above) that makes average feature vectors
 		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
 		counter = counter + 1
 
