@@ -43,9 +43,9 @@ def makeFeatureVec(words, model, num_features, index2word_set, log=False):
 
 	featureVec = np.divide(featureVec, nwords)
 	
-        if log:
-                print("Feature Vec Divided: ", featureVec)
-        return featureVec
+	if log:
+		print("Feature Vec Divided: ", featureVec)
+	return featureVec
 
 
 
