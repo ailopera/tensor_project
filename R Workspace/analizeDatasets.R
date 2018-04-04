@@ -9,6 +9,8 @@ dfCompetition <- read.table("data/competition_data_aggregated.csv", header = TRU
 # head(df$Stance)
 
 # Barplots de conteo de clasificaciones
+# TODO: Añadir porcentaje en cada barplot
+# TODO: Explicar en la memoria estos gráficos
 plotTrain <- ggplot(data=dfTrain, aes(x=Stance)) +  geom_bar(stat="count", fill="steelblue") + labs(title="Clasificaciones en el conjunto de entrenamiento", 
        x="Etiqueta", y="Frecuencia")
 
@@ -18,3 +20,4 @@ plotTest <- ggplot(data=dfTest, aes(x=Stance)) +  geom_bar(stat="count", fill="s
 plotCompetition <- ggplot(data=dfCompetition, aes(x=Stance)) +  geom_bar(stat="count", fill="steelblue") + labs(title="Clasificaciones en el conjunto de validación", 
                                                                                                   x="Etiqueta", y="Frecuencia")
 
+plotCompetition
