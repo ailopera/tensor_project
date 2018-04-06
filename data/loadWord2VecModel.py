@@ -6,6 +6,12 @@ inputPath = sys.argv[1]
 model = gensim.models.Word2Vec.load(inputPath)
 #model = gensim.models.KeyedVectors.load_word2vec_format(inputPath, binary=True)
 
+# Paso 0: Representación numerica de los datos
+# The word2Vec model trained consists on a feature vector for each word in the vocabulary,
+# stored in a numpy array called "syn0"
+# print("Tipo de la estructura de word embeddings: Type(model.wv.syn0)", type(model.wv.syn0))
+print("Model shape (Tamaño del vocabulario, tamaño del vector de features): ", model.wv.syn0.shape)
+
 # Paso 1: Exploración inicial del modelo
 # The doesht_math function will try to deduce which word in a set is most dissimilar form the others
 print(">>> DOESNT_MATCH: Obtiene el término disonante con respecto al resto")
@@ -45,12 +51,6 @@ print("> Love: ", get_most_similar("love"))
 print("---------------------------------------------------------------------------------------------------------")
 print("> Money: ", get_most_similar("money"))
 print("---------------------------------------------------------------------------------------------------------")
-
-# Paso 2: Representación numerica de los datos
-# The word2Vec model trained consists on a feature vector for each word in the vocabulary,
-# stored in a numpy array called "syn0"
-print("Type(model.wv.syn0)", type(model.wv.syn0))
-print("Model shape (Tamaño del vocabulario, tamaño del vector de features): ", model.wv.syn0.shape)
 
 #print("----------------------------------------")
 #print("Sample word model: ", model["love"])
