@@ -67,7 +67,7 @@ def getAvgFeatureVecs(news, model, num_features):
 		if counter%1000. == 0.:
 			print("> Report", counter," of ", len(news))
 		
-		log = True if counter == 99 else False
+		log = True if counter == 100 else False
 		if log:
 			print("> Report", counter," of ", len(news))
 		# Call the function (defined above) that makes average feature vectors
