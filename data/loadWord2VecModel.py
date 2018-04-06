@@ -16,7 +16,8 @@ print("> france, england, germany, berlin: ", model.doesnt_match("france england
 #print("---------------------------------------------------------------------------------------------")
 print("> Paris, berlin, london, austria: ",model.doesnt_match("paris berlin london austria".split()))
 
-print("#############################################################################################")
+# print("#############################################################################################")
+print(" ")
 # We can also use the most_similar function to get insight into the model's wordclusters
 print(">>> MOST SIMILAR QUESTIONS")
 # print("> Man: ",get_most_similar("man"))
