@@ -41,13 +41,14 @@ try:
     # print("#############################################################################################")
     print(" ")
 
-    print(">>> most_similar_cosmul: Obtiene el término más cercano tras aplicar una operación de sustracción sobre los vectores")
-    forest_similar = model.wv.most_similar_cosmul(positive=['forest', 'person'], negative=['tree'])
-    molecule_similar = model.wv.most_similar_cosmul(positive=['molecule'], negative=['group'])
-    polymer_similar = model.wv.most_similar_cosmul(positive=['polymer'], negative=['natural'])
-    print("embedded[forest] + embedded[person] - embedded[group]: ", forest_similar)
-    print("embedded[molecule] - embedded[group]: ", molecule_similar)
-    print("embedded[polymer] - embedded[natural]: ", polymer_similar)
+    # print(">>> most_similar_cosmul: Obtiene el término más cercano tras aplicar una operación de sustracción sobre los vectores")
+    # forest_similar = model.wv.most_similar_cosmul(positive=['forest', 'person'], negative=['tree'])
+    # molecule_similar = model.wv.most_similar_cosmul(positive=['molecule'], negative=['group'])
+    # polymer_similar = model.wv.most_similar_cosmul(positive=['polymer'], negative=['natural'])
+    # print("embedded[forest] + embedded[person] - embedded[group]: ", forest_similar)
+    # print("embedded[molecule] - embedded[group]: ", molecule_similar)
+    # print("embedded[polymer] - embedded[natural]: ", polymer_similar)
+    
     # We can also use the most_similar function to get insight into the model's wordclusters
     print(">>> MOST SIMILAR QUESTIONS")
     # print("> Man: ",get_most_similar("man"))
