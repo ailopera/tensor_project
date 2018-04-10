@@ -1,14 +1,18 @@
 import random
 import csv
+import pandas as pd
+
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
 
 inputPath = "total_data_aggregated.csv"
 # header = "Headline,ArticleBody,Stance,BodyIDS"
 outputTrainPath = "train_partition.csv"
 outputTestPath = "test_partition.csv"
-print(">> Fichero de entrada:", inputPath)
 
-with open(inputPath, 'r') as inputFile, open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testFile:
+print(">> Fichero de entrada:", inputPath)
+inputFile = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
+
+with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testFile:
     print(">> Fichero de train generado:", outputTrainPath)
     print(">> Fichero de test generado:", outputTestPath)
     
