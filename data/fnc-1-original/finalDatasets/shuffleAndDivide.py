@@ -10,7 +10,8 @@ outputTrainPath = "train_partition.csv"
 outputTestPath = "test_partition.csv"
 
 print(">> Fichero de entrada:", inputPath)
-inputFile = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
+# inputFile = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
+data = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
 
 with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testFile:
     print(">> Fichero de train generado:", outputTrainPath)
@@ -24,7 +25,7 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     testWriter.writeheader()
     trainWriter.writeheader()
 
-    data = inputFile.iterrows()
+    # data = inputFile.iterrows()
     # Agitamos los datos para crear una partición de datos aleatoria
     print(">> Aleatorizando las muestras...")
     random.shuffle(data)
@@ -39,7 +40,7 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     print(">> Escribiendo los datos en los ficheros de salida correspondientes...")
     trainWriter.writerows(train_data)
     testWriter.writerows(test_data)
-    
+
 
     
 
