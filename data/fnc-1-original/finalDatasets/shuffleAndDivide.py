@@ -1,4 +1,5 @@
 import random
+import csv
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
 
 inputPath = "total_data_aggregated.csv"
