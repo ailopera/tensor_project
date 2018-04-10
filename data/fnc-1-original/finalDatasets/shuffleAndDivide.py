@@ -20,6 +20,7 @@ with open(inputPath, 'r') as inputFile, open(outputTrainPath, 'w') as trainFile,
     testWriter.writeheader()
     trainWriter.writeheader()
 
+    data = inputFile.iterrows()
     # Agitamos los datos para crear una partición de datos aleatoria
     print(">> Aleatorizando las muestras...")
     random.shuffle(data)
