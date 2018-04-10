@@ -17,7 +17,8 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     print(">> Fichero de train generado:", outputTrainPath)
     print(">> Fichero de test generado:", outputTestPath)
     
-    fieldnames = ["Headline","Body ID","Stance"]
+    fieldnames = ["Headline","ArticleBody","Stance","BodyIDS"]
+
     trainWriter = csv.DictWriter(trainFile, fieldnames=fieldnames)
     testWriter = csv.DictWriter(testFile, fieldnames=fieldnames)
     
@@ -32,16 +33,30 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     df.sample(frac=1)
 
     # Creamos las dos particiones de datos
-    train_data = df[:80]
-    test_data = df[80:]
+    train_batch_size = len(df) * 0.8
+    train_data = df[:train_batch_size]
+    test_data = df[train_batch_size:]
     print(">> Muestras de entrenamiento y validación: ", len(train_data))
     print(">> Muestras de testeo del modelo: ", len(test_data))
 
     # Escribimos las particiones en los ficheros correspondientes
-    print(">> Escribiendo los datos en los ficheros de salida correspondientes...")
-    trainWriter.writerows(train_data)
-    testWriter.writerows(test_data)
+    print(">> Escribiendo los datos en el fichero de entrenamiento/validacion...")
+    for index,line in train_data.iterrows():
+        row = { "Headline": line["Headline"],
+        "ArticleBody": line["ArticleBody"],
+        "Stance": line["Stance"],
+        "BodyIDS": line["BodyIDS"]}
 
+        trainWriter.writerow(row)
+    
+    print(">> Escribiendo los datos en el fichero de test...")
+    for index,line in test_data.iterrows():
+        row = { "Headline": line["Headline"],
+        "ArticleBody": line["ArticleBody"],
+        "Stance": line["Stance"],
+        "BodyIDS": line["BodyIDS"]}
+
+        testWriter.writerow(row)
 
     
 
