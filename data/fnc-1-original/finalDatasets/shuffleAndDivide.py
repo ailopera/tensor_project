@@ -11,7 +11,7 @@ outputTestPath = "test_partition.csv"
 
 print(">> Fichero de entrada:", inputPath)
 # inputFile = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
-data = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
+df = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
 
 with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testFile:
     print(">> Fichero de train generado:", outputTrainPath)
@@ -28,8 +28,9 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     # data = inputFile.iterrows()
     # Agitamos los datos para crear una partición de datos aleatoria
     print(">> Aleatorizando las muestras...")
-    random.shuffle(data)
-
+    # random.shuffle(data)
+    df.sample(frac=1)
+    
     # Creamos las dos particiones de datos
     train_data = data[:80]
     test_data = data[80:]
