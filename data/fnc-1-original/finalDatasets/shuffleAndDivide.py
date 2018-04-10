@@ -1,10 +1,10 @@
 import random
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
 
-inputPath = "total_data_aggregated"
+inputPath = "total_data_aggregated.csv"
 # header = "Headline,ArticleBody,Stance,BodyIDS"
-outputTrainPath = "train_partition"
-outputTestPath = "test_partition"
+outputTrainPath = "train_partition.csv"
+outputTestPath = "test_partition.csv"
 print(">> Fichero de entrada:", inputPath)
 
 with open(inputPath, 'r') as inputFile, open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testFile:
