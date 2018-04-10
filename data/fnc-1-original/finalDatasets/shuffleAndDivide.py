@@ -30,10 +30,10 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     print(">> Aleatorizando las muestras...")
     # random.shuffle(data)
     df.sample(frac=1)
-    
+
     # Creamos las dos particiones de datos
-    train_data = data[:80]
-    test_data = data[80:]
+    train_data = df[:80]
+    test_data = df[80:]
     print(">> Muestras de entrenamiento y validación: ", len(train_data))
     print(">> Muestras de testeo del modelo: ", len(test_data))
 
