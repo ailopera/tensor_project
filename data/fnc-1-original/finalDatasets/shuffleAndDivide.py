@@ -1,6 +1,7 @@
 import random
 import csv
 import pandas as pd
+import math
 
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
 
