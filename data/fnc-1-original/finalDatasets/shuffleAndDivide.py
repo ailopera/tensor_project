@@ -37,8 +37,9 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
 
     # Escribimos las particiones en los ficheros correspondientes
     print(">> Escribiendo los datos en los ficheros de salida correspondientes...")
-    testWriter.writerows()
-    trainWriter.writerows()
+    trainWriter.writerows(train_data)
+    testWriter.writerows(test_data)
+    
 
     
 
