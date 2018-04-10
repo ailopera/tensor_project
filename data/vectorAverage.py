@@ -89,12 +89,14 @@ if __name__ == "__main__":
 	basePath = "./fnc-1-original/aggregatedDatasets/"
 	num_features = 300
 	model_name = sys.argv[1]
+	modelExecuted = sys.argv[2] # Puede ser "MLP" "RF"
 	executionDesc = "Vector Average"
 	# stances_model_name = sys.argv[1]
 	# bodies_model_name = sys.argv[2]
-	
+		
 	# model = KeyedVectors.load_word2vec_format(model_name)
 	start = time.time()
+	execution_start = start
 	model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
 	end = time.time()
 	loadModelTime = end - start
@@ -177,17 +179,23 @@ if __name__ == "__main__":
 	
 	# Llamamos al clasificador con los datos compuestos
 	start = time.time()
-	# Modelo basado en un MultiLayer Perceptron
-	# textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
-	# Modelo basado en un randomForest sencillo
-	randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+	if modelExecuted == 'MLP':
+		# Modelo basado en un MultiLayer Perceptron
+		textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+	elif modelExecuted == 'RF':
+		# Modelo basado en un randomForest sencillo
+		randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+	else:
+		print(">>> ERROR: No se ha ejecutado ningún modelo")
 	end = time.time()
 	modelExecutionTime = end - start
+	execution_end = end
+	totalExecutionTime = execution_end - execution_start
 	print("> Time spent on fiting and predicting: ", modelExecutionTime)
 
 
 	# Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
-	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime","trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "trainInstances", "testInstances"]
+	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime","trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime","trainInstances", "testInstances", "modelTrained"]
 	with open('executionData.csv', 'a') as csv_file:
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		executionData = {"date": time.time().strftime("%Y-%m-%d %H:%M"),
@@ -199,9 +207,12 @@ if __name__ == "__main__":
 		 "trainDataFeatureVecsTime": trainFeatureVecsTime,
 		 "testDataFormattingTime": testDataFormattingTime,
 		 "testDataFeatureVecsTime": testDataFeatureVecsTime,
+		 "totalExecutionTime": totalExecutionTime,
 		 "trainInstances": testData.shape[1],
-		 "testInstances": testData.shape[0]}
-
+		 "testInstances": testData.shape[0],
+		 "modelTrained": modelExecuted
+		 }
+		 
 		newFile = os.stat('executionData.csv').st_size == 0
 		if newFile:
 			writer.writeheader()
