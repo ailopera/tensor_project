@@ -33,7 +33,7 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     df.sample(frac=1)
 
     # Creamos las dos particiones de datos
-    train_batch_size = len(df) * 0.8
+    train_batch_size = math.ceil(len(df) * 0.8)
     train_data = df[:train_batch_size]
     test_data = df[train_batch_size:]
     print(">> Muestras de entrenamiento y validación: ", len(train_data))
