@@ -235,7 +235,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 
 if __name__ == "__main__":
 	model_name = sys.argv[1]
-	modelExecuted = sys.argv[2] # Puede ser "MLP" "RF"
+	model_executed = sys.argv[2] # Puede ser "MLP" "RF"
 	binary = sys.argv[3]
 	executeVectorAverage(model_name, model_executed, binary)
 	
