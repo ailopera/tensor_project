@@ -102,6 +102,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	else:
 		# model = gensim.models.Word2Vec.load(word2vec_model)
 		model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model)
+		#model = KeyedVectors.load_word2vec_format(model_name)
+
 	
 	end = time.time()
 	loadModelTime = end - start
