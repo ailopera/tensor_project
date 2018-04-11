@@ -85,11 +85,10 @@ def makeWordList(text):
 	wordList =  word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
 	return wordList
 
-if __name__ == "__main__":
+
+def executeVectorAverage(word2vec_model, model_executed, binary):
 	basePath = "./fnc-1-original/aggregatedDatasets/"
 	num_features = 300
-	model_name = sys.argv[1]
-	modelExecuted = sys.argv[2] # Puede ser "MLP" "RF"
 	executionDesc = "Vector Average"
 	# stances_model_name = sys.argv[1]
 	# bodies_model_name = sys.argv[2]
@@ -97,7 +96,11 @@ if __name__ == "__main__":
 	# model = KeyedVectors.load_word2vec_format(model_name)
 	start = time.time()
 	execution_start = start
-	model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
+	if binary:
+		model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model, binary=True)
+	else:
+		model = gensim.models.Word2Vec.load(word2vec_model)
+	
 	end = time.time()
 	loadModelTime = end - start
 	print("> Tiempo empleado en cargar el modelo: ", loadModelTime)
@@ -179,10 +182,10 @@ if __name__ == "__main__":
 	
 	# Llamamos al clasificador con los datos compuestos
 	start = time.time()
-	if modelExecuted == 'MLP':
+	if model_executed == 'MLP':
 		# Modelo basado en un MultiLayer Perceptron
 		textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
-	elif modelExecuted == 'RF':
+	elif model_executed == 'RF':
 		# Modelo basado en un randomForest sencillo
 		randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	else:
@@ -217,3 +220,11 @@ if __name__ == "__main__":
 		if newFile:
 			writer.writeheader()
 		writer.writerow(executionData)
+
+
+if __name__ == "__main__":
+	model_name = sys.argv[1]
+	modelExecuted = sys.argv[2] # Puede ser "MLP" "RF"
+	binary = sys.arg[3]
+	return executeVectorAverage(model_name, model_executed, binary)
+	
