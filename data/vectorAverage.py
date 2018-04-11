@@ -200,6 +200,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	elif model_executed == 'RF':
 		# Modelo basado en un randomForest sencillo
 		trainDataInputs = Imputer().fit_transform(trainDataInputs)
+		testDataInputs = Imputer().fit_transform(testDataInputs)
 		randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	else:
 		print(">>> ERROR: No se ha ejecutado ningún modelo")
