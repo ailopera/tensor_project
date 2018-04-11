@@ -9,6 +9,7 @@ from gensim.models import Word2Vec, KeyedVectors
 import word2VecModel
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix 
+from sklearn.preprocessing import Imputer
 import pandas as pd
 from joblib import Parallel, delayed
 import multiprocessing
@@ -86,7 +87,7 @@ def makeWordList(text):
 	return wordList
 
 
-def executeVectorAverage(word2vec_model, model_executed, binary):
+def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], test_data=[], validation=True):
 	basePath = "./fnc-1-original/aggregatedDatasets/"
 	num_features = 300
 	executionDesc = "Vector Average"
@@ -108,8 +109,12 @@ def executeVectorAverage(word2vec_model, model_executed, binary):
 
 	#Primero las convertimos en lista de palabras
 	# trainDataPath = basePath + "train_data_aggregated_mini.csv"
-	trainDataPath = basePath + "train_data_aggregated.csv"
-	trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
+	if train_data == []:
+		trainDataPath = basePath + "train_data_aggregated.csv"
+		trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
+	else:
+		trainData = train_data
+
 	clean_train_headlines = []
 	clean_train_articleBodies = []
 	trainDataVecs = {}
@@ -148,8 +153,12 @@ def executeVectorAverage(word2vec_model, model_executed, binary):
 	# Hacemos lo mismo con los datos de test
 	print(">> Generating word2vec input model and applying vector average for test data...")
 	# testDataPath = basePath + "test_data_aggregated_mini.csv"
-	testDataPath = basePath + "test_data_aggregated.csv"
-	testData = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
+	if test_data == []:
+		testDataPath = basePath + "test_data_aggregated.csv"
+		testData = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
+	else:
+		testData = test_data
+
 	clean_test_articleBodies = []
 	clean_test_headlines = []
 	testDataVecs = {}
@@ -187,6 +196,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary):
 		textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	elif model_executed == 'RF':
 		# Modelo basado en un randomForest sencillo
+		trainDataInputs = Imputer().fit_transform(trainDataInputs)
 		randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	else:
 		print(">>> ERROR: No se ha ejecutado ningún modelo")
@@ -200,7 +210,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary):
 	# Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
 	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime","trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime","trainInstances", "testInstances", "modelTrained"]
 	with open('executionData.csv', 'a') as csv_file:
-		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+		writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 		executionData = {"date": time.time().strftime("%Y-%m-%d %H:%M"),
 		 "executionDesc": executionDesc, 
 		 "textModelFeatures": trainData.shape[0], 
@@ -225,6 +235,6 @@ def executeVectorAverage(word2vec_model, model_executed, binary):
 if __name__ == "__main__":
 	model_name = sys.argv[1]
 	modelExecuted = sys.argv[2] # Puede ser "MLP" "RF"
-	binary = sys.arg[3]
-	return executeVectorAverage(model_name, model_executed, binary)
+	binary = sys.argv[3]
+	executeVectorAverage(model_name, model_executed, binary)
 	
