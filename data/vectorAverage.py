@@ -213,7 +213,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	# Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
 	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime","trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime","trainInstances", "testInstances", "modelTrained"]
 	with open('executionData.csv', 'a') as csv_file:
-		writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+		writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
 		executionData = {"date": time.time().strftime("%Y-%m-%d %H:%M"),
 		 "executionDesc": executionDesc, 
 		 "textModelFeatures": trainData.shape[0], 
