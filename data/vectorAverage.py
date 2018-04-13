@@ -216,7 +216,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		"trainInstances", "testInstances", "modelTrained", "trainAccuracy", "testAccuracy"\
 		"confusionMatrix", "averagePrecision", "recall"]
 	
-	with open('executionData.csv', 'a') as csv_file:
+	with open(output_file, 'a') as csv_file:
 		writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
 		executionData = {
 		 "date": time.strftime("%Y-%m-%d %H:%M"),
@@ -232,14 +232,14 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		 "trainInstances": testData.shape[1],
 		 "testInstances": testData.shape[0],
 		 "modelTrained": modelExecuted,
-		 "trainAccuracy": classification_results.train_accuracy,
-		 "testAccuracy": classificacion_results.test_accuracy,
-		 "confusionMatrix": classificacion_results.confusion_matrix,
-		 "averagePrecision": classificacion_results.averagePrecision,
-		 "recall": classificacion_results.recall
+		 "trainAccuracy": classification_results["train_accuracy"],
+		 "testAccuracy": classificacion_results["test_accuracy"],
+		 "confusionMatrix": classificacion_results["confusion_matrix"],
+		 "averagePrecision": classificacion_results["averagePrecision"],
+		 "recall": classificacion_results["recall"]
 		 }
 		 
-		newFile = os.stat('executionData.csv').st_size == 0
+		newFile = os.stat(output_file).st_size == 0
 		if newFile:
 			writer.writeheader()
 		writer.writerow(executionData)
