@@ -190,6 +190,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	
 	# Llamamos al clasificador con los datos compuestos
 	start = time.time()
+	classification_results = {}
 	if model_executed == 'MLP':
 		# Modelo basado en un MultiLayer Perceptron
 		classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
@@ -231,11 +232,11 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		 "totalExecutionTime": totalExecutionTime,
 		 "trainInstances": testData.shape[1],
 		 "testInstances": testData.shape[0],
-		 "modelTrained": modelExecuted,
+		 "modelTrained": model_executed,
 		 "trainAccuracy": classification_results.train_accuracy,
 		 "testAccuracy": classificacion_results.test_accuracy,
 		 "confusionMatrix": classificacion_results.confusion_matrix,
-		 "averagePrecision": classificacion_results.averagePrecision,
+		 "averagePrecision": classificacion_results.average_precision,
 		 "recall": classificacion_results.recall
 		 }
 		 
