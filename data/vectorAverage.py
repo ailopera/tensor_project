@@ -190,6 +190,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	
 	# Llamamos al clasificador con los datos compuestos
 	start = time.time()
+	classification_results = {}
 	if model_executed == 'MLP':
 		# Modelo basado en un MultiLayer Perceptron
 		classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
