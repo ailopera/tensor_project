@@ -1,0 +1,5 @@
+date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,trainAccuracy,testAccuracyconfusionMatrix,averagePrecision,recall
+2018-04-13 21:09,Vector Average,49972,300features_10minwords_10contextALL,0.40689826011657715,5.08444356918335,60.351985692977905,2.3835761547088623,10.149844408035278,173.16032338142395,4,9994,RF,0.9999599775874489,0.7567540524314589,"[[   1    0   37  687]
+ [   0    0    2  253]
+ [   0    0  329 1419]
+ [   0    0   33 7233]]",0.7567540524314589,0.7567540524314589
