@@ -1,6 +1,6 @@
 # Crea un clasificador random para testear los modelos de representacion de textos
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, average_precision_score, recall_score
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score
 import numpy as np
 
 def convert_to_int_classes(targetList):
@@ -35,7 +35,7 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     train_accuracy = accuracy_score(train_labels, forest.predict(trainDataFeatures))
     test_accuracy = accuracy_score(test_labels, prediction)
     confussion_matrix = confusion_matrix(test_labels, prediction)
-    average_precision = average_precision_score(test_labels, prediction)
+    average_precision = precision_score(test_labels, prediction)
     recall = recall_score(test_labels, prediction)
 
     print(">> Accuracy achieved with the train set: ", train_accuracy)	
