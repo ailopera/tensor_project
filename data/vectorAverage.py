@@ -121,9 +121,6 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	else:
 		testData = test_data
 	
-	print("> Train data shape ", shape(train_data))
-	print("> Test data shape: ", shape(test_data))
-	
 	# Generamos representaciones de vectores de medias
 	# En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
 	# Las stopwords pueden introducir ruido en el calculo de los vectores de medias
@@ -195,7 +192,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	start = time.time()
 	if model_executed == 'MLP':
 		# Modelo basado en un MultiLayer Perceptron
-		textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+		classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	elif model_executed == 'RF':
 		# Modelo basado en un randomForest sencillo
 		trainDataInputs = Imputer().fit_transform(trainDataInputs)
@@ -211,10 +208,18 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 
 
 	# Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
-	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime","trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime","trainInstances", "testInstances", "modelTrained"]
+	# Se genera un fichero por dia
+	date = time.strftime("%Y-%m-%d")
+	output_file = "vectorAverage_execution_" + date + ".csv"
+	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
+		"trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
+		"trainInstances", "testInstances", "modelTrained", "trainAccuracy", "testAccuracy"\
+		"confusionMatrix", "averagePrecision", "recall"]
+	
 	with open('executionData.csv', 'a') as csv_file:
 		writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
-		executionData = {"date": time.strftime("%Y-%m-%d %H:%M"),
+		executionData = {
+		 "date": time.strftime("%Y-%m-%d %H:%M"),
 		 "executionDesc": executionDesc, 
 		 "textModelFeatures": trainData.shape[0], 
 		 "modelName": model_name,
@@ -226,7 +231,12 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		 "totalExecutionTime": totalExecutionTime,
 		 "trainInstances": testData.shape[1],
 		 "testInstances": testData.shape[0],
-		 "modelTrained": modelExecuted
+		 "modelTrained": modelExecuted,
+		 "trainAccuracy": classification_results.train_accuracy,
+		 "testAccuracy": classificacion_results.test_accuracy,
+		 "confusionMatrix": classificacion_results.confusion_matrix,
+		 "averagePrecision": classificacion_results.averagePrecision,
+		 "recall": classificacion_results.recall
 		 }
 		 
 		newFile = os.stat('executionData.csv').st_size == 0
