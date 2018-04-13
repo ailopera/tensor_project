@@ -68,9 +68,9 @@ def getAvgFeatureVecs(news, model, num_features):
 		if counter%1000. == 0.:
 			print("> Report", counter," of ", len(news))
 		
-		log = True if counter == 100 else False
-		if log:
-			print("> Report", counter," of ", len(news))
+		#log = True if counter == 100 else False
+		#if log:
+		#	print("> Report", counter," of ", len(news))
 		# Call the function (defined above) that makes average feature vectors
 		newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
 		counter = counter + 1
@@ -97,12 +97,14 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	# model = KeyedVectors.load_word2vec_format(model_name)
 	start = time.time()
 	execution_start = start
-	if binary:
+	print("> Word2vec_model:", word2vec_model)
+	print("> Binary: ", binary)
+	if binary == True:
 		model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model, binary=True)
 	else:
-		# model = gensim.models.Word2Vec.load(word2vec_model)
-		model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model)
-		#model = KeyedVectors.load_word2vec_format(model_name)
+		model = gensim.models.Word2Vec.load(word2vec_model)
+		#model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model)
+		#model = KeyedVectors.load_word2vec_format(word2vec_model)
 
 	
 	end = time.time()

@@ -23,6 +23,7 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     test_labels = convert_to_int_classes(testTargets)
 	# Creamos un modelo de random forest con los datos de entrenamiento, usando 100 árboles
     forest = RandomForestClassifier(n_estimators=100)
+    print("> TEST LABELS", test_labels)
 
     print("> Fitting a random forest to labeled training data...")
 	# print(">> TRAIN Lens: ArticleBody", len(trainDataVecsArticleBody), " Headline: ", len(trainDataVecsHeadline))
@@ -37,7 +38,7 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
 
 	# forest = forest.fit(trainDataVecsArticleBody, trainData["Stance"])
 	# forest = forest.fit([trainDataVecsHeadline, trainDataVecsArticleBody], trainData["Stance"])
-    forest = forest.fit(trainDataFeatures, trainTargets)
+    forest = forest.fit(trainDataFeatures, train_labels)
 
 	# Test & extract results
     print("> Predicting test dataset...")
