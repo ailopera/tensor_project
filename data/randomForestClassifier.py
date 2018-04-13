@@ -47,13 +47,13 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
 
     metrics = {
 	 	"train_accuracy": train_accuracy,
-		"test_acuraccy": test_accuracy,
-		"confusion_matrix": confusion_matrix,
+		"test_accuracy": test_accuracy,
+		"confusion_matrix": confussion_matrix,
 		"average_precision": average_precision,
 		"recall": recall
 		}
 	
-	return metrics
+    return metrics
 	
 	# # Write the test results
 	# outputFile = "Word2Vec_AverageVectors.csv"

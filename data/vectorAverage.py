@@ -2,7 +2,7 @@
 # - Utilizando el modelo entrenado con nuestros datos: python vectorAverage.py 300features_10minwords_10contextALL
 # - Utilizando modelo oficial: python vectorAverage.py ~/GoogleNews-vectors-negative300.bin
 
-import sys
+import sys,os
 import numpy as np
 import gensim
 from gensim.models import Word2Vec, KeyedVectors
@@ -198,7 +198,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		# Modelo basado en un randomForest sencillo
 		trainDataInputs = Imputer().fit_transform(trainDataInputs)
 		testDataInputs = Imputer().fit_transform(testDataInputs)
-		randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+		classification_results = randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
 	else:
 		print(">>> ERROR: No se ha ejecutado ningún modelo")
 	end = time.time()
@@ -206,7 +206,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	execution_end = end
 	totalExecutionTime = execution_end - execution_start
 	print("> Time spent on fiting and predicting: ", modelExecutionTime)
-
+	print(">> Metrics: ", classification_results)
 
 	# Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
 	# Se genera un fichero por dia
@@ -214,7 +214,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 	output_file = "vectorAverage_execution_" + date + ".csv"
 	fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
 		"trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
-		"trainInstances", "testInstances", "modelTrained", "trainAccuracy", "testAccuracy"\
+		"trainInstances", "testInstances", "modelTrained", "trainAccuracy", "testAccuracy",\
 		"confusionMatrix", "averagePrecision", "recall"]
 	
 	with open(output_file, 'a') as csv_file:
@@ -234,10 +234,10 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		 "testInstances": testData.shape[0],
 		 "modelTrained": model_executed,
 		 "trainAccuracy": classification_results["train_accuracy"],
-		 "testAccuracy": classificacion_results["test_accuracy"],
-		 "confusionMatrix": classificacion_results["confusion_matrix"],
-		 "averagePrecision": classificacion_results["averagePrecision"],
-		 "recall": classificacion_results["recall"]
+		 "testAccuracy": classification_results["test_accuracy"],
+		 "confusionMatrix": classification_results["confusion_matrix"],
+		 "averagePrecision": classification_results["average_precision"],
+		 "recall": classification_results["recall"]
 		 }
 		 
 		newFile = os.stat(output_file).st_size == 0
