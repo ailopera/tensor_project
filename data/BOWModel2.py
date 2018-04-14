@@ -50,10 +50,10 @@ def generateBOWModel(model_executed, train_data=[],test_data=[]):
     execution_start = time.time()
     if train_data == []: 
         inputTrainFile = basePath + "train_data_aggregated.csv"
-        train_data = pd.read_csv(inputStancesPath,header=0,delimiter=",", quoting=1)
+        train_data = pd.read_csv(inputTrainFile, header=0, delimiter=",", quoting=1)
     if test_data == []:
         inputTestFile = basePath + "test_data_aggregated.csv"
-        test_data = pd.read_csv(inputStancesPath,header=0,delimiter=",", quoting=1)
+        test_data = pd.read_csv(inputTestFile, header=0, delimiter=",", quoting=1)
     
     
     # Paso 1: Creamos el modelo de Bag of words de las noticias
@@ -88,7 +88,7 @@ def generateBOWModel(model_executed, train_data=[],test_data=[]):
         test_data_features.append(test_sample)
 
     test_data_features = np.array(test_data_features)
-    
+
     # Paso 2: Ejecutamos los modelos
     start = time.time()
     classification_results = {}
