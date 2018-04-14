@@ -29,7 +29,8 @@ def create_bag_of_centroids(wordlist, word_centroid_map):
     # Return the "bag of centroids"
     return bag_of_centroids
 
-def executeClusterization(word2vec_model, binary, classifier, train_data=None, test_data=None):
+def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,train_data=None, test_data=None):
+    basePath = "./fnc-1-original/aggregatedDatasets/"
     start = time.time() # Start time
 
     #model = KeyedVectors.load_word2vec_format(model_name)
@@ -42,7 +43,6 @@ def executeClusterization(word2vec_model, binary, classifier, train_data=None, t
     # average of 5 words per cluster
     word_vectors = model.wv.syn0
 
-    cluster_size = 200
     num_clusters = round(word_vectors.shape[0] / cluster_size)
     print("> Creando clusteres a partir del modelo cargado...")
     print("> Numero de terminos del modelo: ", word_vectors.shape[0])
@@ -63,7 +63,7 @@ def executeClusterization(word2vec_model, binary, classifier, train_data=None, t
     print("> Tiempo empleado en realizar el clustering de kmeans: ", elapsed, " seconds.")
 
     #Creamos un diccionario de word/index, que mapea cada palabra del vocabulario con su cluster asociado
-    word_centroid_map = dict(zip(model.index2word, idx))
+    word_centroid_map = dict(zip(model.wv.index2word, idx))
 
     # Exploramos un poco los clusteres creados (los 10 primeros)
     for cluster in range(0,10):
@@ -71,8 +71,8 @@ def executeClusterization(word2vec_model, binary, classifier, train_data=None, t
         # Imprimimos todas las palabras del cluster
         words = []
         for i in range(0,len(word_centroid_map.values())):
-            if(word_centroid_map.values()[i] == cluster):
-                words.append(word_centroid_map.keys()[i])
+            if(list(word_centroid_map.values())[i] == cluster):
+                words.append(list(word_centroid_map.keys())[i])
         print(words)
         
     # Creamos el modelo de bag of centroids 
