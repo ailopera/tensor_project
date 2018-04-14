@@ -218,7 +218,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
         executionData = {
          "date": time.strftime("%Y-%m-%d %H:%M"),
          "executionDesc": executionDesc, 
-         "textModelFeatures": trainDataInputs.shape[1], 
+         "textModelFeatures": np.array(trainDataInputs).shape[1], 
          "modelName": model_name,
          "loadModelTime": loadModelTime,
          "trainDataFormattingTime": trainDataFormattingTime,
