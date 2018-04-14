@@ -73,7 +73,9 @@ def generateBOWModel(model_executed, train_data=[],test_data=[]):
     for sample in zip(train_headlines, train_articleBodies):
         train_sample = np.append(sample[0], sample[1])
         train_data_features.append(train_sample)
-
+    
+    train_data_features = np.array(train_data_features)
+    
     start = time.time()
     test_headlines = vectorizer.transform(test_data["Headline"]).toarray()
     test_articleBodies = vectorizer.transform(test_data["ArticleBody"]).toarray()
@@ -85,6 +87,8 @@ def generateBOWModel(model_executed, train_data=[],test_data=[]):
         test_sample = np.append(sample[0], sample[1])
         test_data_features.append(test_sample)
 
+    test_data_features = np.array(test_data_features)
+    
     # Paso 2: Ejecutamos los modelos
     start = time.time()
     classification_results = {}
