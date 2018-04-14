@@ -13,8 +13,7 @@ vectorAverage_iterations = [{"model": "300features_10minwords_10contextALL", "cl
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF"}, \
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF"}]
 
-bow_iterations = [
-        { "min_df": 1.0, "max_df": 1}, \ 
+bow_iterations = [{ "min_df": 1.0, "max_df": 1}, \
         { "min_df": 0.1, "max_df": 1}, \
         { "min_df": 1.0, "max_df": 0.8}, \
         { "min_df": 0.1, "max_df": 0.8}, \
