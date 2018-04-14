@@ -20,6 +20,10 @@ def next_batch(batch_size, train_data, target_data):
         minibatch_data.append(sample)
         minibatch_targets.append(sample_target)
 
+    print("> Len(minibatch_data): ", len(minibatch_data))
+    print("> Len(minibatch_targets): ", len(minibatch_targets))
+    print("> Data sample: " minibatch_data[0])
+    print("> Target sample: " minibatch_targets[0])
     return np.array(minibatch_data),np.array(minibatch_targets)
 
 
@@ -49,9 +53,9 @@ def modelClassifier(input_features, target, test_features, test_targets):
     test_labels = convert_to_int_classes(test_targets)
     
     # Pequeño logging para comprobar que se estan generando bien 
-    for i in range(20):
-        print(">> String label: ", target[i])
-        print(">> Int label: ", train_labels[i])
+    # for i in range(20):
+    #     print(">> String label: ", target[i])
+    #     print(">> Int label: ", train_labels[i])
 
     ### Definicion de la red ###
     train_samples = input_features.shape[0] # Numero de ejemplos
