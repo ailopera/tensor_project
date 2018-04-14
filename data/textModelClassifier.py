@@ -94,9 +94,11 @@ def modelClassifier(input_features, target, test_features, test_targets):
     with tf.name_scope("eval"):
         prediction = tf.nn.in_top_k(logits, y , 1)
         accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
-        recall = tf.metrics.recall_at_top_k(y, prediction, name="recall")
-        precision = tf.metrics.precision_at_top_k(y, prediction, name="precision")
-        confusion_matrix = tf.confusion_matrix(y, prediction, name="confusion_matrix")
+        recall = tf.metrics.recall(y, prediction)
+        precision = tf.metrics.precision(y, prediction)
+        confusion_matrix = tf.confusion_matrix(y, prediction)
+        mean_accuracy = tf.reduce_mean(accuracy)
+        
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
@@ -134,9 +136,12 @@ def modelClassifier(input_features, target, test_features, test_targets):
             acc_test_summary = tf.summary.scalar('Test Accuracy', acc_test)
         
         # Ejecutamos las metricas finales
-        recall_class = recall.eval(feed_dict={X: test_features, y: test_labels})
-        precision_class = precision.eval(feed_dict={X: test_features, y: test_labels})
-        confusion_matrix_class = confusion_matrix.eval(feed_dict={X: test_features, y: test_labels})
+        sess.run(tf.local_variables_initializer())
+        #acc_train = sess.run(mean_accu, )
+        #acc_train = sess.run(mean_accu, )
+        recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
+        precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
+        confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
         
@@ -144,7 +149,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
 	 	"train_accuracy": acc_train,
 		"test_accuracy": acc_test,
 		"confusion_matrix": confusion_matrix_class,
-		"average_precision": precision_class,
-		"recall": recall_class
+		"average_precision": precision_class[1],
+		"recall": recall_class[1]
 		}
         return metrics

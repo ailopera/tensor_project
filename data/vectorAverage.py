@@ -188,6 +188,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
     start = time.time()
     classification_results = {}
     if model_executed == 'MLP':
+        trainDataInputs = Imputer().fit_transform(trainDataInputs)
+        testDataInputs = Imputer().fit_transform(testDataInputs)
         # Modelo basado en un MultiLayer Perceptron
         classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
     elif model_executed == 'RF':
