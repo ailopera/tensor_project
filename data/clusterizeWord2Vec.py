@@ -35,9 +35,13 @@ start = time.time() # Start time
 
 # Cargamos el modelo
 model_name = sys.argv[1]
+binary = sys.argv[2]
 
 #model = KeyedVectors.load_word2vec_format(model_name)
-model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
+if binary:
+    model = gensim.models.KeyedVectors.load_word2vec_format(model_name, binary=True)
+else:
+    model = gensim.models.Word2Vec.load(word2vec_model)
 
 # Set "k" (num_clusters) to be 1/5th of the vocabulary size, or an
 # average of 5 words per cluster

@@ -78,10 +78,10 @@ def makeWordList(text):
     return wordList
 
 
-def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], test_data=[], validation=True):
+def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], test_data=[], validation=False):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     num_features = 300
-    executionDesc = "Vector Average"
+    executionDesc = "vector_Average"
     # stances_model_name = sys.argv[1]
     # bodies_model_name = sys.argv[2]
         
@@ -207,7 +207,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
     date = time.strftime("%Y-%m-%d")
-    output_file = "vectorAverage_execution_" + date + ".csv"
+    validationDesc = "validation" if validation else ""
+    output_file = executionDesc + "_execution_" + date + validationDesc + ".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\

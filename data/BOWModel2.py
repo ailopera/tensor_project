@@ -41,7 +41,7 @@ def createBOWModel(bow_train_data, printLogs=False):
     return vectorizer
 
 
-def generateBOWModel(model_executed, train_data=[],test_data=[]):
+def generateBOWModel(model_executed, train_data=[],test_data=[], validation=False):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "Bag Of Words"
 
@@ -113,7 +113,8 @@ def generateBOWModel(model_executed, train_data=[],test_data=[]):
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
     date = time.strftime("%Y-%m-%d")
-    output_file = "vectorAverage_execution_" + date + ".csv"
+    validationDesc = "validation" if validation else ""
+    output_file = "vectorAverage_execution_" + date + validationDesc + ".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
