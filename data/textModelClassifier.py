@@ -43,6 +43,7 @@ def convert_to_int_classes(targetList):
 
 ### Clasificador ###
 def modelClassifier(input_features, target, test_features, test_targets):
+    tf.reset_default_graph() 
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     root_logdir = "logs"
     tag = "tensorClassifierWithDense"

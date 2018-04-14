@@ -41,17 +41,17 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
     return vectorizer
 
 
-def generateBOWModel(model_executed, train_data=[],test_data=[],validation=False, min_df=1.0, max_df=1):
+def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
 
     # Paso 0: Cargamos los datasets de entrada por defecto
     print(">> Loading data...")
     execution_start = time.time()
-    if train_data == []: 
+    if train_data is None: 
         inputTrainFile = basePath + "train_data_aggregated.csv"
         train_data = pd.read_csv(inputTrainFile, header=0, delimiter=",", quoting=1)
-    if test_data == []:
+    if test_data is None:
         inputTestFile = basePath + "test_data_aggregated.csv"
         test_data = pd.read_csv(inputTestFile, header=0, delimiter=",", quoting=1)
     

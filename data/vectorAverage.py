@@ -78,7 +78,7 @@ def makeWordList(text):
     return wordList
 
 
-def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], test_data=[], validation=False):
+def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     num_features = 300
     executionDesc = "vector_Average"
@@ -105,13 +105,13 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
     
 
     # Cargamos los datos de entrenamiento y de test por defecto, si no se han especificado
-    if train_data == []:
+    if train_data is None:
         trainDataPath = basePath + "train_data_aggregated.csv"
         trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
     else:
         trainData = train_data
     
-    if test_data == []:
+    if test_data is None:
         testDataPath = basePath + "test_data_aggregated.csv"
         testData = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
     else:
