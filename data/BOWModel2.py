@@ -21,7 +21,7 @@ def getFeaturesInfo(features):
 
 
 def createBOWModel(bow_train_data, printLogs=False):
-    MAX_FEATURES = 150
+    MAX_FEATURES = 300
     print("type(bow_train_data) | bow_train_data[1] | type(bow_train_data[1])" )
     print(type(bow_train_data)," | ",bow_train_data[1], " | ", type(bow_train_data[1]) )
     print(">>> Creating the bag of words...\n")
