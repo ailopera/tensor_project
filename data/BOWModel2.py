@@ -20,14 +20,14 @@ def getFeaturesInfo(features):
         print(count,tag)
 
 
-def createBOWModel(bow_train_data, printLogs=False):
+def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
     MAX_FEATURES = 150
     print("type(bow_train_data) | bow_train_data[1] | type(bow_train_data[1])" )
     print(type(bow_train_data)," | ",bow_train_data[1], " | ", type(bow_train_data[1]) )
     print(">>> Creating the bag of words...\n")
 
     # Initialize the "CountVectorizer" object, which is scikit-learn's bag of words tool
-    vectorizer = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None, stop_words=None, max_features=MAX_FEATURES)
+    vectorizer = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None, stop_words=None, max_features=MAX_FEATURES, min_df=min_df, max_df=max_df)
 
     # Entrenamos el modelo de BOW con los datos de entrenamiento
     vectorizer.fit(bow_train_data)
@@ -41,7 +41,7 @@ def createBOWModel(bow_train_data, printLogs=False):
     return vectorizer
 
 
-def generateBOWModel(model_executed, train_data=[],test_data=[], validation=False):
+def generateBOWModel(model_executed, train_data=[],test_data=[], validation=False, min_df=1.0, max_df=1):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
 
@@ -62,7 +62,7 @@ def generateBOWModel(model_executed, train_data=[],test_data=[], validation=Fals
     # (vectorizer, train_data_features) = createBOW.createBOWModel(cleanTrainBodies)
     train_text = np.append(train_data['Headline'], train_data['ArticleBody'])
     start = time.time()
-    vectorizer = createBOWModel(train_text)
+    vectorizer = createBOWModel(train_text, min_df, max_df)
     end = time.time()
     vectorizerFitTime = end - start
     
