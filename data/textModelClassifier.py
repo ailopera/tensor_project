@@ -93,9 +93,11 @@ def modelClassifier(input_features, target, test_features, test_targets):
 
     # Definimos las metricas
     with tf.name_scope("eval"):
-        correct = tf.nn.in_top_k(logits, y , 1)
-        accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
-
+        prediction = tf.nn.in_top_k(logits, y , 1)
+        accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
+        recall = tf.metrics.recall_at_top_k(y, prediction, name="recall")
+        precision = tf.metrics.precision_at_top_k(y, prediction, name="precision")
+        confusion_matrix = tf.confusion_matrix(y, prediction, name="confusion_matrix")
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
@@ -132,6 +134,18 @@ def modelClassifier(input_features, target, test_features, test_targets):
             acc_train_summary = tf.summary.scalar('Train Accuracy', acc_train)
             acc_test_summary = tf.summary.scalar('Test Accuracy', acc_test)
         
+        # Ejecutamos las metricas finales
+        recall_class = recall.eval(feed_dict={X: test_features, y: test_labels})
+        precision_class = precision.eval(feed_dict={X: test_features, y: test_labels})
+        confusion_matrix_class = confusion_matrix.eval(feed_dict={X: test_features, y: test_labels})
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
-
+        
+        metrics = {
+	 	"train_accuracy": acc_train,
+		"test_accuracy": acc_test,
+		"confusion_matrix": confusion_matrix_class,
+		"average_precision": precision_class,
+		"recall": recall_class
+		}
+        return metrics
