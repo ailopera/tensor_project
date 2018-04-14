@@ -131,7 +131,7 @@ def generateBOWModel(model_executed, train_data=[],test_data=[]):
          "trainInstances": train_data.shape[0],
          "testInstances": test_data.shape[0],
          "modelTrained": model_executed,
-         "modelExecutionTime": modelExecutionTime
+         "modelExecutionTime": modelExecutionTime,
          "trainAccuracy": classification_results["train_accuracy"],
          "testAccuracy": classification_results["test_accuracy"],
          "confusionMatrix": classification_results["confusion_matrix"],
