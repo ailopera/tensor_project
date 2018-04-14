@@ -78,7 +78,7 @@ def getAvgFeatureVecs(news, model, num_features):
 
 
 def makeWordList(text):
-	wordList =  word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
+	wordList = word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
 	return wordList
 
 
@@ -222,7 +222,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		executionData = {
 		 "date": time.strftime("%Y-%m-%d %H:%M"),
 		 "executionDesc": executionDesc, 
-		 "textModelFeatures": trainData.shape[0], 
+		 "textModelFeatures": trainData.shape[1], 
 		 "modelName": model_name,
 		 "loadModelTime": loadModelTime,
 		 "trainDataFormattingTime": trainDataFormattingTime,
@@ -230,7 +230,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=[], 
 		 "testDataFormattingTime": testDataFormattingTime,
 		 "testDataFeatureVecsTime": testDataFeatureVecsTime,
 		 "totalExecutionTime": totalExecutionTime,
-		 "trainInstances": testData.shape[1],
+		 "trainInstances": trainData.shape[0],
 		 "testInstances": testData.shape[0],
 		 "modelTrained": model_executed,
 		 "trainAccuracy": classification_results["train_accuracy"],
