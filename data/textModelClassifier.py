@@ -22,8 +22,8 @@ def next_batch(batch_size, train_data, target_data):
 
     print("> Len(minibatch_data): ", len(minibatch_data))
     print("> Len(minibatch_targets): ", len(minibatch_targets))
-    print("> Data sample: " minibatch_data[0])
-    print("> Target sample: " minibatch_targets[0])
+    print("> Data sample: ", minibatch_data[0])
+    print("> Target sample: ", minibatch_targets[0])
     return np.array(minibatch_data),np.array(minibatch_targets)
 
 
