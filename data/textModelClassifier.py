@@ -11,6 +11,7 @@ import random
 def next_batch(batch_size, train_data, target_data):
     training_shape = train_data.shape[0]
     minibatch_indexes = random.sample(range(0,training_shape), batch_size)
+    print("> Minibatch_indexes: ", minibatch_indexes)
     # Tomamos las muestras de los datos de entrada
     minibatch_data = []
     minibatch_targets = []
@@ -22,8 +23,8 @@ def next_batch(batch_size, train_data, target_data):
 
     print("> Len(minibatch_data): ", len(minibatch_data))
     print("> Len(minibatch_targets): ", len(minibatch_targets))
-    print("> Data sample: " minibatch_data[0])
-    print("> Target sample: " minibatch_targets[0])
+    # print("> Data sample: " minibatch_data[0])
+    # print("> Target sample: " minibatch_targets[0])
     return np.array(minibatch_data),np.array(minibatch_targets)
 
 
