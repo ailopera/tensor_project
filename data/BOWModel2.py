@@ -41,7 +41,7 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
     return vectorizer
 
 
-def generateBOWModel(model_executed, train_data=[],test_data=[], validation=False, min_df=1.0, max_df=1):
+def generateBOWModel(model_executed, train_data=[],test_data=[],validation=False, min_df=1.0, max_df=1):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
 
