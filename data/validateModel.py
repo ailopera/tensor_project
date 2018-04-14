@@ -1,4 +1,4 @@
-import sys, time
+import sys, time, math
 import pandas as pd
 from sklearn.model_selection import KFold, train_test_split
 from vectorAverage import executeVectorAverage
@@ -74,7 +74,7 @@ for iteration in iterations:
         print("------------------------------------------------------")
 
 end = time.time()
-KFoldExecution = end - start
+kFoldExecutionTime = end - start
 
 start = time.time()
 # Execute test with test data
@@ -91,4 +91,6 @@ for iteration in iterations:
         elif validation == "BOW":
                 generateBOWModel(iteration["classifier"], train_data, test_data, iteration["min_df"], iteration["max_df"], True)
 end = time.time()
-testExecution = start - end
+testExecutionTime = end - start
+print(">> KFOLD EXECUTION TIME: ", kFoldExecutionTime)
+print(">> TEST EXECUTION TIME: ", testExecutionTime)

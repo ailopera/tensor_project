@@ -109,13 +109,13 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     modelExecutionTime = end - start
     execution_end = time.time()
     totalExecutionTime = execution_end - execution_start
-    print(">> Classification Results: ", classification_results)
+    # print(">> Classification Results: ", classification_results)
 
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
     date = time.strftime("%Y-%m-%d")
     validationDesc = "validation" if validation else ""
-    output_file = "vectorAverage_execution_" + date + validationDesc + ".csv"
+    output_file = executionDesc + "_execution_" + date + validationDesc + ".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
