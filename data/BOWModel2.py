@@ -1,4 +1,3 @@
-print("Training the random forest...")
 import os, time, sys
 import csv
 import numpy as np
@@ -23,7 +22,8 @@ def getFeaturesInfo(features):
 
 def createBOWModel(bow_train_data, printLogs=False):
     MAX_FEATURES = 150
-    print(type(bow_train_data)," | ",bow_train_data[1], type(bow_train_data[1]) )
+    print("type(bow_train_data) | bow_train_data[1] | type(bow_train_data[1])" )
+    print(type(bow_train_data)," | ",bow_train_data[1], " | ", type(bow_train_data[1]) )
     print(">>> Creating the bag of words...\n")
 
     # Initialize the "CountVectorizer" object, which is scikit-learn's bag of words tool
@@ -43,7 +43,7 @@ def createBOWModel(bow_train_data, printLogs=False):
 
 def generateBOWModel(model_executed, train_data=[],test_data=[], validation=False):
     basePath = "./fnc-1-original/aggregatedDatasets/"
-    executionDesc = "Bag Of Words"
+    executionDesc = "bag_Of_Words"
 
     # Paso 0: Cargamos los datasets de entrada por defecto
     print(">> Loading data...")
@@ -60,8 +60,12 @@ def generateBOWModel(model_executed, train_data=[],test_data=[], validation=Fals
     print(">> Creating BOW model...")
     # El modelo de fit lo hacemos a partir de las noticias (cuerpos de noticia) y los headlines de entrenamiento
     # (vectorizer, train_data_features) = createBOW.createBOWModel(cleanTrainBodies)
-    vectorizer = createBOWModel(cleanTrainBodies)
-
+    train_text = np.append(train_data['Headline'], train_data['ArticleBody'])
+    start = time.time()
+    vectorizer = createBOWModel(train_text)
+    end = time.time()
+    vectorizerFitTime = end - start
+    
     # Paso 2: Obtenemos las representaciones de entrenamiento y de test y lo convertimos a un array numpy
     start = time.time()
     train_headlines = vectorizer.transform(train_data["Headline"]).toarray()
@@ -97,13 +101,10 @@ def generateBOWModel(model_executed, train_data=[],test_data=[], validation=Fals
         classification_results = textModelClassifier.modelClassifier(train_data_features, train_data['Stance'], test_data_features, test_data['Stance'])
     elif model_executed == 'RF':
         # Inferimos las representaciones con valores incorrectos (NaN, Inf)
-        # trainDataInputs = Imputer().fit_transform(trainDataInputs)
-        # testDataInputs = Imputer().fit_transform(testDataInputs)
+        # train_data_features = Imputer().fit_transform(trainDataInputs)
+        # test_data_features = Imputer().fit_transform(testDataInputs)
         
-        # Modelo basado en un randomForest sencillo
-        trainDataInputs = Imputer().fit_transform(trainDataInputs)
-        testDataInputs = Imputer().fit_transform(testDataInputs)
-        randomClassifier(train_data_features, train_data['Stance'], test_data_features, test_data['Stance'])
+        classification_results = randomClassifier(train_data_features, train_data['Stance'], test_data_features, test_data['Stance'])
     end = time.time()
     modelExecutionTime = end - start
     execution_end = time.time()
@@ -118,7 +119,7 @@ def generateBOWModel(model_executed, train_data=[],test_data=[], validation=Fals
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall"]
+        "confusionMatrix", "averagePrecision", "recall", "vectorizerFitTime"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -141,7 +142,8 @@ def generateBOWModel(model_executed, train_data=[],test_data=[], validation=Fals
          "testAccuracy": classification_results["test_accuracy"],
          "confusionMatrix": classification_results["confusion_matrix"],
          "averagePrecision": classification_results["average_precision"],
-         "recall": classification_results["recall"]
+         "recall": classification_results["recall"],
+         "vectorizerFitTime": vectorizerFitTime
          }
          
         newFile = os.stat(output_file).st_size == 0
