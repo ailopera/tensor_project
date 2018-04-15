@@ -9,9 +9,15 @@ from BOWModel2 import generateBOWModel
 validation = sys.argv[1]
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
-vectorAverage_iterations = [{"model": "300features_10minwords_10contextALL", "classifier": "MLP", "binaryModel": False}, \
-        {"model": "300features_10minwords_10contextALL", "classifier": "MLP","binaryModel": False}, \
-        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True}, \
+vectorAverage_iterations = [{"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False}, \
+        {"model": "300features_15minwords_20contextALL", "classifier": "MLP","binaryModel": False}, \
+        {"model": "300features_15minwords_35contextALL", "classifier": "MLP","binaryModel": False}, \
+        
+        {"model": "300features_15minwords_10contextALL", "classifier": "RF", "binaryModel": False}, \
+        {"model": "300features_15minwords_20contextALL", "classifier": "RF","binaryModel": False}, \
+        {"model": "300features_15minwords_35contextALL", "classifier": "RF","binaryModel": False}, \
+        
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True}, \
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True}]
 
 bow_iterations = [{ "classifier": "MLP", "min_df": 1, "max_df": 1.0}, \
@@ -25,7 +31,6 @@ bow_iterations = [{ "classifier": "MLP", "min_df": 1, "max_df": 1.0}, \
         { "classifier": "RF", "min_df": 1, "max_df": 0.8}, \
         { "classifier": "RF", "min_df": 0.1, "max_df": 0.8}, \
         { "classifier": "RF", "min_df": 0.25, "max_df": 0.75}
-
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
@@ -109,7 +114,7 @@ with open(output_file, 'a') as csv_file:
         executionData = {
                 "date": time.strftime("%Y-%m-%d %H:%M"),
                 "execution": "",
-                "kFoldTime": kFoldExecutionTime,
+                "KFoldTime": kFoldExecutionTime,
                 "testTime": testExecutionTime,
                 }
                 
