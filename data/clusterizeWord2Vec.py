@@ -12,7 +12,7 @@ import multiprocessing
 # para convertir las noticias en una bolsa de centroides. 
 # esta funcion devuelve un array numpy por cada review, cada una con tantas features como clusteres
 def create_bag_of_centroids(wordlist, word_centroid_map):
-    # The number of clisters is equal to the highest cluster index
+    # The number of clusters is equal to the highest cluster index
     # in the word / centroid map
     num_centroids = max(word_centroid_map.values()) + 1
 
@@ -64,6 +64,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
 
     #Creamos un diccionario de word/index, que mapea cada palabra del vocabulario con su cluster asociado
     word_centroid_map = dict(zip(model.wv.index2word, idx))
+    print(word_centroid_map)
 
     # Exploramos un poco los clusteres creados (los 10 primeros)
     for cluster in range(0,10):
@@ -85,9 +86,9 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     train_centroids = np.zeros((trainData.shape[0], num_clusters), dtype="float32")
     print(">> Generating bag of centroids for training data...")
     # Transformamos el set de entrenamiento a bolsa de centroides
-    for report in trainData:
-        train_articleBody = create_bag_of_centroids(report['ArticleBody'], word_centroid_map)
-        train_body = create_bag_of_centroids(report['Headline'], word_centroid_map)
+    for headline,report in zip(trainData['Headline'], trainData['ArticleBody']):
+        train_articleBody = create_bag_of_centroids(report, word_centroid_map)
+        train_headline = create_bag_of_centroids(headline, word_centroid_map)
         train_sample = np.append(train_articleBody, train_body)
         train_centroids.append(train_sample)
 
@@ -100,11 +101,12 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     test_centroids = np.zeros((testData.shape, num_clusters), dtype="float32")
     print(">> Generating bag of centroids for testing data...")
     # Transformamos el set de entrenamiento a bolsa de centroides
-    for report in testData:
-        test_articleBody = create_bag_of_centroids(report['ArticleBody'], word_centroid_map)
-        test_body = create_bag_of_centroids(report['Headline'], word_centroid_map)
+    for headline,report in zip(testData['Headline'], testData['ArticleBody']):
+        test_articleBody = create_bag_of_centroids(report, word_centroid_map)
+        test_headline = create_bag_of_centroids(headline, word_centroid_map)
         test_sample = np.append(test_articleBody, test_body)
         test_centroids.append(test_sample)
+
 
     test_formatting_end = time.time()
     print("> Tiempo empleado en formatear los datos de entrenamiento: ", train_formatting_end - train_formatting_start)
@@ -112,7 +114,11 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
 
     # Llamamos al clasificador con los datos compuestos
     classify_start = time.time()
-    textModelClassifier.modelClassifier(train_centroids, trainData['Stance'], test_centroids, testData['Stance'])
+    classification_results = {}
+    if classifier == 'RF':
+        classification_results = textModelClassifier.modelClassifier(np.array(train_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
+    elil classifier == 'MLP':
+        classification_results = textModelClassifier.modelClassifier(np.array(test_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
     classify_end = time.time()
     print("> Tiempo empleado en ejecutar el clasificador: ", classify_end - classify_start)
 
