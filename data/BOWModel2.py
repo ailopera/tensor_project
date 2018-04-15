@@ -22,8 +22,8 @@ def getFeaturesInfo(features):
 
 def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
     MAX_FEATURES = 300
-    print("type(bow_train_data) | bow_train_data[1] | type(bow_train_data[1])" )
-    print(type(bow_train_data)," | ",bow_train_data[1], " | ", type(bow_train_data[1]) )
+    #print("type(bow_train_data) | bow_train_data[1] | type(bow_train_data[1])" )
+    #print(type(bow_train_data)," | ",bow_train_data[1], " | ", type(bow_train_data[1]) )
     print(">>> Creating the bag of words...\n")
 
     # Initialize the "CountVectorizer" object, which is scikit-learn's bag of words tool

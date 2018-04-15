@@ -98,8 +98,8 @@ def modelClassifier(input_features, target, test_features, test_targets):
         recall = tf.metrics.recall(y, prediction)
         precision = tf.metrics.precision(y, prediction)
         confusion_matrix = tf.confusion_matrix(y, prediction)
-        final_accuracy = tf.metrics.accuracy(y, prediction)
-        
+        #final_accuracy = tf.metrics.accuracy(y, prediction)
+
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
@@ -135,8 +135,8 @@ def modelClassifier(input_features, target, test_features, test_targets):
         sess.run(tf.local_variables_initializer())
         #acc_train = sess.run(mean_accu, )
         #acc_train = sess.run(mean_accu, )
-        acc_final_test = sess.run(final_accuracy, feed_dict={X: train_features, y: train_labels})
-        acc_final_test = sess.run(final_accuracy, feed_dict={X: test_features, y: test_labels})
+        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels})
+        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
         recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
         precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
         confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
@@ -146,8 +146,8 @@ def modelClassifier(input_features, target, test_features, test_targets):
         file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
         
         metrics = {
-	 	"train_accuracy": acc_final_test,
-		"test_accuracy": acc_final_train,
+	 	"train_accuracy": acc_final_train,
+		"test_accuracy": acc_final_test,
 		"confusion_matrix": confusion_matrix_class,
 		"average_precision": precision_class[1],
 		"recall": recall_class[1]
