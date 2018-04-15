@@ -1,5 +1,5 @@
 import pandas as pd
-import re
+import re, os, csv, time
 import nltk.data
 import logging
 #from gensim import models
@@ -159,7 +159,7 @@ def makeWord2VecModel():
     #nltk.download('puntk')
 
     # Load the puntk tokenizer
-    #tokenizer = nltk.data.load('tokenizer/punkt/english.pickle')
+    tokenizer = nltk.data.load('tokenizer/punkt/english.pickle')
 
     sentences = []
     print("> Parsing sentences from training set")
@@ -171,10 +171,12 @@ def makeWord2VecModel():
     # for index,line in stancesTrainFile.iterrows():
     #     sentences += news_to_sentences(line['Headline'], tokenizer)
     
+    start = time.time()
     for index,line in aggregated_train_file.iterrows():
         sentences += news_to_sentences(line['ArticleBody'], tokenizer)
         sentences += news_to_sentences(line['Headline'], tokenizer)
-        
+    end = time.time()
+    formatTime = end - start
 
     # Check how many sentences we have in total
     print("> #Sentences: ", len(sentences))
@@ -189,13 +191,14 @@ def makeWord2VecModel():
     # Export data to a csv file
     date = time.strftime("%Y-%m-%d")
     output_file = "word2vec_execution_" + date + ".csv"
-    fieldNames = ["date", "modelName", "executionTime"]
+    fieldNames = ["date", "modelName", "formatTime", "trainTime"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
         executionData = {
          "date": time.strftime("%Y-%m-%d %H:%M"),
          "modelName": "",
+         "formatTime": formatTime,
          "trainTime": trainTime
          }
          

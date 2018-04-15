@@ -1,4 +1,4 @@
-import sys, time, math
+import sys, time, math, os, csv
 import pandas as pd
 from sklearn.model_selection import KFold, train_test_split
 from vectorAverage import executeVectorAverage
@@ -37,11 +37,13 @@ test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 # Get size of batch
 start = time.time()
 k = 4
+# batch_size = train_df.shape[0] / k 
+SHUFFLE = True
+K_fold = KFold(k, SHUFFLE)
 print(">> Performing K-Fold Validation with K ", k)
-batch_size = train_df.shape[0] / k 
-print(">> K: ", k)
 print(">> File samples: ", train_df.shape[0])
-print(">> Batch Size: ", batch_size)
+print(">> Suffle: ", SHUFFLE)
+# print(">> Batch Size: ", batch_size)
 
 # Get execution params based on implementation executed
 if validation == "vectorAverage":
@@ -50,8 +52,8 @@ elif validation == "BOW":
         iterations = bow_iterations
 
 print(">> Executing different model configurations over train data applying K-Fold Validation...")
+
 for iteration in iterations:
-    K_fold = KFold(k)
     # Execute k-fold validation k times
     #for k, (train_data,test_data) in enumerate(k_fold.split(train_df,target)):
     index = 1
@@ -92,5 +94,27 @@ for iteration in iterations:
                 generateBOWModel(iteration["classifier"], train_data, test_data, iteration["min_df"], iteration["max_df"], True)
 end = time.time()
 testExecutionTime = end - start
+
 print(">> KFOLD EXECUTION TIME: ", kFoldExecutionTime)
 print(">> TEST EXECUTION TIME: ", testExecutionTime)
+
+# Export data to a csv file
+date = time.strftime("%Y-%m-%d")
+output_file = "kFoldValidation_execution_" + date + ".csv"
+fieldNames = ["date", "execution", "KFoldTime", "testTime"]
+
+with open(output_file, 'a') as csv_file:
+writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+executionData = {
+        "date": time.strftime("%Y-%m-%d %H:%M"),
+        "execution": "",
+        "kFoldTime": kFoldExecutionTime,
+        "testTime": testExecutionTime,
+        }
+        
+newFile = os.stat(output_file).st_size == 0
+if newFile:
+        writer.writeheader()
+writer.writerow(executionData)
+
+print(">> Stats exported to: ", output_file)
