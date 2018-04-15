@@ -113,9 +113,10 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
 
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
+    csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
     validationDesc = "validation" if validation else ""
-    output_file = executionDesc + "_execution_" + date + validationDesc + ".csv"
+    output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + ".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\

@@ -44,7 +44,6 @@ def makeFeatureVec(words, model, num_features, index2word_set, log=False):
 def getAvgFeatureVecs(news, model, num_features):
     # Dado un conjunto de noticias (cada una es una lista de palabras), calcula 
     # El vector de medias para cada una y devuelve un vector de dos dimensiones
-
     counter = 0
 
     # Reservamos espacio para un array de dos dimensiones, por velocidad
@@ -208,9 +207,10 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
 
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
+    csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
     validationDesc = "validation" if validation else ""
-    output_file = executionDesc + "_execution_" + date + validationDesc + ".csv"
+    output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + ".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
