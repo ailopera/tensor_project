@@ -99,22 +99,23 @@ print(">> KFOLD EXECUTION TIME: ", kFoldExecutionTime)
 print(">> TEST EXECUTION TIME: ", testExecutionTime)
 
 # Export data to a csv file
+csvOutputDir = "./executionStats/"
 date = time.strftime("%Y-%m-%d")
-output_file = "kFoldValidation_execution_" + date + ".csv"
+output_file =  csvOutputDir + "kFoldValidation_execution_" + date + ".csv"
 fieldNames = ["date", "execution", "KFoldTime", "testTime"]
 
 with open(output_file, 'a') as csv_file:
-writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
-executionData = {
-        "date": time.strftime("%Y-%m-%d %H:%M"),
-        "execution": "",
-        "kFoldTime": kFoldExecutionTime,
-        "testTime": testExecutionTime,
-        }
-        
-newFile = os.stat(output_file).st_size == 0
-if newFile:
-        writer.writeheader()
-writer.writerow(executionData)
+        writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+        executionData = {
+                "date": time.strftime("%Y-%m-%d %H:%M"),
+                "execution": "",
+                "kFoldTime": kFoldExecutionTime,
+                "testTime": testExecutionTime,
+                }
+                
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+                writer.writeheader()
+        writer.writerow(executionData)
 
 print(">> Stats exported to: ", output_file)

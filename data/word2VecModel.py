@@ -101,7 +101,7 @@ def trainWord2Vec(sentences,archiveTag):
     num_features = 300  # Word vector dimensionality
     min_word_count = 15 # Minimum word count
     num_workers = 4 # Number of threads to run in parallel
-    context = 20 # Context window size
+    context = 35 # Context window size
     downsampling = 1e-3 #Downsample setting for frequent words 
 
     # Initialize and train the model (this will take some time)
@@ -117,6 +117,7 @@ def trainWord2Vec(sentences,archiveTag):
     model_name = str(num_features) + "features_" + str(min_word_count) + "minwords_" + str(context) + "context" + archiveTag
     model.save(model_name)
     #models.Word2Vec.save_word2vec_format(model_name)
+    return model_name
 
 # def makeWord2VecModel(trainStance):
 def makeWord2VecModel():
@@ -184,20 +185,21 @@ def makeWord2VecModel():
     # print ("> Second Sentence : ", sentences[1])
     
     start = time.time()
-    trainWord2Vec(sentences, fileTag)
+    model_name = trainWord2Vec(sentences, fileTag)
     end = time.time()
     trainTime = end - start
 
     # Export data to a csv file
+    csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
-    output_file = "word2vec_execution_" + date + ".csv"
+    output_file = csvOutputDir + "word2vec_execution_" + date + ".csv"
     fieldNames = ["date", "modelName", "formatTime", "trainTime"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
         executionData = {
          "date": time.strftime("%Y-%m-%d %H:%M"),
-         "modelName": "",
+         "modelName": model_name,
          "formatTime": formatTime,
          "trainTime": trainTime
          }
