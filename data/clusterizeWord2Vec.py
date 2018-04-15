@@ -82,7 +82,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     trainDataPath = basePath + "train_data_aggregated.csv"
     trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 
-    train_centroids = np.zeros((trainData.shape[0], num_clusters), dtype="float32")
+    train_centroids = np.zeros((trainData.shape[0]*2, num_clusters), dtype="float32")
     print(">> Generating bag of centroids for training data...")
     # Transformamos el set de entrenamiento a bolsa de centroides
     for report in trainData:
