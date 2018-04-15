@@ -144,7 +144,7 @@ def makeWord2VecModel():
     
     aggregated_train_path = "./fnc-1-original/finalDatasets/train_partition.csv"
     aggregated_train_file = pd.read_csv(aggregated_train_path,header=0,delimiter=",", quoting=1)
-    print(">>> Read file ", aggregated_train_file , "shape:", aggregated_train_file.shape)
+    print(">>> Read file ", aggregated_train_path , "shape:", aggregated_train_file.shape)
 
     # Si tuvieramos datos sin etiquetar podriamos utilizarlos igualmente en el entrenamiento
     # ya que word2vec no requiere de datos etiquetados
@@ -160,7 +160,7 @@ def makeWord2VecModel():
     #nltk.download('puntk')
 
     # Load the puntk tokenizer
-    tokenizer = nltk.data.load('tokenizer/punkt/english.pickle')
+    #tokenizer = nltk.data.load('tokenizer/punkt/english.pickle')
 
     sentences = []
     print("> Parsing sentences from training set")
