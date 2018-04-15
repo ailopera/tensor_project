@@ -101,7 +101,7 @@ def trainWord2Vec(sentences,archiveTag):
     num_features = 300  # Word vector dimensionality
     min_word_count = 15 # Minimum word count
     num_workers = 4 # Number of threads to run in parallel
-    context = 10 # Context window size
+    context = 20 # Context window size
     downsampling = 1e-3 #Downsample setting for frequent words 
 
     # Initialize and train the model (this will take some time)
@@ -129,17 +129,22 @@ def makeWord2VecModel():
     #     inputFilePath = basePath + "train_bodies.csv" 
         # fileTag = "BODIES"
     
-    stancesFilePath = basePath + "train_stances.csv"
-    bodiesFilePath = basePath + "train_bodies.csv"
+    # stancesFilePath = basePath + "train_stances.csv"
+    # bodiesFilePath = basePath + "train_bodies.csv"
+
     fileTag = "ALL"
 
     # textTag = 'articleBody' if trainStance==False else 'Headline'
-    # Leemos los ficheros etiquetados y sin etiquetar
-    bodiesTrainFile = pd.read_csv(bodiesFilePath,header=0,delimiter=",", quoting=1)
-    stancesTrainFile = pd.read_csv(stancesFilePath,header=0,delimiter=",", quoting=1)
-    print(">>> Read file ", bodiesFilePath , "shape:", bodiesTrainFile.shape)
-    print(">>> Read file ", stancesFilePath , "shape:", stancesTrainFile.shape)
+    # # Leemos los ficheros etiquetados y sin etiquetar
+    # bodiesTrainFile = pd.read_csv(bodiesFilePath,header=0,delimiter=",", quoting=1)
+    # stancesTrainFile = pd.read_csv(stancesFilePath,header=0,delimiter=",", quoting=1)
+    # print(">>> Read file ", bodiesFilePath , "shape:", bodiesTrainFile.shape)
+    # print(">>> Read file ", stancesFilePath , "shape:", stancesTrainFile.shape)
     
+    aggregated_train_path = "./fnc-1-original/finalDatasets/train_partition.csv"
+    aggregated_train_file = pd.read_csv(aggregated_train_path,header=0,delimiter=",", quoting=1)
+    print(">>> Read file ", aggregated_train_file , "shape:", aggregated_train_file.shape)
+
     # Si tuvieramos datos sin etiquetar podriamos utilizarlos igualmente en el entrenamiento
     # ya que word2vec no requiere de datos etiquetados
     # inputUnlabeledFile = basePath + "test_stances_unlabeled.csv"
@@ -160,18 +165,47 @@ def makeWord2VecModel():
     print("> Parsing sentences from training set")
 
     # Recorremos el fichero de titulares y cuerpos de noticias para crear el modelo
-    for index,line in bodiesTrainFile.iterrows():
-        sentences += news_to_sentences(line['articleBody'], tokenizer)
+    # for index,line in bodiesTrainFile.iterrows():
+    #     sentences += news_to_sentences(line['articleBody'], tokenizer)
     
-    for index,line in stancesTrainFile.iterrows():
+    # for index,line in stancesTrainFile.iterrows():
+    #     sentences += news_to_sentences(line['Headline'], tokenizer)
+    
+    for index,line in aggregated_train_file.iterrows():
+        sentences += news_to_sentences(line['ArticleBody'], tokenizer)
         sentences += news_to_sentences(line['Headline'], tokenizer)
-    
+        
+
     # Check how many sentences we have in total
     print("> #Sentences: ", len(sentences))
-
-    print ("> First Sentence : ", sentences[0])
-    print ("> Second Sentence : ", sentences[1])
+    # print ("> First Sentence : ", sentences[0])
+    # print ("> Second Sentence : ", sentences[1])
+    
+    start = time.time()
     trainWord2Vec(sentences, fileTag)
+    end = time.time()
+    trainTime = end - start
+
+    # Export data to a csv file
+    date = time.strftime("%Y-%m-%d")
+    output_file = "word2vec_execution_" + date + ".csv"
+    fieldNames = ["date", "modelName", "executionTime"]
+    
+    with open(output_file, 'a') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+        executionData = {
+         "date": time.strftime("%Y-%m-%d %H:%M"),
+         "modelName": "",
+         "trainTime": trainTime
+         }
+         
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+            writer.writeheader()
+        writer.writerow(executionData)
+
+        print(">> Stats exported to: ", output_file)
+
 
 if __name__ == "__main__":
   #  makeWord2VecModel(False) # Para entrenar el fichero con los cuerpos de noticias
