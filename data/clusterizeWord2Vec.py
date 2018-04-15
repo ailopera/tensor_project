@@ -117,7 +117,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     classification_results = {}
     if classifier == 'RF':
         classification_results = textModelClassifier.modelClassifier(np.array(train_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
-    elil classifier == 'MLP':
+    elif classifier == 'MLP':
         classification_results = textModelClassifier.modelClassifier(np.array(test_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
     classify_end = time.time()
     print("> Tiempo empleado en ejecutar el clasificador: ", classify_end - classify_start)
