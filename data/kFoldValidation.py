@@ -42,6 +42,8 @@ SHUFFLE = True
 K_fold = KFold(k, SHUFFLE)
 print(">> Performing K-Fold Validation with K ", k)
 print(">> File samples: ", train_df.shape[0])
+print(">> Suffle: ", SHUFFLE)
+# print(">> Batch Size: ", batch_size)
 
 # Get execution params based on implementation executed
 if validation == "vectorAverage":
@@ -51,17 +53,21 @@ elif validation == "BOW":
 
 print(">> Executing different model configurations over train data applying K-Fold Validation...")
 
-# Divide data between train and validation
-# Run model with every configuration specified
-train_proportion = math.ceil(train_df.shape[0])
-train_data = df[:train_proportion]
-validation_data = df[train_proportion:]
-print(">>> LEN train data: ", len(train_data))
-print(">>> LEN validation data: ", len(validation_data))
-
 for iteration in iterations:
-        print(">>> Executing Configuration: ", iteration)
-        # Execute model with the configuration specified 
+    # Execute k-fold validation k times
+    #for k, (train_data,test_data) in enumerate(k_fold.split(train_df,target)):
+    index = 1
+    for train_indices, test_indices in K_fold.split(train_df):
+        # 2. Fold the data between train and validation
+        # X_train, X_test, y_train, y_test = train_test_split(train_df, train_df['Stances'], test_size=0.2)
+        # train_data, test_data, train_targets, test_targets = train_test_split(train_df, train_df['Stances'], test_size=0.2)
+        print(">>> Executing KFold iteration ", index)
+        print(">>> Configuration: ", iteration)
+        train_data, test_data = train_df.iloc[train_indices], train_df.iloc[test_indices]
+        print(">>> train_data.shape: ", train_data.shape)
+        print(">>> test_data.shape: ", test_data.shape)
+        # train_targets, test_targets = train_df[train_indices]['Stance'], train_df[test_indices]['Stance']
+        #3. Execute model with the configuration specified 
         if validation == "vectorAverage":
                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_data)
         elif validation == "BOW":
@@ -70,7 +76,7 @@ for iteration in iterations:
         print("------------------------------------------------------")
 
 end = time.time()
-trainValidationTime = end - start
+kFoldExecutionTime = end - start
 
 start = time.time()
 # Execute test with test data
@@ -89,21 +95,21 @@ for iteration in iterations:
 end = time.time()
 testExecutionTime = end - start
 
-print(">> TRAIN-VALIDATION EXECUTION TIME: ", trainValidationTime)
+print(">> KFOLD EXECUTION TIME: ", kFoldExecutionTime)
 print(">> TEST EXECUTION TIME: ", testExecutionTime)
 
 # Export data to a csv file
 csvOutputDir = "./executionStats/"
 date = time.strftime("%Y-%m-%d")
-output_file =  csvOutputDir + "simpleValidation_execution_" + date + ".csv"
-fieldNames = ["date", "execution", "trainValidationTime", "testTime"]
+output_file =  csvOutputDir + "kFoldValidation_execution_" + date + ".csv"
+fieldNames = ["date", "execution", "KFoldTime", "testTime"]
 
 with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
         executionData = {
                 "date": time.strftime("%Y-%m-%d %H:%M"),
                 "execution": "",
-                "trainValidationTime": trainValidationTime,
+                "KFoldTime": kFoldExecutionTime,
                 "testTime": testExecutionTime,
                 }
                 
