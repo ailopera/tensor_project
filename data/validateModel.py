@@ -36,12 +36,6 @@ test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 
 # Get size of batch
 start = time.time()
-k = 4
-# batch_size = train_df.shape[0] / k 
-SHUFFLE = True
-K_fold = KFold(k, SHUFFLE)
-print(">> Performing K-Fold Validation with K ", k)
-print(">> File samples: ", train_df.shape[0])
 
 # Get execution params based on implementation executed
 if validation == "vectorAverage":
@@ -53,9 +47,9 @@ print(">> Executing different model configurations over train data applying K-Fo
 
 # Divide data between train and validation
 # Run model with every configuration specified
-train_proportion = math.ceil(train_df.shape[0])
-train_data = df[:train_proportion]
-validation_data = df[train_proportion:]
+train_proportion = math.ceil(train_df.shape[0] * 0.8)
+train_data = train_df[:train_proportion]
+validation_data = train_df[train_proportion:]
 print(">>> LEN train data: ", len(train_data))
 print(">>> LEN validation data: ", len(validation_data))
 
@@ -63,10 +57,9 @@ for iteration in iterations:
         print(">>> Executing Configuration: ", iteration)
         # Execute model with the configuration specified 
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_data)
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_data, iteration["min_df"], iteration["max_df"])
-        index = index + 1
+                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"])
         print("------------------------------------------------------")
 
 end = time.time()
@@ -77,15 +70,13 @@ start = time.time()
 # Execute the same iterations with final validation data
 print("---------------------- TEST ------------------------------")
 print(">> Executing different model configurations over test data")
-# Creamos las dos particiones de datos
-train_batch_size = math.ceil(len(test_df) * 0.8)
-train_data = test_df[:train_batch_size]
-test_data = test_df[train_batch_size:]
+print(">>> LEN train data: ", train_data.shape[0])
+print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_data, True)
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, True)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_data, iteration["min_df"], iteration["max_df"], True)
+                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], True)
 end = time.time()
 testExecutionTime = end - start
 
