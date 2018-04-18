@@ -120,7 +120,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall", "vectorizerFitTime"]
+        "confusionMatrix", "averagePrecision", "recall", "vectorizerFitTime", "min_df", "max_df"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -144,7 +144,9 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
          "confusionMatrix": classification_results["confusion_matrix"],
          "averagePrecision": classification_results["average_precision"],
          "recall": classification_results["recall"],
-         "vectorizerFitTime": vectorizerFitTime
+         "vectorizerFitTime": vectorizerFitTime,
+         "min_df": min_df,
+         "max_df": max_df
          }
          
         newFile = os.stat(output_file).st_size == 0
