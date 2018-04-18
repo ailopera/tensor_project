@@ -46,11 +46,11 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     print(">> Recall: ", recall)
 
     metrics = {
-	 	"train_accuracy": train_accuracy,
-		"test_accuracy": test_accuracy,
+	 	"train_accuracy": round(train_accuracy,2),
+		"test_accuracy": round(test_accuracy,2),
 		"confusion_matrix": confussion_matrix,
-		"average_precision": average_precision,
-		"recall": recall
+		"average_precision": round(average_precision,2),
+		"recall": round(recall,2)
 		}
 	
     return metrics

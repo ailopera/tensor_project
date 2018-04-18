@@ -2,6 +2,7 @@
 # En este caso utilizamos la funcion dense() en vez de crear una funcion propia
 import tensorflow as tf
 import numpy as np
+from tensorflow.examples.tutorials.mnist import input_data
 from datetime import datetime
 import random
 
@@ -10,7 +11,6 @@ import random
 def next_batch(batch_size, train_data, target_data):
     training_shape = train_data.shape[0]
     minibatch_indexes = random.sample(range(0,training_shape), batch_size)
-    # print("> Minibatch_indexes: ", len(minibatch_indexes))
     # Tomamos las muestras de los datos de entrada
     minibatch_data = []
     minibatch_targets = []
@@ -20,10 +20,6 @@ def next_batch(batch_size, train_data, target_data):
         minibatch_data.append(sample)
         minibatch_targets.append(sample_target)
 
-    # print("> Len(minibatch_data): ", len(minibatch_data))
-    # print("> Len(minibatch_targets): ", len(minibatch_targets))
-    # print("> Data sample: ", minibatch_data[0])
-    # print("> Target sample: ", minibatch_targets[0])
     return np.array(minibatch_data),np.array(minibatch_targets)
 
 
@@ -40,10 +36,18 @@ def convert_to_int_classes(targetList):
         
     return np.array(int_classes)
 
+def bag_of_words_model(features, labels, mode):
+    bow_column = tf.feature_column.categorical_column_with_identity( WORDS_FEATURE, num_buckets=n_words)
+    bow_embedding_column ) tf.feature_column.embedding_column(bow_column, dimension=EMBEDDING_size)
+    bow = tf.feature_column.input_layer(features, feature_columns=[bow_embedding_column])
+    logits = tf.layers.dense(bow, MAX_LABEL, activation=None)
+
+    predicted_classes = tf.argmax(logits,1)
+
+    return tf.estimatos.EstimatorSpec(mode = tf.estimator.ModeKeys.PREDICT, predictions = { 'class': predicted_classes, 'prob': tf.nn.softmax(logits)}) 
 
 ### Clasificador ###
 def modelClassifier(input_features, target, test_features, test_targets):
-    tf.reset_default_graph() 
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     root_logdir = "logs"
     tag = "tensorClassifierWithDense"
@@ -54,9 +58,9 @@ def modelClassifier(input_features, target, test_features, test_targets):
     test_labels = convert_to_int_classes(test_targets)
     
     # Pequeño logging para comprobar que se estan generando bien 
-    # for i in range(20):
-    #     print(">> String label: ", target[i])
-    #     print(">> Int label: ", train_labels[i])
+    for i in range(20):
+        print(">> String label: ", target[i])
+        print(">> Int label: ", train_labels[i])
 
     ### Definicion de la red ###
     train_samples = input_features.shape[0] # Numero de ejemplos
@@ -75,7 +79,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
 
-    with tf.name_scope("dnn"):
+    with tf.name_scope("dnn"): 
         hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=tf.nn.relu)
         hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=tf.nn.relu)
         logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
@@ -93,17 +97,18 @@ def modelClassifier(input_features, target, test_features, test_targets):
 
     # Definimos las metricas
     with tf.name_scope("eval"):
-        prediction = tf.nn.in_top_k(logits, y , 1)
-        accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
-        recall = tf.metrics.recall(y, prediction)
-        precision = tf.metrics.precision(y, prediction)
-        confusion_matrix = tf.confusion_matrix(y, prediction)
-        #final_accuracy = tf.metrics.accuracy(y, prediction)
+        correct = tf.nn.in_top_k(logits, y , 1)
+        accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
+    # Imprimimos el grafo para verlo desde tensorflow
+    file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+
     #### Fase de ejecucion ###
+    # Cargamos el dataset
+    # mnist = input_data.read_data_sets("/tmp/data/")
     n_epochs = 20
     batch_size = 50
 
@@ -131,27 +136,6 @@ def modelClassifier(input_features, target, test_features, test_targets):
             acc_train_summary = tf.summary.scalar('Train Accuracy', acc_train)
             acc_test_summary = tf.summary.scalar('Test Accuracy', acc_test)
         
-        # Ejecutamos las metricas finales
-        sess.run(tf.local_variables_initializer())
-        #acc_train = sess.run(mean_accu, )
-        #acc_train = sess.run(mean_accu, )
-        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels})
-        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
-        recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
-        precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
-        confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
-        # Imprimimos el grafo para verlo desde tensorflow
-        file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
-        
-        metrics = {
-	 	"train_accuracy": round(acc_final_train,2),
-		"test_accuracy": round(acc_final_test,2),
-		"confusion_matrix": confusion_matrix_class,
-		"average_precision": round(precision_class[1],2),
-		"recall": round(recall_class[1],2)
-		}
-        print(">> MLP Metrics: ")
-        print(metrics)
-        return metrics
+

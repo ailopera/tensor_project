@@ -74,9 +74,9 @@ print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, True)
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], True)
+                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"])
 end = time.time()
 testExecutionTime = end - start
 
@@ -94,8 +94,8 @@ with open(output_file, 'a') as csv_file:
         executionData = {
                 "date": time.strftime("%Y-%m-%d %H:%M"),
                 "execution": "",
-                "trainValidationTime": trainValidationTime,
-                "testTime": testExecutionTime,
+                "trainValidationTime": round(trainValidationTime,2),
+                "testTime": round(testExecutionTime,2),
                 }
                 
         newFile = os.stat(output_file).st_size == 0
