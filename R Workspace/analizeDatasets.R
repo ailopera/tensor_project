@@ -1,6 +1,6 @@
 library(ggplot2)
 library(gridExtra)
-
+setwd("C:/Users/Operador/projects/tensor_project/R Workspace")
 # Read in csv files
 dfTrain <- read.table("data/train_data_aggregated.csv", header = TRUE, sep = ",")
 dfTest <- read.table("data/test_data_aggregated.csv", header = TRUE, sep = ",")
