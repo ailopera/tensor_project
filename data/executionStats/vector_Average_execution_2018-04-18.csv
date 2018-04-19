@@ -1,13 +1,33 @@
 date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecision,recall
-2018-04-18 20:27,vector_Average,600,300features_15minwords_10contextALL,0.31,4.06,47.6,2.21,11.64,107.61,38379,9594,MLP,41.51,0.83,0.83,"[[ 646   32    0    0]
+2018-04-18 21:11,vector_Average,600,300features_15minwords_10contextALL,0.31,4.02,46.98,1.98,11.47,106.96,38379,9594,MLP,41.94,0.84,0.84,"[[ 629   49    0    0]
  [ 146    0    0    0]
- [ 630 1074    0    0]
- [ 194 6872    0    0]]",1.0,0.89
-2018-04-18 20:30,vector_Average,600,300features_15minwords_10contextALL,0.19,3.98,46.04,2.03,11.74,134.12,38379,9594,RF,69.87,1.0,0.98,"[[ 565   10   56   47]
- [  21  101   13   11]
- [  14    5 1645   40]
- [   3    0    9 7054]]",0.98,0.98
-2018-04-18 20:32,vector_Average,600,~/GoogleNews-vectors-negative300.bin,42.46,5.67,30.05,3.93,9.4,133.87,38379,9594,MLP,42.08,0.78,0.78,"[[ 670    8    0    0]
+ [ 585 1119    0    0]
+ [ 197 6869    0    0]]",0.99,0.9
+2018-04-18 21:13,vector_Average,600,300features_15minwords_10contextALL,0.19,3.97,45.73,2.15,11.36,132.85,38379,9594,RF,69.19,1.0,0.97,"[[ 556   14   62   46]
+ [  22   99   14   11]
+ [  18    2 1641   43]
+ [   3    0   11 7052]]",0.97,0.97
+2018-04-18 21:15,vector_Average,600,~/GoogleNews-vectors-negative300.bin,41.11,5.57,29.3,3.66,8.76,131.32,38379,9594,MLP,42.69,0.83,0.82,"[[ 623   55    0    0]
  [ 146    0    0    0]
- [1165  539    0    0]
- [  96 6970    0    0]]",1.0,0.84
+ [ 609 1095    0    0]
+ [ 304 6762    0    0]]",0.99,0.88
+2018-04-18 21:18,vector_Average,600,~/GoogleNews-vectors-negative300.bin,40.62,5.13,29.87,3.81,8.8,167.76,38379,9594,RF,79.3,1.0,0.94,"[[ 439    3   74  162]
+ [  18   62   21   45]
+ [  12    2 1511  179]
+ [   2    0   12 7052]]",0.94,0.94
+2018-04-18 21:20,vector_Average,600,300features_15minwords_10contextALL,0.2,3.83,46.27,2.13,12.29,108.82,38379,11993,MLP,43.83,0.81,0.76,"[[ 869   10    0    0]
+ [ 281    0    0    0]
+ [1612  493    0    0]
+ [  80 8648    0    0]]",1.0,0.82
+2018-04-18 21:22,vector_Average,600,300features_15minwords_10contextALL,0.2,4.27,45.7,2.18,12.18,135.76,38379,11993,RF,70.96,1.0,0.79,"[[ 131    2   45  701]
+ [   1   19    6  255]
+ [   4    1  668 1432]
+ [   1    0   28 8699]]",0.79,0.79
+2018-04-18 21:24,vector_Average,600,~/GoogleNews-vectors-negative300.bin,41.14,5.47,29.78,3.94,9.75,132.99,38379,11993,MLP,42.65,0.82,0.76,"[[ 860   19    0    0]
+ [ 281    0    0    0]
+ [1511  594    0    0]
+ [ 250 8478    0    0]]",1.0,0.82
+2018-04-18 21:27,vector_Average,600,~/GoogleNews-vectors-negative300.bin,40.77,5.7,29.85,3.81,9.62,170.0,38379,11993,RF,80.0,1.0,0.78,"[[  97    1   43  738]
+ [   1   15    5  260]
+ [   4    1  504 1596]
+ [   0    0   39 8689]]",0.78,0.78
