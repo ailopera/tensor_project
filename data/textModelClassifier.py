@@ -138,10 +138,12 @@ def modelClassifier(input_features, target, test_features, test_targets):
         #acc_train = sess.run(mean_accu, )
         acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels})
         acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
-        recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
-        precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
+        # recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
+        # precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
         # confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
         prediction = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
+        print("Prediction: ", prediction)
+        
         confusion_matrix_class = confusion_matrix(test_labels,prediction)
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
