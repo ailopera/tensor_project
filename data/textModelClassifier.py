@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 from datetime import datetime
 import random
+from sklearn.metrics import confusion_matrix
 
 ### Funciones auxiliares
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
@@ -92,13 +93,13 @@ def modelClassifier(input_features, target, test_features, test_targets):
         training_op = optimizer.minimize(loss)
 
     # Definimos las metricas
-    with tf.name_scope("eval"):
-        prediction = tf.nn.in_top_k(logits, y , 1)
-        accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
-        recall = tf.metrics.recall(y, prediction)
-        precision = tf.metrics.precision(y, prediction)
-        confusion_matrix = tf.confusion_matrix(y, prediction)
-        #final_accuracy = tf.metrics.accuracy(y, prediction)
+    # with tf.name_scope("eval"):
+    prediction = tf.nn.in_top_k(logits, y , 1)
+    accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
+    recall = tf.metrics.recall(y, prediction)
+    precision = tf.metrics.precision(y, prediction)
+    # confusion_matrix = tf.confusion_matrix(y, prediction)
+    #final_accuracy = tf.metrics.accuracy(y, prediction)
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -139,7 +140,9 @@ def modelClassifier(input_features, target, test_features, test_targets):
         acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
         recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
         precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
-        confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
+        # confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
+        prediction = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
+        confusion_matrix_class = confusion_matrix(test_labels,prediction)
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
         # Imprimimos el grafo para verlo desde tensorflow
