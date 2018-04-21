@@ -35,8 +35,8 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     train_accuracy = accuracy_score(train_labels, forest.predict(trainDataFeatures))
     test_accuracy = accuracy_score(test_labels, prediction)
     confussion_matrix = confusion_matrix(test_labels, prediction,labels=[0,1,2,3])
-    average_precision = precision_score(test_labels, prediction, average="weighted", labels=[0,1,2,3])
-    recall = recall_score(test_labels, prediction, average="weighted", labels=[0,1,2,3])
+    average_precision = precision_score(test_labels, prediction, average='weighted', labels=[0,1,2,3])
+    recall = recall_score(test_labels, prediction, average='weighted', labels=[0,1,2,3])
 
     print(">> Accuracy achieved with the train set: ", train_accuracy)	
     print(">> Accuracy achieved with the test set: ", test_accuracy)
