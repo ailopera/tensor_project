@@ -1,0 +1,21 @@
+date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecision,recall
+2018-04-20 21:37,vector_Average,600,300features_15minwords_10contextALL,0.76,4.73,52.83,2.04,12.74,124.33,38379,9594,MLP,50.92,0.84,0.85,"[[  63    0  211  404]
+ [  16    0   44   86]
+ [  28    0 1181  495]
+ [  10    0  162 6894]]",0.94,0.99
+2018-04-20 21:39,vector_Average,600,300features_15minwords_10contextALL,0.19,4.2,47.61,2.07,12.08,141.09,38379,9594,RF,74.67,1.0,0.97,"[[ 561   11   58   48]
+ [  18   98   13   17]
+ [  20    2 1637   45]
+ [   3    0   16 7047]]",0.97,0.97
+2018-04-20 21:43,vector_Average,600,~/GoogleNews-vectors-negative300.bin,87.78,5.63,29.98,3.57,8.63,183.71,38379,9594,MLP,47.86,0.8,0.8,"[[   1    0  116  561]
+ [   0    0   28  118]
+ [   0    0  796  908]
+ [   0    0  168 6898]]",0.93,1.0
+2018-04-20 21:46,vector_Average,600,~/GoogleNews-vectors-negative300.bin,47.01,6.29,33.94,3.95,9.74,188.06,38379,9594,RF,86.86,1.0,0.94,"[[ 428    4   84  162]
+ [  19   61   21   45]
+ [  12    2 1506  184]
+ [   1    0   14 7051]]",0.94,0.94
+2018-04-20 21:48,vector_Average,600,300features_15minwords_10contextALL,0.21,4.75,50.51,2.44,14.01,125.02,38379,11993,MLP,52.8,0.84,0.77,"[[   8    0   93  778]
+ [   1    0   19  261]
+ [   5    0  702 1398]
+ [   1    0  212 8515]]",0.93,1.0
