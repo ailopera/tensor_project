@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 from datetime import datetime
 import random
-#from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 ### Funciones auxiliares
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
@@ -21,10 +21,11 @@ def next_batch(batch_size, train_data, target_data):
         minibatch_data.append(sample)
         minibatch_targets.append(sample_target)
 
-    # print("> Len(minibatch_data): ", len(minibatch_data))
-    # print("> Len(minibatch_targets): ", len(minibatch_targets))
-    # print("> Data sample: ", minibatch_data[0])
-    # print("> Target sample: ", minibatch_targets[0])
+    #print("> Len(minibatch_data): ", len(minibatch_data))
+    #print("> Len(minibatch_targets): ", len(minibatch_targets))
+    #print("> Data sample: ", minibatch_data[0])
+    #print("> Target sample: ", minibatch_targets)
+    #print("-------------")
     return np.array(minibatch_data),np.array(minibatch_targets)
 
 
@@ -96,12 +97,14 @@ def modelClassifier(input_features, target, test_features, test_targets):
     # with tf.name_scope("eval"):
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
     prediction=tf.argmax(logits,1)
+    #correct_prediction_2 = tf.equal(prediction, y)
+    #accuracy_prediction = tf.reduce_mean(tf.cast(correct_prediction_2, tf.float32))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     recall = tf.metrics.recall(y, prediction)
     precision = tf.metrics.precision(y, prediction)
-    confusion_matrix = tf.confusion_matrix(y, prediction)
+    confusion_matrix_class = tf.confusion_matrix(y, prediction)
     #final_accuracy = tf.metrics.accuracy(y, prediction)
-
+    #con_mat = tf.confusion_matrix(labels=y, predictions=prediction, num_classes=4, dtype=tf.int32, name=None)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
@@ -141,12 +144,25 @@ def modelClassifier(input_features, target, test_features, test_targets):
         acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
         recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
         precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
-        confusion_matrix_class = sess.run(confusion_matrix, feed_dict={X: test_features, y: test_labels})
-        prediction = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
-        print("Prediction: ", prediction)
-        print("logits: ", logits)
-        print("Y: ", y)
+        confusion_matrix_class = sess.run(confusion_matrix_class, feed_dict={X: test_features, y: test_labels})
+        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
+        logits = sess.run(logits,feed_dict={X: test_features, y: test_labels} )
+        #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
+        print("Prediction: ", prediction_values)
+        print("Longitud de predictions: ", sess.run(tf.size(prediction_values)))
+        print("Longitud de las entradas: ", len(test_labels))
+        #sess.run(tf.Print(prediction_values, [prediction_values]))
+        #print("logits: ", logits)
+        #print("Y: ", y)
+        #print("Acuraccy prediction: ", accuracy_prediction)
         #confusion_matrix_class = confusion_matrix(test_labels,prediction)
+        
+        # Calculamos precision, recall y confusion matrix utilizando sklearn
+        #confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
+        #precision_class = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        #recall_class = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        print("Tipo: ", type(precision_class))
+        print("valor: ", precision_class)
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
         # Imprimimos el grafo para verlo desde tensorflow
