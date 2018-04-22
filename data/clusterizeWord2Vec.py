@@ -105,13 +105,23 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     train_centroids = np.zeros((trainData.shape[0]*2, num_clusters), dtype="float32")
     print(">> Generating mean of cluster centroids for training data...")
     # Transformamos el set de entrenamiento a bolsa de centroides
-    for headline,report in zip(trainData['Headline'], trainData['ArticleBody']):
-        train_articleBody = create_bag_of_centroids(report, word_centroid_map, kmeans_clustering)
-        #print("Train_articleBody_features", len(test_articleBody))
-        #print("Train_articleBody_features", test_articleBody)
-        train_headline = create_bag_of_centroids(headline, word_centroid_map, kmeans_clustering)
-        train_sample = np.append(train_headline, train_articleBody)
+    
+    train_headlines_vecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in trainData['Headline'])	
+    train_articles_vecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in trainData['ArticleBody'])	
+    
+    for headline,report in zip(train_headlines_vecs, train_articles_vecs):
+        train_sample = np.append(headline, report)
         train_centroids = np.append(train_centroids,train_sample)
+
+
+
+    # for headline,report in zip(trainData['Headline'], trainData['ArticleBody']):
+    #     train_articleBody = create_bag_of_centroids(report, word_centroid_map, kmeans_clustering)
+    #     #print("Train_articleBody_features", len(test_articleBody))
+    #     #print("Train_articleBody_features", test_articleBody)
+    #     train_headline = create_bag_of_centroids(headline, word_centroid_map, kmeans_clustering)
+    #     train_sample = np.append(train_headline, train_articleBody)
+    #     train_centroids = np.append(train_centroids,train_sample)
 
     train_formatting_end = time.time()
 
