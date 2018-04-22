@@ -6,7 +6,13 @@ from gensim.models import Word2Vec, KeyedVectors
 import numpy as np
 import pandas as pd
 import textModelClassifier
+from randomForestClassifier import randomClassifier
+
 import multiprocessing
+from joblib import Parallel, delayed
+
+from sklearn.preprocessing import Imputer
+
 NUM_FEATURES = 300
 # Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
 # para convertir las noticias en una bolsa de centroides. 
@@ -102,26 +108,20 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     trainDataPath = basePath + "train_data_aggregated.csv"
     trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 
-    train_centroids = np.zeros((trainData.shape[0]*2, num_clusters), dtype="float32")
     print(">> Generating mean of cluster centroids for training data...")
     # Transformamos el set de entrenamiento a bolsa de centroides
     
-    train_headlines_vecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in trainData['Headline'])	
-    train_articles_vecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in trainData['ArticleBody'])	
+    train_headlines_vecs = Parallel(n_jobs=n_jobs, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in trainData['Headline'])	
+    train_articles_vecs = Parallel(n_jobs=n_jobs, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in trainData['ArticleBody'])	
     
+    print(">> Composing train data input features...")
+    print("Train Headlines: ", len(train_headlines_vecs))
+    print("Train ArticleBodies: ", len(train_articles_vecs))
+    train_centroids = []
     for headline,report in zip(train_headlines_vecs, train_articles_vecs):
         train_sample = np.append(headline, report)
-        train_centroids = np.append(train_centroids,train_sample)
-
-
-
-    # for headline,report in zip(trainData['Headline'], trainData['ArticleBody']):
-    #     train_articleBody = create_bag_of_centroids(report, word_centroid_map, kmeans_clustering)
-    #     #print("Train_articleBody_features", len(test_articleBody))
-    #     #print("Train_articleBody_features", test_articleBody)
-    #     train_headline = create_bag_of_centroids(headline, word_centroid_map, kmeans_clustering)
-    #     train_sample = np.append(train_headline, train_articleBody)
-    #     train_centroids = np.append(train_centroids,train_sample)
+        train_centroids.append(train_sample)
+        #train_centroids = np.append(train_centroids,train_sample)
 
     train_formatting_end = time.time()
 
@@ -129,16 +129,17 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     testDataPath = basePath + "test_data_aggregated.csv"
     testData = pd.read_csv(testDataPath, header=0, delimiter=",", quoting=1)
     #  Transformamos el set test a bolsa de centroids
-    test_centroids = np.zeros((testData.shape, num_clusters), dtype="float32")
-    print(">> Generating mean of cluster centroids for testing data...")
-    # Transformamos el set de entrenamiento a bolsa de centroides
-    for headline,report in zip(testData['Headline'], testData['ArticleBody']):
-        test_articleBody = create_bag_of_centroids(report, word_centroid_map, kmeans_clustering)
-        test_headline = create_bag_of_centroids(headline, word_centroid_map, kmeans_clustering)
-        test_sample = np.append(test_headline, test_articleBody)
-        #test_centroids.append(test_sample)
-        test_centroids = np.append(test_centroids, test_sample)
+    print(">> Generating mean of cluster centroids for testing data...")  
+    test_headlines_vecs = Parallel(n_jobs=n_jobs, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in testData['Headline'])	
+    test_articles_vecs = Parallel(n_jobs=n_jobs, verbose= 10)(delayed(create_bag_of_centroids)(report, word_centroid_map, kmeans_clustering) for report in testData['ArticleBody'])	
 
+    # Transformamos el set de entrenamiento a bolsa de centroides
+    print(">> Composing test data input features...")
+    test_centroids = []
+    for headline,report in zip(test_headlines_vecs, test_articles_vecs):
+        test_sample = np.append(headline, report)
+        test_centroids.append(test_sample)
+        #test_centroids = np.append(test_centroids, test_sample)
 
     test_formatting_end = time.time()
     print("> Tiempo empleado en formatear los datos de entrenamiento: ", train_formatting_end - train_formatting_start)
@@ -147,10 +148,18 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     # Llamamos al clasificador con los datos compuestos
     classify_start = time.time()
     classification_results = {}
-    if classifier == 'RF':
+    
+    if classifier == 'MLP':
+        train_centroids = Imputer().fit_transform(train_centroids)
+        test_centroids = Imputer().fit_transform(test_centroids)
+        # Modelo basado en un MultiLayer Perceptron
         classification_results = textModelClassifier.modelClassifier(np.array(train_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
-    elif classifier == 'MLP':
-        classification_results = textModelClassifier.modelClassifier(np.array(test_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
+    elif classifier == 'RF':
+        # Modelo basado en un randomForest sencillo
+        train_centroids = Imputer().fit_transform(train_centroids)
+        test_centroids = Imputer().fit_transform(test_centroids)
+        classification_results = randomClassifier(np.array(train_centroids), trainData['Stance'], np.array(test_centroids), testData['Stance'])
+    
     classify_end = time.time()
     print("> Tiempo empleado en ejecutar el clasificador: ", classify_end - classify_start)
 
