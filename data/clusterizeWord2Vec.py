@@ -13,6 +13,8 @@ from joblib import Parallel, delayed
 
 from sklearn.preprocessing import Imputer
 
+from itertools import groupby
+
 NUM_FEATURES = 300
 # Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
 # para convertir las noticias en una bolsa de centroides. 
@@ -49,8 +51,11 @@ def create_bag_of_centroids(wordlist, word_centroid_map, clusters):
       featureVec = np.add(featureVec, vec)
     
     featureVec = np.divide(featureVec, nwords)
+
+    dict_centroids = groupby(bag_of_centroids, Key=vec)
     #print("len(featureVec) ", len(featureVec))
-    #print("FeatureVec ", featureVec)
+    print("dict_centroids ", dict_centroids)
+    print("--------------------------------")
     #time.sleep(20)
     return np.array(featureVec)
 
@@ -105,7 +110,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     # Reservamos un array para el conjunto de entrenamiento de bag of centroids (por razones de velocidad)
 
     train_formatting_start = time.time()
-    trainDataPath = basePath + "train_data_aggregated.csv"
+    trainDataPath = basePath + "train_data_aggregated_mini.csv"
     trainData = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 
     print(">> Generating mean of cluster centroids for training data...")
@@ -126,7 +131,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     train_formatting_end = time.time()
 
 
-    testDataPath = basePath + "test_data_aggregated.csv"
+    testDataPath = basePath + "test_data_aggregated_mini.csv"
     testData = pd.read_csv(testDataPath, header=0, delimiter=",", quoting=1)
     #  Transformamos el set test a bolsa de centroids
     print(">> Generating mean of cluster centroids for testing data...")  
@@ -162,6 +167,48 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     
     classify_end = time.time()
     print("> Tiempo empleado en ejecutar el clasificador: ", classify_end - classify_start)
+    
+    # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
+    # Se genera un fichero por dia
+    csvOutputDir = "./executionStats/"
+    date = time.strftime("%Y-%m-%d")
+    # validationDesc = "validation" if validation else ""
+    output_file = csvOutputDir + executionDesc + "_execution_" + date + ".csv"
+    fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
+        "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
+        "trainInstances", "testInstances", "modelTrained", "clusterSize","modelExecutionTime","trainAccuracy", "testAccuracy",\
+        "confusionMatrix", "averagePrecision", "recall"]
+    
+    with open(output_file, 'a') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+        executionData = {
+         "date": time.strftime("%Y-%m-%d %H:%M"),
+         "executionDesc": executionDesc, 
+         "textModelFeatures": np.array(trainDataInputs).shape[1], 
+         "modelName": word2vec_model,
+         "loadModelTime": round(loadModelTime,2),
+         "trainDataFormattingTime": round(trainDataFormattingTime,2),
+         "trainDataFeatureVecsTime": round(trainFeatureVecsTime,2),
+         "testDataFormattingTime": round(testDataFormattingTime,2),
+         "testDataFeatureVecsTime": round(testDataFeatureVecsTime,2),
+         "totalExecutionTime": round(totalExecutionTime,2),
+         "trainInstances": trainData.shape[0],
+         "testInstances": testData.shape[0],
+         "modelTrained": model_executed,
+         "clusterSize": cluster_size,
+         "modelExecutionTime": round(modelExecutionTime,2),
+         "trainAccuracy": classification_results["train_accuracy"],
+         "testAccuracy": classification_results["test_accuracy"],
+         "confusionMatrix": classification_results["confusion_matrix"],
+         "averagePrecision": classification_results["average_precision"],
+         "recall": classification_results["recall"]
+         }
+         
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+            writer.writeheader()
+        writer.writerow(executionData)
+        print(">> Stats exported to: ", output_file)
 
 
 if __name__ == "__main__":
