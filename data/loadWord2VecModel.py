@@ -9,9 +9,9 @@ def get_most_similar( word):
         print("> ",word[0],": ", word[1]) 
 
 inputPath = sys.argv[1] 
-binModel = len(sys.argv) == 3 and sys.argv[2] == False
+binModel = sys.argv[2]
 print("BinModel: ", binModel, len(sys.argv), sys.argv[2])
-print(">>> DOESNT_MATCH: Obtiene el término disonante con respecto al resto")
+
 if not binModel:
     #model = gensim.models.Word2Vec.load("300features_15minwords_10contextALL")
     model = gensim.models.Word2Vec.load(inputPath)
@@ -26,6 +26,7 @@ print("Model shape (Tamaño del vocabulario, tamaño del vector de features): ",
 try:
     # Paso 1: Exploración inicial del modelo
     # The doesht_math function will try to deduce which word in a set is most dissimilar form the others
+    #print(">>> DOESNT_MATCH: Obtiene el término disonante con respecto al resto")
     print(">>> doesnt_match: Obtiene el término disonante con respecto al resto")
     #print("---------------------------------------------------------------------------------------------")
     print("> Man, woman, child, kitchen: ", model.doesnt_match("man woman child kitchen".split()))
@@ -53,36 +54,45 @@ try:
     print(">>> MOST SIMILAR QUESTIONS")
     # print("> Man: ",get_most_similar("man"))
     # print("--------------------------------------------------------------------------------------------------------")
-    print("> Woman: ")
-    get_most_similar("woman")
+    
+    print("> Global: ")
+    get_most_similar("global")
+    print("---------------------------------------------------------------------------------------------------------")
+    print("> War: ")
+    get_most_similar("war")
+    print("--------------------------------------------------------------------------------------------------------")
+    print("> Money: ")
+    get_most_similar("money")
+    print("---------------------------------------------------------------------------------------------------------")
+    
+    print("> Obama: ")
+    get_most_similar("obama")
     print("--------------------------------------------------------------------------------------------------------")
     print("> Queen: ")
     get_most_similar("queen")
     print("--------------------------------------------------------------------------------------------------------")
-    print("> Obama: ")
-    get_most_similar("obama")
+    print("> Love: ")
+    get_most_similar("love")
+    print("---------------------------------------------------------------------------------------------------------")
+    
+    
+    print("> Woman: ")
+    get_most_similar("woman")
+    print("--------------------------------------------------------------------------------------------------------")
     #print("---------------------------------------------------------------------------------------------")
     #print("> Trump: ", model.most_similar("trump")) # Not in vocabulary
 
     print("--------------------------------------------------------------------------------------------------------")
     #print("> Salary: ", model.most_similar("salary")) # Not in vocabulary
-    print("> War: ")
-    get_most_similar("war")
-    print("--------------------------------------------------------------------------------------------------------")
+    
     print("> Crisis: ")
     get_most_similar("crisis")
     print("--------------------------------------------------------------------------------------------------------")
     # model.most_similar("horrible") #Not in vocabulary
     # model.most_similar("universal") # Not in vocabulary
-    print("> Global: ")
-    get_most_similar("global")
-    print("---------------------------------------------------------------------------------------------------------")
-    print("> Love: ")
-    get_most_similar("love")
-    print("---------------------------------------------------------------------------------------------------------")
-    print("> Money: ")
-    get_most_similar("money")
-    print("---------------------------------------------------------------------------------------------------------")
+    
+    
+    
 
     #print("----------------------------------------")
     get_most_similar("money")

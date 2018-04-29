@@ -214,7 +214,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall"]
+        "confusionMatrix", "averagePrecision", "recall","averagePrecisionSK", "recallSK"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -237,7 +237,9 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
          "testAccuracy": classification_results["test_accuracy"],
          "confusionMatrix": classification_results["confusion_matrix"],
          "averagePrecision": classification_results["average_precision"],
-         "recall": classification_results["recall"]
+         "recall": classification_results["recall"],
+         "averagePrecisionSK": classification_results["average_precisionSK"],
+         "recallSK": classification_results["recallSK"]
          }
          
         newFile = os.stat(output_file).st_size == 0
