@@ -158,9 +158,10 @@ def modelClassifier(input_features, target, test_features, test_targets):
         #confusion_matrix_class = confusion_matrix(test_labels,prediction)
         
         # Calculamos precision, recall y confusion matrix utilizando sklearn
-        #confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
-        #precision_class = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
-        #recall_class = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        
+        confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
+        precision_classSK = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        recall_classSK = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
         print("Tipo: ", type(precision_class))
         print("valor: ", precision_class)
         # Guardamos la version actual del modelo entrenado
@@ -173,7 +174,10 @@ def modelClassifier(input_features, target, test_features, test_targets):
 		"test_accuracy": round(acc_final_test,2),
 		"confusion_matrix": confusion_matrix_class,
 		"average_precision": round(precision_class[1],2),
-		"recall": round(recall_class[1],2)
+		"recall": round(recall_class[1],2),
+    "average_precisionSK": round(precision_classSK,2),
+    "recallSK": round(recall_classSK,2),
+   
 		}
         print(">> MLP Metrics: ")
         print(metrics)

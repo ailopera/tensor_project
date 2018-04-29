@@ -50,7 +50,9 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
 		"test_accuracy": round(test_accuracy,2),
 		"confusion_matrix": confussion_matrix,
 		"average_precision": round(average_precision,2),
-		"recall": round(recall,2)
+		"recall": round(recall,2),
+   "average_precisionSK": 0,
+    "recallSK": 0,
 		}
 	
     return metrics

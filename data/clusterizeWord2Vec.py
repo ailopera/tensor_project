@@ -37,7 +37,8 @@ def create_bag_of_centroids(wordlist, word_centroid_map, clusters):
             index = word_centroid_map[word]
             #print("Index: ", index)
             #bag_of_centroids[index] += 1
-            bag_of_centroids.append(centers[index])
+            #bag_of_centroids.append(centers[index])
+            bag_of_centroids.append((centers[index],1))
     
     # Return the "bag of centroids"
     #print("len(bag_of_centroids) - BEFORE MEAN", len(bag_of_centroids))
@@ -52,19 +53,19 @@ def create_bag_of_centroids(wordlist, word_centroid_map, clusters):
     
     featureVec = np.divide(featureVec, nwords)
 
-    dict_centroids = groupby(bag_of_centroids, Key=vec)
+    dict_centroids = groupby(bag_of_centroids, lambda x: x[0])
     #print("len(featureVec) ", len(featureVec))
     print("dict_centroids ", dict_centroids)
     print("--------------------------------")
     #time.sleep(20)
     return np.array(featureVec)
 
-def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,train_data=None, test_data=None):
+def executeClusterization(word2vec_model, binary, classifier, cluster_size=600 ,train_data=None, test_data=None):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     start = time.time() # Start time
-
+    print("BINARY: ", binary)
     #model = KeyedVectors.load_word2vec_format(model_name)
-    if binary == True:
+    if binary:
         model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model, binary=True)
     else:
         model = gensim.models.Word2Vec.load(word2vec_model)
@@ -82,7 +83,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     # Inicializa un objeto de k-means y lo usa para extraer centroides
     n_jobs = multiprocessing.cpu_count()
     # kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=1)
-    kmeans_clustering = MiniBatchKMeans(n_clusters= num_clusters)
+    kmeans_clustering = MiniBatchKMeans(n_clusters= num_clusters, init_size=num_clusters*3)
     # En idx guardamos el cluster asociado a cada palabra
     # print("> Tiempo empleado en inicializar modelo Kmeans")
     print("> Inicio fit_predict...")
@@ -216,4 +217,5 @@ if __name__ == "__main__":
     word2vec_model = sys.argv[1]
     binary = sys.argv[2]
     classifier = sys.argv[3]
+    print("BINARY: ", binary)
     executeClusterization(word2vec_model, binary, classifier)
