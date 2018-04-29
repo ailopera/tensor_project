@@ -10,8 +10,8 @@ import json
 import re
 
 # # Read data Results
-# executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-04-21.csv"
-executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-04-21.csv"
+executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-04-23.csv"
+# executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-04-23.csv"
 trainExecution = pd.read_csv(executionStatsPath,header=0,delimiter=",", quoting=1)
 print("> Load file ", executionStatsPath)
 class_names = ['Agree', 'Disagree', 'Discuss', 'Unrelated']

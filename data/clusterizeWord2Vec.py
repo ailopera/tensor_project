@@ -82,7 +82,7 @@ def executeClusterization(word2vec_model, binary, classifier, cluster_size=200 ,
     # Inicializa un objeto de k-means y lo usa para extraer centroides
     n_jobs = multiprocessing.cpu_count()
     # kmeans_clustering = KMeans(n_clusters= num_clusters, max_iter=100, n_jobs=1)
-    kmeans_clustering = MiniBatchKMeans(n_clusters= num_clusters)
+    kmeans_clustering = MiniBatchKMeans(n_clusters= num_clusters, init_size=num_clusters*3)
     # En idx guardamos el cluster asociado a cada palabra
     # print("> Tiempo empleado en inicializar modelo Kmeans")
     print("> Inicio fit_predict...")

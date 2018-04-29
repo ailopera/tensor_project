@@ -55,7 +55,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
     train_labels = convert_to_int_classes(target)
     test_labels = convert_to_int_classes(test_targets)
     
-    # Pequeño logging para comprobar que se estan generando bien 
+    # PequeÃ±o logging para comprobar que se estan generando bien 
     # for i in range(20):
     #     print(">> String label: ", target[i])
     #     print(">> Int label: ", train_labels[i])
@@ -64,7 +64,7 @@ def modelClassifier(input_features, target, test_features, test_targets):
     train_samples = input_features.shape[0] # Numero de ejemplos
 
     # Hiperparametros del modelo
-    n_inputs = input_features.shape[1] #Tamaño de la entrada
+    n_inputs = input_features.shape[1] #TamaÃ±o de la entrada
     n_hidden1 = 300 # Numero de neuronas de la primera capa oculta
     n_hidden2 = 100 # Numero de neuronas de la segunda capa oculta
     n_outputs = 4 # Numero de salidas/clases a predecir
@@ -158,9 +158,10 @@ def modelClassifier(input_features, target, test_features, test_targets):
         #confusion_matrix_class = confusion_matrix(test_labels,prediction)
         
         # Calculamos precision, recall y confusion matrix utilizando sklearn
-        #confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
-        #precision_class = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
-        #recall_class = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        
+        confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
+        precision_classSK = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        recall_classSK = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
         print("Tipo: ", type(precision_class))
         print("valor: ", precision_class)
         # Guardamos la version actual del modelo entrenado
@@ -173,7 +174,10 @@ def modelClassifier(input_features, target, test_features, test_targets):
 		"test_accuracy": round(acc_final_test,2),
 		"confusion_matrix": confusion_matrix_class,
 		"average_precision": round(precision_class[1],2),
-		"recall": round(recall_class[1],2)
+		"recall": round(recall_class[1],2),
+        "average_precisionSK": round(precision_classSK,2),
+        "recallSK": round(recall_classSK,2),
+   
 		}
         print(">> MLP Metrics: ")
         print(metrics)

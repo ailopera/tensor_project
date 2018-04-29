@@ -28,6 +28,16 @@ bow_iterations = [{ "classifier": "MLP", "min_df": 1, "max_df": 1.0}, \
         { "classifier": "RF", "min_df": 0.25, "max_df": 0.75}
 ]
 
+clusters_iterations = [{"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \        
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 20, "max_df": 0.8}, \        
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
+
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True, "clusterSize": 20, "max_df": 0.8}, \
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}]
+
 #cargamos el dataset de entrenamiento/validacion y el de test
 trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
 testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
@@ -42,6 +52,8 @@ if validation == "vectorAverage":
         iterations = vectorAverage_iterations
 elif validation == "BOW":
         iterations = bow_iterations
+elif validation == "clusters":
+        iterations = clusters_iterations
 
 print(">> Executing different model configurations over train data applying K-Fold Validation...")
 
@@ -60,6 +72,8 @@ for iteration in iterations:
                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data)
         elif validation == "BOW":
                 generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"])
+        elif validation == "clusters":
+                executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
         print("------------------------------------------------------")
 
 end = time.time()
@@ -77,6 +91,8 @@ for iteration in iterations:
                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df)
         elif validation == "BOW":
                 generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"])
+        elif validation == "clusters":
+                executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
 end = time.time()
 testExecutionTime = end - start
 
