@@ -12,8 +12,6 @@ outputTestPath = "test_partition_split.csv"
 
 bodyIds = range(2532)
 randomizedIds = shuffle(bodyIds)
-train_ids = 
-test_ids = 
 
 train_batch_size = math.ceil(len(bodyIds) * 0.8)
 train_ids = bodyIds[:train_batch_size]
@@ -38,28 +36,17 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     testWriter.writeheader()
     trainWriter.writeheader()
 
-    # data = inputFile.iterrows()
-    # Agitamos los datos para crear una partición de datos aleatoria
-    print(">> Aleatorizando las muestras...")
-    # random.shuffle(data)
-    df.sample(frac=1)
-
-
     # Escribimos las particiones en los ficheros correspondientes
+    for index,line in df.iterrows():
+        row = { "Headline": line["Headline"],
+        "ArticleBody": line["ArticleBody"],
+        "Stance": line["Stance"],
+        "BodyIDS": line["BodyIDS"]}
 
-
-    row = { "Headline": line["Headline"],
-    "ArticleBody": line["ArticleBody"],
-    "Stance": line["Stance"],
-    "BodyIDS": line["BodyIDS"]}
-
-    bodyIds = int(line["BodyIDS"]) if not line[3] == "BodyIDS" else -1
-    if bodyIds in train_ids:
-        trainWriter.writerow(row)
-    elif bodyIds in test_ids: 
-        testWriter.writerow(row)
-    else:
-        print("Id no existente en la lista")
-    
-
-    
+        bodyIds = int(line["BodyIDS"]) if not line[3] == "BodyIDS" else -1
+        if bodyIds in train_ids:
+            trainWriter.writerow(row)
+        elif bodyIds in test_ids: 
+            testWriter.writerow(row)
+        else:
+            print("Id no existente en la lista")
