@@ -10,8 +10,9 @@ inputPath = "total_data_aggregated.csv"
 outputTrainPath = "train_partition_split.csv"
 outputTestPath = "test_partition_split.csv"
 
-bodyIds = range(2532)
-randomizedIds = shuffle(bodyIds)
+bodyIds = list(range(2532))
+#print(bodyIds)
+randomizedIds = random.shuffle(bodyIds)
 
 train_batch_size = math.ceil(len(bodyIds) * 0.8)
 train_ids = bodyIds[:train_batch_size]
@@ -49,4 +50,4 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
         elif bodyIds in test_ids: 
             testWriter.writerow(row)
         else:
-            print("Id no existente en la lista")
+            print("Id no existente en la lista: ", bodyIds)
