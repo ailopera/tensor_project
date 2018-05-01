@@ -14,6 +14,10 @@ gcloud compute --project "deep-learning-media-filter" ssh --zone "us-central1-c"
 
 ## TensorFlow
 
-- Arrancar virtualenv: source activate tensorflow
+- Arrancar virtualenv (de anaconda): source activate tensorflow
 - Salir de una sesion de virtualenv: deactivate
 - Arrancar tensorboard: tensorboard --logdir tf_logs/
+
+
+## fnc baseline
+- Activar el entorno (va conn virtualenv):  source fncenv/bin/activate
