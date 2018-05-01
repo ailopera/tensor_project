@@ -18,13 +18,31 @@ from itertools import groupby
 
 NUM_FEATURES = 300
 
+def simple_average_count(wordlist, word_centroid_map, centers):
+    # Loop over the words in the review. If the word is in the vocabulary,
+    # find which cluster it belongs to, and increment that cluster count by one
+    # Realizamos un conteo de los centroides que hay en el texto
+    # Obtenemos a su vez el conteo mayor de centroides para hacer el corte mas adelante
+    centroids_count = {}
+    total_count = 0
+    featureVec = np.zeros((NUM_FEATURES,), dtype="float32")
+    for word in wordlist.split():
+        #print("word: ", word)
+        if word in word_centroid_map:
+            index = word_centroid_map[word]
+            featureVec = np.add(centers[index], vec)      
+            total_count = total_count + count
+    
+    #print(">> Total count of words: ", total_count)
+    featureVec = np.divide(featureVec, total_count)
+    #print (">> Aggregated Mean: ", featureVec)
+    print("----------------------------------------")
+    return featureVec
 
-def simple_average_count():
 
 
-
-def complex_average_count():
-# Loop over the words in the review. If the word is in the vocabulary,
+def complex_average_count(wordlist, word_centroid_map, centers, max_df=0.8):
+    # Loop over the words in the review. If the word is in the vocabulary,
     # find which cluster it belongs to, and increment that cluster count by one
     # Realizamos un conteo de los centroides que hay en el texto
     # Obtenemos a su vez el conteo mayor de centroides para hacer el corte mas adelante
@@ -41,7 +59,6 @@ def complex_average_count():
                 max_count = centroids_count[index]
             else:
               centroids_count[index] = 1
-    
     
     
     #Filtramos aquellos valores del diccionario que tienen una ocurrencia mayor a la fijada
@@ -61,7 +78,7 @@ def complex_average_count():
     total_count = 0
     featureVec = np.zeros((NUM_FEATURES,), dtype="float32")
     for index, count in filtered_centroids.items():
-    #for index, count in centroids_count.items():
+      #for index, count in centroids_count.items():
       #print("Actual index: ",index, " center:" , centers[index])
       vec = np.multiply(centers[index], count) #Multiplicamos el vector por su ocurrencia
       featureVec = np.add(featureVec, vec)
@@ -71,7 +88,8 @@ def complex_average_count():
     featureVec = np.divide(featureVec, total_count)
     #print (">> Aggregated Mean: ", featureVec)
     print("----------------------------------------")
-    
+    return featureVec
+
 # Con la clusterización asignamos un centroide a cada palabra, por lo que de esta forma podemos definir una funcion
 # para convertir las noticias en una bolsa de centroides. 
 # esta funcion devuelve un array numpy por cada review, cada una con tantas features como clusteres
@@ -82,11 +100,12 @@ def create_bag_of_centroids(wordlist, word_centroid_map, clusters, max_df=0.8):
     centers = np.array(clusters.cluster_centers_)
     #print("First centre: ", centers[0])
     
-    if max_df == 1:
-      simple_average_count()
-    else:
-      complex_average_count()
-      
+    # if max_df == 1:
+    #   featureVec = simple_average_count(wordlist, word_centroid_map, centers)
+    # else:
+    #   featureVec = complex_average_count(wordlist, word_centroid_map, centers)
+
+    featureVec = simple_average_count(wordlist, word_centroid_map, centers)
     #print("len(featureVec) ", len(featureVec))
     return np.array(featureVec)
 
