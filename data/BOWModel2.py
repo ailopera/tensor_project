@@ -94,23 +94,23 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
 
     test_data_features = np.array(test_data_features)
 
+
+    #Aplicamos SMOTE para paliar el desbalanceo de clases
+    if not smote == "":
+        train_data_features, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
+    else:
+        train_labels = train_data['Stance']
+
     # Paso 2: Ejecutamos los modelos
     start = time.time()
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        #Aplicamos SMOTE para paliar el desbalanceo de clases
-        if not smote == "":
-            train_data_features, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
-        else:
-            train_labels = train_data['Stance']
-        
         classification_results = textModelClassifier.modelClassifier(train_data_features, train_labels, test_data_features, test_data['Stance'])
     elif model_executed == 'RF':
         # Inferimos las representaciones con valores incorrectos (NaN, Inf)
         # train_data_features = Imputer().fit_transform(trainDataInputs)
         # test_data_features = Imputer().fit_transform(testDataInputs)
-        train_data_features, train_labels = SMOTE(ratio='all',random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
         classification_results = randomClassifier(train_data_features,train_labels, test_data_features, test_data['Stance'])
     end = time.time()
     modelExecutionTime = end - start
@@ -166,7 +166,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
 
         print(">> Stats exported to: ", output_file)
 
-    #Escribimos la distribución de etiquetas del dataset generado por smote, en un csv con una sola columna
+    #Escribimos la distribuciï¿½n de etiquetas del dataset generado por smote, en un csv con una sola columna
     if not smote == "":
       fieldNames = ["Stance"]
       output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + ".csv"

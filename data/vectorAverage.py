@@ -77,7 +77,7 @@ def makeWordList(text):
     return wordList
 
 
-def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False):
+def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False, smote=""):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     num_features = 300
     executionDesc = "vector_Average"
@@ -183,21 +183,28 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     print("> Tamaño de los datos de entrada (entrenamiento): ", trainData.shape)
     print("> Tamaño de los datos de entrada (test): ", testData.shape)
     
+
+    #Inferimos las muestras erroneas
+    trainDataInputs = Imputer().fit_transform(trainDataInputs)
+    testDataInputs = Imputer().fit_transform(testDataInputs)
+    #Aplicamos SMOTE si procede
+    if not smote == "":
+        trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(train_data_features, trainData['Stance'])
+    else:
+        train_labels = trainData['Stance']
+
     # Llamamos al clasificador con los datos compuestos
     start = time.time()
     classification_results = {}
     if model_executed == 'MLP':
-        trainDataInputs = Imputer().fit_transform(trainDataInputs)
-        testDataInputs = Imputer().fit_transform(testDataInputs)
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+        classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
     elif model_executed == 'RF':
         # Modelo basado en un randomForest sencillo
-        trainDataInputs = Imputer().fit_transform(trainDataInputs)
-        testDataInputs = Imputer().fit_transform(testDataInputs)
-        classification_results = randomClassifier(np.array(trainDataInputs), trainData['Stance'], np.array(testDataInputs), testData['Stance'])
+        classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
     else:
         print(">>> ERROR: No se ha ejecutado ningún modelo")
+
     end = time.time()
     modelExecutionTime = end - start
     execution_end = end
@@ -214,7 +221,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall","averagePrecisionSK", "recallSK"]
+        "confusionMatrix", "averagePrecision", "recall","averagePrecisionSK", "recallSK", "SMOTE"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -239,7 +246,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
          "averagePrecision": classification_results["average_precision"],
          "recall": classification_results["recall"],
          "averagePrecisionSK": classification_results["average_precisionSK"],
-         "recallSK": classification_results["recallSK"]
+         "recallSK": classification_results["recallSK"],
+         "SMOTE": smote
          }
          
         newFile = os.stat(output_file).st_size == 0
@@ -247,6 +255,26 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
             writer.writeheader()
         writer.writerow(executionData)
         print(">> Stats exported to: ", output_file)
+
+    #Escribimos la distribuci�n de etiquetas del dataset generado por smote, en un csv con una sola columna
+    if not smote == "":
+      fieldNames = ["Stance"]
+      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + ".csv"
+      
+      with open(output_file, 'a') as csv_file:
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+          print(">> Exporting stance data to: ", output_file)
+          writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+          writer.writeheader()
+          for stance in train_labels:
+            stance_label = {
+             "Stance": stance
+             }
+            writer.writerow(stance_label)
+  
+        print(">> Stance data exported to: ", output_file)
+    
 
 
 if __name__ == "__main__":
