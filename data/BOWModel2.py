@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 import textModelClassifier
 from randomForestClassifier import randomClassifier
+from imblearn.over_sampling import SMOTE
 
 # Pequeña funcion auxiliar para explorar las features de una representacion
 def getFeaturesInfo(features):
@@ -41,7 +42,7 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
     return vectorizer
 
 
-def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False):
+def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False, smote =False):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
 
@@ -98,13 +99,19 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifier.modelClassifier(train_data_features, train_data['Stance'], test_data_features, test_data['Stance'])
+        #Aplicamos SMOTE para paliar el desbalanceo de clases
+        if smote:
+            train_data_features, train_labels = SMOTE(ratio='all',random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
+        else:
+            train_labels = train_data['Stance']
+        
+        classification_results = textModelClassifier.modelClassifier(train_data_features, train_labels, test_data_features, test_data['Stance'])
     elif model_executed == 'RF':
         # Inferimos las representaciones con valores incorrectos (NaN, Inf)
         # train_data_features = Imputer().fit_transform(trainDataInputs)
         # test_data_features = Imputer().fit_transform(testDataInputs)
-        
-        classification_results = randomClassifier(train_data_features, train_data['Stance'], test_data_features, test_data['Stance'])
+        train_data_features, train_labels = SMOTE(ratio='all',random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
+        classification_results = randomClassifier(train_data_features,train_labels, test_data_features, test_data['Stance'])
     end = time.time()
     modelExecutionTime = end - start
     execution_end = time.time()
@@ -120,7 +127,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances","min_df", "max_df", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall", "vectorizerFitTime", "averagePrecisionSK", "recallSK"]
+        "confusionMatrix", "averagePrecision", "recall", "vectorizerFitTime", "averagePrecisionSK", "recallSK", "SMOTE"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -148,7 +155,8 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
          "recall": classification_results["recall"],
          "vectorizerFitTime": round(vectorizerFitTime,2),
          "averagePrecisionSK": classification_results["average_precisionSK"],
-         "recallSK": classification_results["recallSK"]
+         "recallSK": classification_results["recallSK"],
+         "SMOTE": smote
          }
          
         newFile = os.stat(output_file).st_size == 0
