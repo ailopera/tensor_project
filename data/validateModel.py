@@ -59,7 +59,7 @@ elif validation == "BOW":
 elif validation == "clusters":
         iterations = clusters_iterations
 
-print(">> Executing different model configurations over train data applying K-Fold Validation...")
+print(">> Executing different model configurations over train data applying simple validation...")
 
 # Divide data between train and validation
 # Run model with every configuration specified
@@ -75,7 +75,7 @@ for iteration in iterations:
         if validation == "vectorAverage":
                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, True)
+                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, "minority")
         elif validation == "clusters":
                 executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
         print("------------------------------------------------------")
@@ -94,7 +94,7 @@ for iteration in iterations:
         if validation == "vectorAverage":
                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"])
+                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "minority")
         elif validation == "clusters":
                 executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
 end = time.time()

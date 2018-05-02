@@ -42,7 +42,7 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
     return vectorizer
 
 
-def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False, smote =False):
+def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False, smote=""):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
 
@@ -100,8 +100,8 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
         #Aplicamos SMOTE para paliar el desbalanceo de clases
-        if smote:
-            train_data_features, train_labels = SMOTE(ratio='all',random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
+        if not smote == "":
+            train_data_features, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(train_data_features, train_data['Stance'])
         else:
             train_labels = train_data['Stance']
         
@@ -123,7 +123,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
     validationDesc = "validation" if validation else ""
-    output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + ".csv"
+    output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + "_smote_" +  smote + ".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances","min_df", "max_df", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
@@ -166,6 +166,25 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
 
         print(">> Stats exported to: ", output_file)
 
+    #Escribimos la distribución de etiquetas del dataset generado por smote, en un csv con una sola columna
+    if not smote == "":
+      fieldNames = ["Stance"]
+      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + ".csv"
+      
+      with open(output_file, 'a') as csv_file:
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+          print(">> Exporting stance data to: ", output_file)
+          writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+          writer.writeheader()
+          for stance in train_labels:
+            stance_label = {
+             "Stance": stance
+             }
+            writer.writerow(stance_label)
+  
+        print(">> Stance data exported to: ", output_file)
+    
 
 if __name__ == "__main__":
     model_executed = sys.argv[1] # Puede ser "MLP" "RF"
