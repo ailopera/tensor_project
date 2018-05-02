@@ -28,8 +28,8 @@ bow_iterations = [{ "classifier": "MLP", "min_df": 1, "max_df": 1.0}, \
         { "classifier": "RF", "min_df": 0.25, "max_df": 0.75}
 ]
 
-clusters_iterations = [{"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \        
-        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 20, "max_df": 0.8}, \        
+clusters_iterations = [{"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 20, "max_df": 0.8}, \
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}, \
 
@@ -39,8 +39,12 @@ clusters_iterations = [{"model": "~/GoogleNews-vectors-negative300.bin", "classi
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True, "clusterSize": 50, "max_df": 0.8}]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
-trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
-testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
+# Primer particionado
+#trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
+# Segundo particionado
+trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 

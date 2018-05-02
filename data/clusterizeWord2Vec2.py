@@ -30,13 +30,13 @@ def simple_average_count(wordlist, word_centroid_map, centers):
         #print("word: ", word)
         if word in word_centroid_map:
             index = word_centroid_map[word]
-            featureVec = np.add(centers[index], vec)      
-            total_count = total_count + count
+            featureVec = np.add(featureVec, centers[index])      
+            total_count = total_count + 1
     
     #print(">> Total count of words: ", total_count)
     featureVec = np.divide(featureVec, total_count)
     #print (">> Aggregated Mean: ", featureVec)
-    print("----------------------------------------")
+    #print("----------------------------------------")
     return featureVec
 
 
