@@ -14,7 +14,7 @@ from sklearn.preprocessing import Imputer
 import word2VecModel
 import textModelClassifier
 from randomForestClassifier import randomClassifier
-
+from imblearn.over_sampling import SMOTE
 LOG_ENABLED = False
 
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
@@ -189,7 +189,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     testDataInputs = Imputer().fit_transform(testDataInputs)
     #Aplicamos SMOTE si procede
     if not smote == "":
-        trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(train_data_features, trainData['Stance'])
+        trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
     else:
         train_labels = trainData['Stance']
 

@@ -1,5 +1,0 @@
-date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,min_df,max_df,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecision,recall,vectorizerFitTime,averagePrecisionSK,recallSK,SMOTE
-2018-05-02 09:53,bag_Of_Words,600,,,0,5.98,0,1.46,139.48,39220,9805,1,1.0,MLP,125.27,0.96,0.65,"[[ 227   16  133  354]
- [  43   25   58  113]
- [ 133   17  980  570]
- [ 581   83 1332 5140]]",0.94,0.92,6.29,0.69,0.65,all

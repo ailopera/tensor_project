@@ -73,9 +73,9 @@ for iteration in iterations:
         print(">>> Executing Configuration: ", iteration)
         # Execute model with the configuration specified 
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data,False, "minority")
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data,False, "all")
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, "minority")
+                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, "all")
         elif validation == "clusters":
                 executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
         print("------------------------------------------------------")
@@ -92,9 +92,9 @@ print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "minority")
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "all")
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "minority")
+                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "all")
         elif validation == "clusters":
                 executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
 end = time.time()
