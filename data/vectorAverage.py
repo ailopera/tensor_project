@@ -190,8 +190,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     #Aplicamos SMOTE si procede
     smote_kind = ""
     if not smote == "":
-        smote_kind = "svm"
-        trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4, kind=smote_kind).fit_sample(trainDataInputs, trainData['Stance'])
+        trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
     else:
         train_labels = trainData['Stance']
 
@@ -219,12 +218,12 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
     validationDesc = "validation" if validation else ""
-    additionalDesc = "_smote_" +  smote + "_kind_" + smote_kind  if not smote == "" else ""
+    additionalDesc = "_smote_" +  smote if not smote == "" else ""
     output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + additionalDesc +".csv"
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall","averagePrecisionSK", "recallSK", "SMOTE", "SMOTEKind"]
+        "confusionMatrix", "averagePrecision", "recall","averagePrecisionSK", "recallSK", "SMOTE"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -250,8 +249,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
          "recall": classification_results["recall"],
          "averagePrecisionSK": classification_results["average_precisionSK"],
          "recallSK": classification_results["recallSK"],
-         "SMOTE": smote,
-         "SMOTEKind": smote_kind
+         "SMOTE": smote
          }
          
         newFile = os.stat(output_file).st_size == 0
@@ -263,7 +261,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     #Escribimos la distribuci�n de etiquetas del dataset generado por smote, en un csv con una sola columna
     if not smote == "":
       fieldNames = ["Stance"]
-      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + "_kind_" + smote_kind + ".csv"
+      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + ".csv"
       with open(output_file, 'a') as csv_file:
         newFile = os.stat(output_file).st_size == 0
         if newFile:
