@@ -10,8 +10,15 @@ import json
 import re
 
 # # Read data Results
-executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-04-23.csv"
+# Fireros del particionado 1
+# executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-04-23.csv"
 # executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-04-23.csv"
+# Ficheros del particionado 2
+# executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-05-01.csv"
+# executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-05-02_smote_all.csv"
+# executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-05-03.csv"
+executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-05-01.csv"
+
 trainExecution = pd.read_csv(executionStatsPath,header=0,delimiter=",", quoting=1)
 print("> Load file ", executionStatsPath)
 class_names = ['Agree', 'Disagree', 'Discuss', 'Unrelated']
