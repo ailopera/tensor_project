@@ -10,7 +10,7 @@ from BOWModel2 import generateBOWModel
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
 common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
-iterations = [{ "activation": "relu", "config_tag": "prueba"}]
+iterations = [{ "activation_function": "relu", "config_tag": "prueba"}]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
 # Primer particionado
@@ -41,8 +41,7 @@ print(">>> LEN validation data: ", len(validation_data))
 for classifier_config in iterations:
         print(">>> Executing Configuration: ", classifier_config)
         # Execute model with the configuration specified 
-        if validation == "vectorAverage":
-                executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, "all", classifier_config)
+        executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, "all", classifier_config)
         print("------------------------------------------------------")
 
 end = time.time()
@@ -55,13 +54,9 @@ print("---------------------- TEST ------------------------------")
 print(">> Executing different model configurations over test data")
 print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
-for iteration in iterations:
-        if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "all")
-        elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "all")
-        elif validation == "clusters":
-                executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
+#for iteration in iterations:
+        #executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, "all", classifier_config)
+        
 end = time.time()
 testExecutionTime = end - start
 

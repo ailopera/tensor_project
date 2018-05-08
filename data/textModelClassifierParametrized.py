@@ -50,11 +50,11 @@ default_hyperparams = {"activation_function": "relu", "learning_rate_update":"co
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    root_logdir = "logs"
+    root_logdir = "testLogs"
     tag = "FNNClassifier"
-    config_tag = hyperparams.config_tag if not hyperparams == None else default_hyperparams["config_tag"]
+    config_tag = hyperparams["config_tag"] if not hyperparams == None else default_hyperparams["config_tag"]
     logdir = "{}/run-{}-{}-{}/".format(root_logdir,tag, config_tag,now)
-
+      
     # Convertimos a enteros las clases
     train_labels = convert_to_int_classes(target)
     test_labels = convert_to_int_classes(test_targets)
@@ -70,11 +70,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     # funcion de activacion de las capas
     activation = None
-    if hyperparams.activation_function == 'relu':
+    if hyperparams["activation_function"] == 'relu':
         activation = tf.nn.relu
-    elif hyperparams.activation_function == 'leaky_relu':
+    elif hyperparams["activation_function"] == 'leaky_relu':
         activation = tf.nn.leaky_relu
-    elif hyperparams.activation_function == 'elu':
+    elif hyperparams["activation_function"] == 'elu':
         activation = tf.nn.elu
     else:
         print(">>> ERROR: Wrong activation function specified")
@@ -126,27 +126,34 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     n_iterations = round(train_samples / batch_size)
 
+
+    # Export de escalares
+    # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
+    tf.summary.scalar('Accuracy', accuracy)
+    merged_summary_op = tf.summary.merge_all()
+    
     # Entrenamos el modelo. Usamos minibatch gradient descent 
     # (en cada iteracion aplicamos el gradiente descendiente sobre una submuestra aleatoria de los datos de entrenamiento)
     #  Al final de cada epoch computamos el accuracy sobre uno de los batches.
     with tf.Session() as sess:
         # Inicializamos las variables globales del grafo
         init.run()
+        # Imprimimos el grafo para verlo desde tensorflow
+        summary_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
         # Realizamos el entrenamiento fijando en n_epochs
         for epoch in range(n_epochs):
             for iteration in range(n_iterations):
                 # X_batch, y_batch = mnist.train.next_batch(batch_size)
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
-                sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
-            
+                _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
+                #Escribimos las metricas en tensorboard
+                summary_writer.add_summary(summary, epoch*iteration)
+                summary_writer.flush()
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
             acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
             print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
-
-            # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
-            acc_train_summary = tf.summary.scalar('Train Accuracy', acc_train)
-            acc_test_summary = tf.summary.scalar('Test Accuracy', acc_test)
+            
         
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
@@ -159,6 +166,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         confusion_matrix_class = sess.run(confusion_matrix_class, feed_dict={X: test_features, y: test_labels})
         prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
         logits = sess.run(logits,feed_dict={X: test_features, y: test_labels} )
+        
+        
         #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
         print("Prediction: ", prediction_values)
         print("Longitud de predictions: ", sess.run(tf.size(prediction_values)))
@@ -178,8 +187,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         print("valor: ", precision_class)
         # Guardamos la version actual del modelo entrenado
         save_path = saver.save(sess, "./my_model_final.ckpt")
-        # Imprimimos el grafo para verlo desde tensorflow
-        file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+        
         
         metrics = {
 	 	"train_accuracy": round(acc_final_train,2),
