@@ -187,6 +187,23 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
             writer.writerow(stance_label)
   
         print(">> Stance data exported to: ", output_file)
+    else:
+      fieldNames = ["Stance"]
+      output_file = csvOutputDir + executionDesc + "_trainData_" + date + validationDesc + ".csv"
+      
+      with open(output_file, 'a') as csv_file:
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+          print(">> Exporting stance data to: ", output_file)
+          writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
+          writer.writeheader()
+          for stance in train_labels:
+            stance_label = {
+             "Stance": stance
+             }
+            writer.writerow(stance_label)
+  
+        print(">> Stance data exported to: ", output_file)
     
 
 if __name__ == "__main__":
