@@ -12,7 +12,8 @@ import gensim
 from gensim.models import Word2Vec, KeyedVectors
 from sklearn.preprocessing import Imputer
 import word2VecModel
-import textModelClassifier
+# import textModelClassifier # Primer modelo de clasificador basico, no parammetrizable
+import textModelClassifierParametrized
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 LOG_ENABLED = False
@@ -77,7 +78,7 @@ def makeWordList(text):
     return wordList
 
 
-def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False, smote=""):
+def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False, smote="", classifier_config=None):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     num_features = 300
     executionDesc = "vector_Average"
@@ -199,7 +200,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
+        classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
     elif model_executed == 'RF':
         # Modelo basado en un randomForest sencillo
         classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
