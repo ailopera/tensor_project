@@ -147,8 +147,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                 _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
                 #Escribimos las metricas en tensorboard
-                summary_writer.add_summary(summary, epoch*iteration)
-                summary_writer.flush()
+                if iteration == 0:
+                    summary_writer.add_summary(summary, epoch*iteration)
+                    summary_writer.flush()
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
             acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
