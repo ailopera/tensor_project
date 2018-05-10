@@ -119,7 +119,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     #con_mat = tf.confusion_matrix(labels=y, predictions=prediction, num_classes=4, dtype=tf.int32, name=None)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
-
+    
+    ##Metricas de scikit
+    #precision_classSK = precision_score(y, prediction, average="weighted", labels=[0,1,2,3])
+    #recall_classSK = recall_score(y, prediction, average="weighted", labels=[0,1,2,3])
+            
     #### Fase de ejecucion ###
     n_epochs = 20
     batch_size = 50
@@ -129,17 +133,39 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     # Export de escalares
     # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
+    
     tf.summary.scalar('Accuracy', accuracy)
+    tf.summary.scalar('Loss', loss)
+    tf.summary.histogram('Xentropy', xentropy)
+    hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
+    hidden_2_weights = [v for v in tf.global_variables() if v.name == "hidden2/kernel:0"][0]
+    outputs_weigths = [v for v in tf.global_variables() if v.name == "outputs/kernel:0"][0]
+    hidden_1_bias = [v for v in tf.global_variables() if v.name == "hidden1/bias:0"][0]
+    hidden_2_bias = [v for v in tf.global_variables() if v.name == "hidden2/bias:0"][0]
+    output_2_bias = [v for v in tf.global_variables() if v.name == "outputs/bias:0"][0]
+    tf.summary.histogram('Weigths_hidden1', hidden_1_weights)
+    tf.summary.histogram('Weigths_hidden2', hidden_2_weights)
+    tf.summary.histogram('Weigths_hidden2', hidden_2_weights)
+    tf.summary.histogram('Bias_hidden1', hidden_1_bias)
+    tf.summary.histogram('Bias_hidden2', hidden_2_bias)
+    tf.summary.histogram('Bias_output', output_2_bias)
+    #tf.summary.scalar('Precision', precision_classSK)
+    #tf.summary.scalar('Recall', recall_classSK)
     merged_summary_op = tf.summary.merge_all()
     
     # Entrenamos el modelo. Usamos minibatch gradient descent 
     # (en cada iteracion aplicamos el gradiente descendiente sobre una submuestra aleatoria de los datos de entrenamiento)
     #  Al final de cada epoch computamos el accuracy sobre uno de los batches.
     with tf.Session() as sess:
+        all_vars= tf.global_variables()
+        for v in tf.global_variables():
+          print(v.name)
+        hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
         # Inicializamos las variables globales del grafo
         init.run()
-        # Imprimimos el grafo para verlo desde tensorflow
+        # Creamos el writter
         summary_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+        
         # Realizamos el entrenamiento fijando en n_epochs
         for epoch in range(n_epochs):
             for iteration in range(n_iterations):
@@ -147,12 +173,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                 _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
                 #Escribimos las metricas en tensorboard
-                if iteration == 0:
-                    summary_writer.add_summary(summary, epoch*iteration)
-                    summary_writer.flush()
+                if iteration % 20 ==  0:
+                     summary_writer.add_summary(summary, epoch*n_iterations + iteration)        
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-            acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
+            acc_train, h1_weights = sess.run([accuracy, hidden_1_weights], feed_dict={X: X_batch, y: y_batch})
+            #acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
+            acc_test, prediction_values = sess.run([accuracy, prediction], feed_dict={X: test_features, y: test_labels})
+            
+            
+            summary_writer.flush() 
             print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
             
         
@@ -186,8 +216,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         recall_classSK = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
         print("Tipo: ", type(precision_class))
         print("valor: ", precision_class)
-        # Guardamos la version actual del modelo entrenado
-        save_path = saver.save(sess, "./my_model_final.ckpt")
+        # Guardamos la version final del modelo entrenado
+        save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
         
         
         metrics = {
