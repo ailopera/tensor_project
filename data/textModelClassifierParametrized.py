@@ -201,7 +201,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                     summary_writer.add_summary(summary, epoch * n_iterations + iteration)        
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-            acc_train, h1_weights = sess.run([accuracy, hidden_1_weights], feed_dict={X: X_batch, y: y_batch})
+            #acc_train, h1_weights = sess.run([accuracy, hidden_1_weights], feed_dict={X: X_batch, y: y_batch})
             #acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
             acc_test, prediction_values = sess.run([accuracy, prediction], feed_dict={X: test_features, y: test_labels})
             
