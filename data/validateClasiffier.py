@@ -9,8 +9,10 @@ from BOWModel2 import generateBOWModel
 
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
-common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
-iterations = [{ "activation_function": "relu", "config_tag": "prueba"}]
+common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": ""}
+iterations = [{ "activation_function": "relu", "config_tag": "prueba", "hidden1": 300, "hidden2": 100},
+{ "activation_function": "relu", "config_tag": "prueba", "hidden1": 400, "hidden2": 200}
+]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
 # Primer particionado

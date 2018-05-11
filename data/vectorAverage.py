@@ -190,6 +190,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     testDataInputs = Imputer().fit_transform(testDataInputs)
     #Aplicamos SMOTE si procede
     if not smote == "":
+        print(">> Applying SMOTE")
         trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
     else:
         train_labels = trainData['Stance']
@@ -223,7 +224,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
         "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
         "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall","averagePrecisionSK", "recallSK", "SMOTE"]
+        "confusionMatrix", "averagePrecisionSK", "recallSK", "SMOTE"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -245,10 +246,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
          "trainAccuracy": classification_results["train_accuracy"],
          "testAccuracy": classification_results["test_accuracy"],
          "confusionMatrix": classification_results["confusion_matrix"],
-         "averagePrecision": classification_results["average_precision"],
-         "recall": classification_results["recall"],
-         "averagePrecisionSK": classification_results["average_precisionSK"],
-         "recallSK": classification_results["recallSK"],
+         "averagePrecisionSK": classification_results["precision_test"],
+         "recallSK": classification_results["recall_test"],
          "SMOTE": smote
          }
          

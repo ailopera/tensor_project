@@ -6,7 +6,28 @@ from datetime import datetime
 import random
 from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
+import csv
+import os
+
 ### Funciones auxiliares
+#Vuelca las metricas de ejecucion 
+def write_metrics_to_file(metrics):
+    header = ["train_accuracy", "test_accuracy", "confusion_matrix",
+		"precision_train", "recall_train", "precision_test",
+        "recall_test" ,"execution_dir","activation_function"
+    ]
+    csv_output_dir = "./executionStats/classifier"
+    date = time.strftime("%Y-%m-%d")
+    output_file = csv_output_dir + '_' + date + '_FNN_classifier.csv'
+    with open(output_file, 'a') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldNames = header)
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+            writer.writeheader()
+        writer.writerow(executionData)
+        print(">> Stats exported to: ", output_file)
+
+        
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
     training_shape = train_data.shape[0]
@@ -147,7 +168,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                 _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
                 #Escribimos las metricas en tensorboard
-                if iteration == 0:
+                if iteration % 20 ==  0:
                     summary_writer.add_summary(summary, epoch*iteration)
                     summary_writer.flush()
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
@@ -194,12 +215,14 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 	 	"train_accuracy": round(acc_final_train,2),
 		"test_accuracy": round(acc_final_test,2),
 		"confusion_matrix": confusion_matrix_class,
-		"average_precision": round(precision_class[1],2),
-		"recall": round(recall_class[1],2),
-        "average_precisionSK": round(precision_classSK,2),
-        "recallSK": round(recall_classSK,2),
-   
+		"precision_train":round(precision_train,2),
+        "recall_train": round(recall_train,2),
+        "precision_test": round(precision_classSK,2),
+        "recall_test": round(recall_classSK,2),
+        "execution_dir": logdir,
+        "activation_function": hyperparams["activation_function"]
 		}
         print(">> MLP Metrics: ")
         print(metrics)
+        write_metrics_to_file(metrics)
         return metrics
