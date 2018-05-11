@@ -8,23 +8,24 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 import csv
 import os
+import time
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
 def write_metrics_to_file(metrics):
     header = ["train_accuracy", "test_accuracy", "confusion_matrix",
 		"precision_train", "recall_train", "precision_test",
-        "recall_test" ,"execution_dir","activation_function"
+        "recall_test" ,"execution_dir","activation_function", "hidden1", "hidden2"
     ]
     csv_output_dir = "./executionStats/classifier"
     date = time.strftime("%Y-%m-%d")
     output_file = csv_output_dir + '_' + date + '_FNN_classifier.csv'
     with open(output_file, 'a') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldNames = header)
+        writer = csv.DictWriter(csv_file, fieldnames = header)
         newFile = os.stat(output_file).st_size == 0
         if newFile:
             writer.writeheader()
-        writer.writerow(executionData)
+        writer.writerow(metrics)
         print(">> Stats exported to: ", output_file)
 
 
@@ -253,7 +254,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "precision_test": round(precision_classSK,2),
             "recall_test": round(recall_classSK,2),
             "execution_dir": logdir,
-            "activation_function": hyperparams["activation_function"]
+            "activation_function": hyperparams["activation_function"],
+            "hidden1": hyperparams["hidden1"],
+            "hidden2": hyperparams["hidden2"],
 		}
         print(">> MLP Metrics: ")
         print(metrics)
