@@ -27,7 +27,7 @@ def write_metrics_to_file(metrics):
         writer.writerow(executionData)
         print(">> Stats exported to: ", output_file)
 
-        
+
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
     training_shape = train_data.shape[0]
@@ -67,7 +67,9 @@ def convert_to_int_classes(targetList):
 # activation_function: relu | leaky_relu | elu | 
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
-default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT"}
+default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT"
+"hidden1": 300 , "hidden2": 100}
+
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -85,8 +87,10 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     # Hiperparametros del modelo
     n_inputs = input_features.shape[1] #TamaÃ±o de la entrada
-    n_hidden1 = 300 # Numero de neuronas de la primera capa oculta
-    n_hidden2 = 100 # Numero de neuronas de la segunda capa oculta
+    # Numero de neuronas de la primera capa oculta
+    n_hidden1 = hyperparams['hidden1'] if hyperparams['hidden1'] is not None else default_hyperparams['hidden1']
+    # Numero de neuronas de la segunda capa oculta
+    n_hidden2 = hyperparams['hidden2'] if hyperparams['hidden2'] is not None else default_hyperparams['hidden2']
     n_outputs = 4 # Numero de salidas/clases a predecir
 
     # funcion de activacion de las capas
