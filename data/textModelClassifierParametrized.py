@@ -181,10 +181,10 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # (en cada iteracion aplicamos el gradiente descendiente sobre una submuestra aleatoria de los datos de entrenamiento)
     #  Al final de cada epoch computamos el accuracy sobre uno de los batches.
     with tf.Session() as sess:
-        all_vars= tf.global_variables()
-        for v in tf.global_variables():
-          print(v.name)
-        hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
+        # for v in tf.global_variables():
+        #   print(v.name)
+        # # hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
+        
         # Inicializamos las variables globales del grafo
         init.run()
         # Creamos el writter
@@ -211,16 +211,15 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
-        #acc_train = sess.run(mean_accu, )
-        #acc_train = sess.run(mean_accu, )
         acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels})
         acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
-        recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
-        precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
-        confusion_matrix_class = sess.run(confusion_matrix_class, feed_dict={X: test_features, y: test_labels})
+        # recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
+        # precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
+        # confusion_matrix_class = sess.run(confusion_matrix_class, feed_dict={X: test_features, y: test_labels})
         prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
+        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, train_labels})
+
         logits = sess.run(logits,feed_dict={X: test_features, y: test_labels} )
-        
         
         #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
         print("Prediction: ", prediction_values)
@@ -233,26 +232,28 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         #confusion_matrix_class = confusion_matrix(test_labels,prediction)
         
         # Calculamos precision, recall y confusion matrix utilizando sklearn
+        precision_train = precision_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])
+        recall_train = recall_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])
         
         confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
         precision_classSK = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
         recall_classSK = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
-        print("Tipo: ", type(precision_class))
-        print("valor: ", precision_class)
+        # print("Tipo: ", type(precision_class))
+        # print("valor: ", precision_class)
         # Guardamos la version final del modelo entrenado
         save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
         
         
         metrics = {
-	 	"train_accuracy": round(acc_final_train,2),
-		"test_accuracy": round(acc_final_test,2),
-		"confusion_matrix": confusion_matrix_class,
-		"precision_train":round(precision_train,2),
-        "recall_train": round(recall_train,2),
-        "precision_test": round(precision_classSK,2),
-        "recall_test": round(recall_classSK,2),
-        "execution_dir": logdir,
-        "activation_function": hyperparams["activation_function"]
+            "train_accuracy": round(acc_final_train,2),
+            "test_accuracy": round(acc_final_test,2),
+            "confusion_matrix": confusion_matrix_class,
+            "precision_train":round(precision_train,2),
+            "recall_train": round(recall_train,2),
+            "precision_test": round(precision_classSK,2),
+            "recall_test": round(recall_classSK,2),
+            "execution_dir": logdir,
+            "activation_function": hyperparams["activation_function"]
 		}
         print(">> MLP Metrics: ")
         print(metrics)
