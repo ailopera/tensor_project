@@ -217,7 +217,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         # precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
         # confusion_matrix_class = sess.run(confusion_matrix_class, feed_dict={X: test_features, y: test_labels})
         prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
-        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, train_labels})
+        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels})
 
         logits = sess.run(logits,feed_dict={X: test_features, y: test_labels} )
         

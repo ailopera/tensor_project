@@ -43,7 +43,7 @@ print(">>> LEN validation data: ", len(validation_data))
 for classifier_config in iterations:
         print(">>> Executing Configuration: ", classifier_config)
         # Execute model with the configuration specified 
-        executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, "all", classifier_config)
+        executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
         print("------------------------------------------------------")
 
 end = time.time()
@@ -57,7 +57,7 @@ print(">> Executing different model configurations over test data")
 print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 #for iteration in iterations:
-        #executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, "all", classifier_config)
+        #executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, common_params["smote"], classifier_config)
         
 end = time.time()
 testExecutionTime = end - start
