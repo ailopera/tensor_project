@@ -20,7 +20,7 @@ def write_metrics_to_file(metrics):
         "execution_dir","activation_function",
         "hidden1", "hidden2", "epochs"
     ]
-    csv_output_dir = "./executionStats/classifier"
+    csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
     output_file = csv_output_dir + '_' + date + '_FNN_classifier.csv'
     with open(output_file, 'a') as csv_file:
