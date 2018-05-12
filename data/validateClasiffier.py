@@ -12,6 +12,8 @@ from BOWModel2 import generateBOWModel
 common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": ""}
 iterations = [{ "activation_function": "relu", "config_tag": "prueba", "hidden1": 300, "hidden2": 100},
 { "activation_function": "relu", "config_tag": "prueba", "hidden1": 400, "hidden2": 200}
+{ "activation_function": "relu", "config_tag": "prueba", "hidden1": 400, "hidden2": 200, "epochs": 50}
+{ "activation_function": "relu", "config_tag": "prueba", "hidden1": 400, "hidden2": 200, "epochs": 20}
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test

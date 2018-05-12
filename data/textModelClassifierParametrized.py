@@ -253,7 +253,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "precision_test": round(precision_classSK,2),
             "recall_test": round(recall_classSK,2),
             "execution_dir": logdir,
-            "activation_function": hyperparams["activation_function"]
+            "activation_function": hyperparams["activation_function"],
+            "hidden1": hyperparams["hidden1"],
+            "hidden2": hyperparams["hidden2"],
 		}
         print(">> MLP Metrics: ")
         print(metrics)
