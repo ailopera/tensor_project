@@ -8,23 +8,26 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 import csv
 import os
+import time
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
 def write_metrics_to_file(metrics):
     header = ["train_accuracy", "test_accuracy", "confusion_matrix",
-		"precision_train", "recall_train", "precision_test",
-        "recall_test" ,"execution_dir","activation_function"
+		"precision_train", "precision_test",
+        "recall_train", "recall_test" ,
+        "execution_dir","activation_function", "epochs"
+        "hidden1", "hidden2"
     ]
     csv_output_dir = "./executionStats/classifier"
     date = time.strftime("%Y-%m-%d")
     output_file = csv_output_dir + '_' + date + '_FNN_classifier.csv'
     with open(output_file, 'a') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldNames = header)
+        writer = csv.DictWriter(csv_file, fieldnames = header)
         newFile = os.stat(output_file).st_size == 0
         if newFile:
             writer.writeheader()
-        writer.writerow(executionData)
+        writer.writerow(metrics)
         print(">> Stats exported to: ", output_file)
 
 
@@ -68,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "hidden1": 300 , "hidden2": 100}
+    "hidden1": 300 , "hidden2": 100, "epochs": 20}
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
@@ -134,23 +137,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # with tf.name_scope("eval"):
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
     prediction=tf.argmax(logits,1)
-    #correct_prediction_2 = tf.equal(prediction, y)
-    #accuracy_prediction = tf.reduce_mean(tf.cast(correct_prediction_2, tf.float32))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     recall = tf.metrics.recall(y, prediction)
     precision = tf.metrics.precision(y, prediction)
     confusion_matrix_class = tf.confusion_matrix(y, prediction)
-    #final_accuracy = tf.metrics.accuracy(y, prediction)
     #con_mat = tf.confusion_matrix(labels=y, predictions=prediction, num_classes=4, dtype=tf.int32, name=None)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
-    
-    ##Metricas de scikit
-    #precision_classSK = precision_score(y, prediction, average="weighted", labels=[0,1,2,3])
-    #recall_classSK = recall_score(y, prediction, average="weighted", labels=[0,1,2,3])
-            
+        
     #### Fase de ejecucion ###
-    n_epochs = 20
+    n_epochs = hyperparams['epochs'] if hyperparams['epochs'] is None else default_hyperparams['epochs']
     batch_size = 50
 
     n_iterations = round(train_samples / batch_size)
@@ -189,7 +185,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         init.run()
         # Creamos el writter
         summary_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
-        
+        summary_writer_test = tf.summary.FileWriter(logdir, tf.get_default_graph())
         # Realizamos el entrenamiento fijando en n_epochs
         for epoch in range(n_epochs):
             for iteration in range(n_iterations):
@@ -197,15 +193,20 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                 _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
                 #Escribimos las metricas en tensorboard
-                if iteration % 20 ==  0:
-                    summary_writer.add_summary(summary, epoch * n_iterations + iteration)        
+                # if iteration % 20 ==  0:
+                    # _, summary = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
+                    # summary_writer.add_summary(summary, epoch * n_iterations + iteration)
+                    # summary_writer.add_summary(summary_test, epoch * n_iterations + iteration)        
             # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
-            acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-            #acc_train, h1_weights = sess.run([accuracy, hidden_1_weights], feed_dict={X: X_batch, y: y_batch})
-            #acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
-            acc_test, prediction_values = sess.run([accuracy, prediction], feed_dict={X: test_features, y: test_labels})
+            # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
+            acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
+            acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
             
+            summary_writer.add_summary(summary_train, epoch * n_iterations)        
             summary_writer.flush() 
+            summary_writer_test.add_summary(summary_test, epoch * n_iterations)        
+            summary_writer_test.flush() 
+
             print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
             
         
@@ -249,13 +250,14 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "test_accuracy": round(acc_final_test,2),
             "confusion_matrix": confusion_matrix_class,
             "precision_train":round(precision_train,2),
-            "recall_train": round(recall_train,2),
             "precision_test": round(precision_classSK,2),
+            "recall_train": round(recall_train,2),
             "recall_test": round(recall_classSK,2),
             "execution_dir": logdir,
-            "activation_function": hyperparams["activation_function"],
-            "hidden1": hyperparams["hidden1"],
-            "hidden2": hyperparams["hidden2"],
+            "activation_function": activation,
+            "hidden1": n_hidden1,
+            "hidden2": n_hidden2,
+            "epochs": epochs
 		}
         print(">> MLP Metrics: ")
         print(metrics)
