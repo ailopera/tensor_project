@@ -12,12 +12,13 @@ import time
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
+
 def write_metrics_to_file(metrics):
     header = ["train_accuracy", "test_accuracy", "confusion_matrix",
 		"precision_train", "precision_test",
         "recall_train", "recall_test" ,
-        "execution_dir","activation_function", "epochs"
-        "hidden1", "hidden2"
+        "execution_dir","activation_function",
+        "hidden1", "hidden2", "epochs"
     ]
     csv_output_dir = "./executionStats/classifier"
     date = time.strftime("%Y-%m-%d")
@@ -78,7 +79,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     root_logdir = "testLogs"
     tag = "FNNClassifier"
-    config_tag = hyperparams["config_tag"] if not hyperparams == None else default_hyperparams["config_tag"]
+    config_tag = hyperparams["config_tag"] if "config_tag" in hyperparams else default_hyperparams["config_tag"]
     logdir = "{}/run-{}-{}-{}/".format(root_logdir,tag, config_tag,now)
       
     # Convertimos a enteros las clases
@@ -91,9 +92,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # Hiperparametros del modelo
     n_inputs = input_features.shape[1] #TamaÃ±o de la entrada
     # Numero de neuronas de la primera capa oculta
-    n_hidden1 = hyperparams['hidden1'] if hyperparams['hidden1'] is not None else default_hyperparams['hidden1']
+    n_hidden1 = hyperparams['hidden1'] if 'hidden1' in hyperparams else default_hyperparams['hidden1']
     # Numero de neuronas de la segunda capa oculta
-    n_hidden2 = hyperparams['hidden2'] if hyperparams['hidden2'] is not None else default_hyperparams['hidden2']
+    n_hidden2 = hyperparams['hidden2'] if 'hidden2' in hyperparams else default_hyperparams['hidden2']
     n_outputs = 4 # Numero de salidas/clases a predecir
 
     # funcion de activacion de las capas
