@@ -146,7 +146,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     saver = tf.train.Saver()
         
     #### Fase de ejecucion ###
-    n_epochs = hyperparams['epochs'] if hyperparams['epochs'] is None else default_hyperparams['epochs']
+    n_epochs = hyperparams['epochs'] if 'epochs' in hyperparams else default_hyperparams['epochs']
     batch_size = 50
 
     n_iterations = round(train_samples / batch_size)
@@ -257,7 +257,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "activation_function": activation,
             "hidden1": n_hidden1,
             "hidden2": n_hidden2,
-            "epochs": epochs
+            "epochs": n_epochs
 		}
         print(">> MLP Metrics: ")
         print(metrics)
