@@ -1,0 +1,21 @@
+date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecision,recall,averagePrecisionSK,recallSK,SMOTE
+2018-05-08 20:36,vector_Average,600,300features_15minwords_10contextALL,0.3,3.81,47.06,2.04,10.9,214.24,39220,9805,MLP,137.59,0.89,0.8,"[[ 236   40  226  228]
+ [  22   44   54  119]
+ [ 128   43 1136  393]
+ [ 102   81  507 6446]]",0.95,0.97,0.8,0.8,all
+2018-05-08 21:15,vector_Average,600,300features_15minwords_10contextALL,0.31,4.06,48.37,1.89,11.15,230.13,39220,9805,MLP,152.12,0.89,0.8,"[[ 272   51  111  296]
+ [  31   41   21  146]
+ [ 212   61  873  554]
+ [ 126   85  237 6688]]",0.95,0.96,0.79,0.8,all
+2018-05-08 21:26,vector_Average,600,300features_15minwords_10contextALL,0.31,3.67,47.17,1.87,10.55,227.09,39220,9805,MLP,150.96,0.89,0.8,"[[ 263   38  174  255]
+ [  23   44   48  124]
+ [ 173   61 1013  453]
+ [ 157   85  416 6478]]",0.95,0.96,0.79,0.8,all
+2018-05-08 21:38,vector_Average,600,300features_15minwords_10contextALL,0.3,3.91,45.84,1.81,10.5,210.06,39220,9805,MLP,135.42,0.89,0.8,"[[ 302   36  124  268]
+ [  23   45   25  146]
+ [ 213   71  943  473]
+ [ 158   92  312 6574]]",0.95,0.96,0.79,0.8,all
+2018-05-08 21:42,vector_Average,600,300features_15minwords_10contextALL,0.31,3.95,45.99,1.9,10.38,213.75,39220,9805,MLP,138.29,0.89,0.8,"[[ 292   26  143  269]
+ [  34   34   34  137]
+ [ 199   36  983  482]
+ [ 167   35  378 6556]]",0.95,0.96,0.79,0.8,all

@@ -1,0 +1,37 @@
+train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,execution_dir,activation_function,hidden1,hidden2,epochs,config_tag
+0.86,0.78,"[[  17    0   92  621]
+ [   2    0   12  225]
+ [  14    0  665 1021]
+ [   4    0  214 6918]]",0.82,0.72,0.86,0.78,testLogs/run-FNNClassifier-neurons-20180512110613/,relu,300,100,20,neurons
+0.86,0.78,"[[  30    0   86  614]
+ [   2    0   12  225]
+ [  19    0  644 1037]
+ [   7    0  177 6952]]",0.83,0.73,0.86,0.78,testLogs/run-FNNClassifier-neurons-20180512110806/,relu,400,200,20,neurons
+0.84,0.77,"[[   7    0   70  653]
+ [   1    0    9  229]
+ [   6    0  547 1147]
+ [   0    0  148 6988]]",0.8,0.72,0.84,0.77,testLogs/run-FNNClassifier-neurons-20180512111016/,relu,500,300,20,neurons
+0.89,0.8,"[[ 113    0  126  491]
+ [  13    0   25  201]
+ [  58    0  781  861]
+ [  41    0  187 6908]]",0.87,0.75,0.89,0.8,testLogs/run-FNNClassifier-epochs-20180512111251/,relu,500,300,25,epochs
+0.9,0.81,"[[ 203    0  166  361]
+ [  36    0   36  167]
+ [ 100    0  942  658]
+ [  81    0  248 6807]]",0.89,0.77,0.9,0.81,testLogs/run-FNNClassifier-epochs-20180512111547/,relu,500,300,30,epochs
+0.91,0.81,"[[ 143    0  121  466]
+ [  18    0   25  196]
+ [  76    0  776  848]
+ [  37    0  113 6986]]",0.89,0.77,0.91,0.81,testLogs/run-FNNClassifier-epochs-20180512111904/,relu,500,300,35,epochs
+0.85,0.77,"[[   8    0   75  647]
+ [   1    0    9  229]
+ [  11    0  579 1110]
+ [   2    0  153 6981]]",0.81,0.72,0.85,0.77,testLogs/run-FNNClassifier-activation-20180512112245/,relu,500,300,20,activation
+0.8,0.76,"[[   4    0   51  675]
+ [   0    0    6  233]
+ [   1    0  437 1262]
+ [   0    0  144 6992]]",0.76,0.73,0.8,0.76,testLogs/run-FNNClassifier-activation-20180512112518/,leaky_relu,500,300,20,activation
+0.74,0.73,"[[   0    0    7  723]
+ [   0    0    0  239]
+ [   0    0   86 1614]
+ [   0    0   75 7061]]",0.71,0.62,0.74,0.73,testLogs/run-FNNClassifier-activation-20180512112801/,elu,500,300,20,activation

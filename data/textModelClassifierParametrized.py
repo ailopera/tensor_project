@@ -12,17 +12,16 @@ import time
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
-
 def write_metrics_to_file(metrics):
     header = ["train_accuracy", "test_accuracy", "confusion_matrix",
 		"precision_train", "precision_test",
         "recall_train", "recall_test" ,
         "execution_dir","activation_function",
-        "hidden1", "hidden2", "epochs"
+        "hidden1", "hidden2", "epochs", "config_tag"
     ]
     csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
-    output_file = csv_output_dir + '_' + date + '_FNN_classifier.csv'
+    output_file = csv_output_dir + '_FNN_classifier_' + date + '.csv'
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames = header)
         newFile = os.stat(output_file).st_size == 0
@@ -114,7 +113,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
     print("> Numero de instancias de entrenamiento: ", train_samples)
-
+    print("> Funcion de activacion: ", hyperparams["activation_function"])
+    
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
 
@@ -151,10 +151,15 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     batch_size = 50
 
     n_iterations = round(train_samples / batch_size)
-
-    # Export de escalares
-    # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
     
+    print("> Numero de epochs: ", n_epochs)
+    print("> Learning rate: ", learning_rate)
+    print("> Tam. batch: ", batch_size)
+    print("> Prueba: ", config_tag)
+    
+    # Export de escalares e histogramas
+    # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
+    # Descomentar los que resulten interesantes de visualizar
     tf.summary.scalar('Accuracy', accuracy)
     tf.summary.scalar('Loss', loss)
     tf.summary.histogram('Xentropy', xentropy)
@@ -224,9 +229,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         logits = sess.run(logits,feed_dict={X: test_features, y: test_labels} )
         
         #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
-        print("Prediction: ", prediction_values)
-        print("Longitud de predictions: ", sess.run(tf.size(prediction_values)))
-        print("Longitud de las entradas: ", len(test_labels))
+        #print("Prediction: ", prediction_values)
+        #print("Longitud de predictions: ", sess.run(tf.size(prediction_values)))
+        #print("Longitud de las entradas: ", len(test_labels))
         #sess.run(tf.Print(prediction_values, [prediction_values]))
         #print("logits: ", logits)
         #print("Y: ", y)
@@ -255,10 +260,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "recall_train": round(recall_train,2),
             "recall_test": round(recall_classSK,2),
             "execution_dir": logdir,
-            "activation_function": activation,
+            "activation_function": hyperparams["activation_function"],
             "hidden1": n_hidden1,
             "hidden2": n_hidden2,
-            "epochs": n_epochs
+            "epochs": n_epochs,
+            "config_tag": config_tag
 		}
         print(">> MLP Metrics: ")
         print(metrics)

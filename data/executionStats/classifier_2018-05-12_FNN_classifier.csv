@@ -1,0 +1,1 @@
+train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,execution_dir,activation_function,epochshidden1,hidden2

@@ -1,0 +1,37 @@
+train_accuracy,test_accuracy,confusion_matrix,precision_train,recall_train,precision_test,recall_test,execution_dir,activation_function
+0.85,0.77,"[[   9    0   73  648]
+ [   1    0    9  229]
+ [  10    0  539 1151]
+ [   2    0  156 6978]]",0.81,0.85,0.71,0.77,testLogs/run-FNNClassifier-prueba-20180511201857/,relu
+0.85,0.77,"[[  14    0   75  641]
+ [   3    0    8  228]
+ [  13    0  537 1150]
+ [   3    0  123 7010]]",0.81,0.85,0.72,0.77,testLogs/run-FNNClassifier-prueba-20180511202052/,relu
+0.84,0.77,"[[   7    0   80  643]
+ [   1    0    9  229]
+ [  10    0  567 1123]
+ [   2    0  161 6973]]",0.8,0.84,0.71,0.77,testLogs/run-FNNClassifier-prueba-20180511203353/,relu,300,100
+0.86,0.77,"[[  15    0   78  637]
+ [   1    0   11  227]
+ [  11    0  630 1059]
+ [   2    0  188 6946]]",0.82,0.86,0.73,0.77,testLogs/run-FNNClassifier-prueba-20180511203601/,relu,400,200
+0.85,0.77,"[[   7    0   78  645]
+ [   1    0    9  229]
+ [   6    0  576 1118]
+ [   0    0  168 6968]]",0.8,0.85,0.72,0.77,testLogs/run-FNNClassifier-prueba-20180511205134/,relu,300,100
+0.85,0.77,"[[   7    0   73  650]
+ [   1    0    9  229]
+ [   6    0  602 1092]
+ [   1    0  157 6978]]",0.81,0.85,0.73,0.77,testLogs/run-FNNClassifier-prueba-20180511205335/,relu,400,200
+0.85,0.77,"[[   9    0   75  646]
+ [   1    0    8  230]
+ [   6    0  576 1118]
+ [   1    0  159 6976]]",0.81,0.85,0.73,0.77,testLogs/run-FNNClassifier-prueba-20180511205549/,relu,500,300
+0.8,0.76,"[[   4    0   52  674]
+ [   0    0    5  234]
+ [   1    0  420 1279]
+ [   0    0  154 6982]]",0.75,0.8,0.73,0.76,testLogs/run-FNNClassifier-prueba-20180511205824/,leaky_relu,500,300
+0.74,0.73,"[[   0    0    4  726]
+ [   0    0    0  239]
+ [   0    0   76 1624]
+ [   0    0   72 7064]]",0.67,0.74,0.62,0.73,testLogs/run-FNNClassifier-prueba-20180511210110/,elu,500,300

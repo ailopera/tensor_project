@@ -11,13 +11,17 @@ from BOWModel2 import generateBOWModel
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
 common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": ""}
 iterations = [
-        { "activation_function": "relu", "config_tag": "prueba", "hidden1": 300, "hidden2": 100},
-        { "activation_function": "relu", "config_tag": "prueba", "hidden1": 400, "hidden2": 200},
-        { "activation_function": "relu", "config_tag": "prueba", "hidden1": 500, "hidden2": 300},
-        { "activation_function": "relu", "config_tag": "prueba", "hidden1": 500, "hidden2": 300, "epochs": 50},
-        { "activation_function": "relu", "config_tag": "prueba", "hidden1": 500, "hidden2": 300, "epochs": 70},
-        { "activation_function": "leaky_relu", "config_tag": "prueba", "hidden1": 500, "hidden2": 300},
-        { "activation_function": "elu", "config_tag": "prueba", "hidden1": 500, "hidden2": 300}
+        { "activation_function": "relu", "config_tag": "neurons", "hidden1": 300, "hidden2": 100},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden1": 400, "hidden2": 200},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden1": 500, "hidden2": 300},
+    
+        { "activation_function": "relu", "config_tag": "epochs", "hidden1": 500, "hidden2": 300, "epochs": 25},    
+        { "activation_function": "relu", "config_tag": "epochs", "hidden1": 500, "hidden2": 300, "epochs": 30},
+        { "activation_function": "relu", "config_tag": "epochs", "hidden1": 500, "hidden2": 300, "epochs": 35},
+        
+        { "activation_function": "relu", "config_tag": "activation", "hidden1": 500, "hidden2": 300},
+        { "activation_function": "leaky_relu", "config_tag": "activation", "hidden1": 500, "hidden2": 300},
+        { "activation_function": "elu", "config_tag": "activation", "hidden1": 500, "hidden2": 300}
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
