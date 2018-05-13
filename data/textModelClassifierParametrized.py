@@ -71,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "hidden1": 300 , "hidden2": 100, "epochs": 20}
+    "hidden1": 300 , "hidden2": 100, "epochs": 20, 'nlayers': 2, 'defNeurons': 100}
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
@@ -94,6 +94,15 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     n_hidden1 = hyperparams['hidden1'] if 'hidden1' in hyperparams else default_hyperparams['hidden1']
     # Numero de neuronas de la segunda capa oculta
     n_hidden2 = hyperparams['hidden2'] if 'hidden2' in hyperparams else default_hyperparams['hidden2']
+    
+    n_layers = hyperparams['nlayers'] if 'nlayers' in hyperparams else default_hyperparams['nlayers']
+    if n_layers >= 3:
+        n_hidden3 = hyperparams['hidden3'] if 'hidden3' in hyperparams else default_hyperparams['defNeurons']
+    if nlayers >= 4:
+        n_hidden4 = hyperparams['hidden4'] if 'hidden4' in hyperparams else default_hyperparams['defNeurons']
+    if nlayers >= 5:
+        n_hidden4 = hyperparams['hidden5'] if 'hidden5' in hyperparams else default_hyperparams['defNeurons']
+    
     n_outputs = 4 # Numero de salidas/clases a predecir
 
     # funcion de activacion de las capas
@@ -114,14 +123,28 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
     print("> Numero de instancias de entrenamiento: ", train_samples)
     print("> Funcion de activacion: ", hyperparams["activation_function"])
-    
+    print("> Numero de capas ocultas: ", n_layers)
+
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
 
     with tf.name_scope("dnn"):
         hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
         hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation)
-        logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
+        if n_layers == 3:
+            hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
+            logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
+        elif nlayers == 4:
+            hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
+            hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
+            logits = tf.layers.dense(hidden4, n_outputs, name="outputs")
+        elif nlayers == 5:
+            hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
+            hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
+            hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
+            logits = tf.layers.dense(hidden5, n_outputs, name="outputs")
+        else:
+            logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
 
     # We define the cost function
     with tf.name_scope("loss"):
