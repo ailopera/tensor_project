@@ -75,12 +75,15 @@ default_hyperparams = {"activation_function": "relu", "learning_rate_update":"co
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
-    now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    date = datetime.utcnow().strftime("%Y%m%d")
+    hour = datetime.utcnow().strftime("%H%M%S")
     start = time.time()
-    root_logdir = "testLogs"
+    # root_logdir = "testLogs"
+    root_logdir = "fnnLogs"
     tag = "FNNClassifier"
     config_tag = hyperparams["config_tag"] if "config_tag" in hyperparams else default_hyperparams["config_tag"]
-    logdir = "{}/run-{}-{}-{}/".format(root_logdir,tag, config_tag,now)
+    subdir = date
+    logdir = "{}/{}/run-{}-{}-{}/".format(root_logdir, subdir , tag, config_tag, hour)
       
     # Convertimos a enteros las clases
     train_labels = convert_to_int_classes(target)
@@ -217,8 +220,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         # Inicializamos las variables globales del grafo
         init.run()
         # Creamos el writter
-        summary_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
-        summary_writer_test = tf.summary.FileWriter(logdir, tf.get_default_graph())
+        summary_writer = tf.summary.FileWriter(logdir + '_train', tf.get_default_graph())
+        summary_writer_test = tf.summary.FileWriter(logdir + '_test', tf.get_default_graph())
         # Realizamos el entrenamiento fijando en n_epochs
         for epoch in range(n_epochs):
             for iteration in range(n_iterations):
