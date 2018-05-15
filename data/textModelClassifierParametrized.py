@@ -17,7 +17,7 @@ def write_metrics_to_file(metrics):
 		"precision_train", "precision_test",
         "recall_train", "recall_test" ,
         "execution_dir","activation_function",
-        "hidden1", "hidden2", "epochs", "config_tag"
+        "hidden1", "hidden2", "epochs", "config_tag", "n_layers"
     ]
     csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
@@ -98,9 +98,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     n_layers = hyperparams['nlayers'] if 'nlayers' in hyperparams else default_hyperparams['nlayers']
     if n_layers >= 3:
         n_hidden3 = hyperparams['hidden3'] if 'hidden3' in hyperparams else default_hyperparams['defNeurons']
-    if nlayers >= 4:
+    if n_layers >= 4:
         n_hidden4 = hyperparams['hidden4'] if 'hidden4' in hyperparams else default_hyperparams['defNeurons']
-    if nlayers >= 5:
+    if n_layers >= 5:
         n_hidden4 = hyperparams['hidden5'] if 'hidden5' in hyperparams else default_hyperparams['defNeurons']
     
     n_outputs = 4 # Numero de salidas/clases a predecir
@@ -134,11 +134,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         if n_layers == 3:
             hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
             logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
-        elif nlayers == 4:
+        elif n_layers == 4:
             hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
             hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
             logits = tf.layers.dense(hidden4, n_outputs, name="outputs")
-        elif nlayers == 5:
+        elif n_layers == 5:
             hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
             hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
             hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
@@ -287,7 +287,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "hidden1": n_hidden1,
             "hidden2": n_hidden2,
             "epochs": n_epochs,
-            "config_tag": config_tag
+            "config_tag": config_tag,
+            "n_layers": n_layers
 		}
         print(">> MLP Metrics: ")
         print(metrics)
