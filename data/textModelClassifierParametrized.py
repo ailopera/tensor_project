@@ -71,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100] }, 
+    "epochs": 20, 'hidden_neurons': [300, 100] }
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -82,7 +82,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # root_logdir = "testLogs"
     root_logdir = "fnnLogs"
     tag = "FNNClassifier"
-    config_tag = hyperparams["config_tag"] if "config_tag" in hyperparams else default_hyperparams["config_tag"]
+    config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
     logdir = "{}/{}/run-{}-{}-{}/".format(root_logdir, subdir , tag, config_tag, hour)
       
@@ -109,7 +109,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     if n_layers >= 4:
         n_hidden4 = hidden_neurons[3]
     if n_layers >= 5:
-        n_hidden4 = hidden_neurons[4]
+        n_hidden5 = hidden_neurons[4]
 
     n_outputs = 4 # Numero de salidas/clases a predecir
 
