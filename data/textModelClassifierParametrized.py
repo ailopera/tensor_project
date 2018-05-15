@@ -224,27 +224,42 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         summary_writer = tf.summary.FileWriter(logdir + '_train', tf.get_default_graph())
         summary_writer_test = tf.summary.FileWriter(logdir + '_test', tf.get_default_graph())
         # Realizamos el entrenamiento fijando en n_epochs
+        minimun_loss = 1
+        early_stopping_threshold = round(n_iterations * 0.8)
+        executed_epochs = 0
+        stop_training = False
         for epoch in range(n_epochs):
-            for iteration in range(n_iterations):
-                # X_batch, y_batch = mnist.train.next_batch(batch_size)
-                X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
-                _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
-                #Escribimos las metricas en tensorboard
-                # if iteration % 20 ==  0:
-                    # _, summary = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
-                    # summary_writer.add_summary(summary, epoch * n_iterations + iteration)
-                    # summary_writer.add_summary(summary_test, epoch * n_iterations + iteration)        
-            # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
-            # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-            acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
-            acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
-            
-            summary_writer.add_summary(summary_train, epoch)        
-            summary_writer.flush() 
-            summary_writer_test.add_summary(summary_test, epoch)        
-            summary_writer_test.flush() 
-
-            print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
+            if not stop_training: 
+                for iteration in range(n_iterations):
+                    # X_batch, y_batch = mnist.train.next_batch(batch_size)
+                    X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
+                    _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
+                    loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels})
+                    if loss_test < minimun_loss:
+                        minimun_loss = loss_test
+                        loss_stacionality = 0
+                        # Guardamos el estado de la red
+                        save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
+                    else:
+                        loss_stacionality = loss_stacionality + 1
+                    #Escribimos las metricas en tensorboard
+                    # if iteration % 20 ==  0:
+                        # _, summary = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
+                        # summary_writer.add_summary(summary, epoch * n_iterations + iteration)
+                        # summary_writer.add_summary(summary_test, epoch * n_iterations + iteration)        
+                # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
+                # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
+                acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
+                acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
+                
+                summary_writer.add_summary(summary_train, epoch * n_iterations)        
+                summary_writer.flush() 
+                summary_writer_test.add_summary(summary_test, epoch * n_iterations)        
+                summary_writer_test.flush() 
+                executed_epochs = executed_epochs + 1
+                
+                stop_training = loss_stacionality >= early_stopping_threshold
+                print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
             
         end = time.time()
         # Ejecutamos las metricas finales
@@ -278,8 +293,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         recall_classSK = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
         # print("Tipo: ", type(precision_class))
         # print("valor: ", precision_class)
+        
         # Guardamos la version final del modelo entrenado
-        save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
+        # save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
         
         
         metrics = {
