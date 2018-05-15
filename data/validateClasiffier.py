@@ -23,17 +23,17 @@ iterations = [
         # { "activation_function": "leaky_relu", "config_tag": "activation", "hidden_neurons": [500, 300]},
         # { "activation_function": "elu", "config_tag": "activation", "hidden_neurons": [500, 300]},
         
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [550, 350]},
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 400]},
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 300]},
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 100]},
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 50]},
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [50, 25]},
+        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [550, 350]},
+        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 400]},
+        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 300]},
+        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 100]},
+        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 50]},
+        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [50, 25]},
 
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150]}, # 3 capas
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [500, 275, 200]}, # 3 capas
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 300, 225, 150]}, # 4 capas
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75]}, # 4 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150]}, # 3 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [500, 275, 200]}, # 3 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 300, 225, 150]}, # 4 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75]}, # 4 capas
         { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 375, 300, 225, 150]}, # 5 capas
         { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375,300, 225, 150, 75]}  # 5 capas
 
