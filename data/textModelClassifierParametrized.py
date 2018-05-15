@@ -80,7 +80,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     hour = datetime.utcnow().strftime("%H%M%S")
     start = time.time()
     # root_logdir = "testLogs"
-    root_logdir = "fnnLogs"
+    root_logdir = "fnnLogs2"
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -239,9 +239,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
             acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
             
-            summary_writer.add_summary(summary_train, epoch * n_iterations)        
+            summary_writer.add_summary(summary_train, epoch)        
             summary_writer.flush() 
-            summary_writer_test.add_summary(summary_test, epoch * n_iterations)        
+            summary_writer_test.add_summary(summary_test, epoch)        
             summary_writer_test.flush() 
 
             print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)

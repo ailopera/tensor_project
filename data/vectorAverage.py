@@ -192,20 +192,20 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     if not smote == "":
         print(">> Applying SMOTE")
         trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
-        testDataInputs, test_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(testDataInputs, testData['Stance'])
+        #testDataInputs, test_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(testDataInputs, testData['Stance'])
     else:
         train_labels = trainData['Stance']
-        test_labels = testData['Stance']
+
     
     # Llamamos al clasificador con los datos compuestos
     start = time.time()
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), test_labels, classifier_config)
+        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
     elif model_executed == 'RF':
         # Modelo basado en un randomForest sencillo
-        classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), test_labels)
+        classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
     else:
         print(">>> ERROR: No se ha ejecutado ningún modelo")
 
