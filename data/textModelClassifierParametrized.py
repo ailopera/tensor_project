@@ -13,11 +13,11 @@ import time
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
 def write_metrics_to_file(metrics):
-    header = ["train_accuracy", "test_accuracy", "confusion_matrix",
+    header = ["config_tag", "train_accuracy", "test_accuracy", "confusion_matrix",
 		"precision_train", "precision_test",
         "recall_train", "recall_test" ,
-        "execution_dir","activation_function",
-        "hidden1", "hidden2", "epochs", "config_tag", "n_layers"
+        "n_layers", "hidden_neurons",
+        "epochs", "activation_function", "execution_dir", "execution_time"
     ]
     csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
@@ -29,7 +29,7 @@ def write_metrics_to_file(metrics):
             writer.writeheader()
         writer.writerow(metrics)
         print(">> Stats exported to: ", output_file)
-
+        print("############################################################################")
 
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
@@ -71,11 +71,12 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "hidden1": 300 , "hidden2": 100, "epochs": 20, 'nlayers': 2, 'defNeurons': 100}
+    "epochs": 20, 'hidden_neurons': [300, 100] }, 
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
     now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    start = time.time()
     root_logdir = "testLogs"
     tag = "FNNClassifier"
     config_tag = hyperparams["config_tag"] if "config_tag" in hyperparams else default_hyperparams["config_tag"]
@@ -87,22 +88,25 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     
     ### Definicion de la red ###
     train_samples = input_features.shape[0] # Numero de ejemplos
-
+    
     # Hiperparametros del modelo
+    valid_hidden_neuron_param = ("hidden_neurons" in hyperparams and len(hyperparams["hidden_neurons"]) >= 2)
+    hidden_neurons = hyperparams["hidden_neurons"] if valid_hidden_neuron_param else default_hyperparams["hidden_neurons"]
+
     n_inputs = input_features.shape[1] #TamaÃ±o de la entrada
     # Numero de neuronas de la primera capa oculta
-    n_hidden1 = hyperparams['hidden1'] if 'hidden1' in hyperparams else default_hyperparams['hidden1']
+    n_hidden1 = hidden_neurons[0] 
     # Numero de neuronas de la segunda capa oculta
-    n_hidden2 = hyperparams['hidden2'] if 'hidden2' in hyperparams else default_hyperparams['hidden2']
+    n_hidden2 = hidden_neurons[1]
     
-    n_layers = hyperparams['nlayers'] if 'nlayers' in hyperparams else default_hyperparams['nlayers']
+    n_layers = len(hidden_neurons)
     if n_layers >= 3:
-        n_hidden3 = hyperparams['hidden3'] if 'hidden3' in hyperparams else default_hyperparams['defNeurons']
+        n_hidden3 = hidden_neurons[2]
     if n_layers >= 4:
-        n_hidden4 = hyperparams['hidden4'] if 'hidden4' in hyperparams else default_hyperparams['defNeurons']
+        n_hidden4 = hidden_neurons[3]
     if n_layers >= 5:
-        n_hidden4 = hyperparams['hidden5'] if 'hidden5' in hyperparams else default_hyperparams['defNeurons']
-    
+        n_hidden4 = hidden_neurons[4]
+
     n_outputs = 4 # Numero de salidas/clases a predecir
 
     # funcion de activacion de las capas
@@ -170,7 +174,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     saver = tf.train.Saver()
         
     #### Fase de ejecucion ###
-    n_epochs = hyperparams['epochs'] if 'epochs' in hyperparams else default_hyperparams['epochs']
+    n_epochs = hyperparams["epochs"] if "epochs" in hyperparams else default_hyperparams["epochs"]
     batch_size = 50
 
     n_iterations = round(train_samples / batch_size)
@@ -238,7 +242,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
             print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
             
-        
+        end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
         acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels})
@@ -282,13 +286,13 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "precision_test": round(precision_classSK,2),
             "recall_train": round(recall_train,2),
             "recall_test": round(recall_classSK,2),
-            "execution_dir": logdir,
             "activation_function": hyperparams["activation_function"],
-            "hidden1": n_hidden1,
-            "hidden2": n_hidden2,
+            "hidden_neurons": hidden_neurons,
             "epochs": n_epochs,
             "config_tag": config_tag,
-            "n_layers": n_layers
+            "n_layers": n_layers,
+            "execution_dir": logdir,
+            "execution_time": end - start
 		}
         print(">> MLP Metrics: ")
         print(metrics)
