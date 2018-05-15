@@ -1,0 +1,57 @@
+train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,execution_dir,activation_function,hidden1,hidden2,epochs,config_tag,n_layers
+0.9,0.8,"[[ 298   31  126  275]
+ [  29   39   29  142]
+ [ 196   52  975  477]
+ [ 160   61  341 6574]]",0.9,0.79,0.9,0.8,testLogs/run-FNNClassifier-neurons-20180514205141/,relu,300,100,20,neurons,2
+0.9,0.8,"[[ 341   40  133  216]
+ [  41   49   29  120]
+ [ 251   63 1032  354]
+ [ 254  118  380 6384]]",0.9,0.8,0.9,0.8,testLogs/run-FNNClassifier-neurons-20180514205533/,relu,400,200,20,neurons,2
+0.9,0.8,"[[ 261   28  187  254]
+ [  29   32   45  133]
+ [ 167   41 1058  434]
+ [ 144   51  449 6492]]",0.9,0.79,0.9,0.8,testLogs/run-FNNClassifier-neurons-20180514210026/,relu,500,300,20,neurons,2
+0.92,0.81,"[[ 263   34  169  264]
+ [  21   34   45  139]
+ [ 125   44 1081  450]
+ [  97   47  402 6590]]",0.92,0.8,0.92,0.81,testLogs/run-FNNClassifier-epochs-20180514210639/,relu,500,300,25,epochs,2
+0.95,0.81,"[[ 288   39  153  250]
+ [  29   32   48  130]
+ [ 171   42 1046  441]
+ [ 147   64  358 6567]]",0.95,0.8,0.95,0.81,testLogs/run-FNNClassifier-epochs-20180514211355/,relu,500,300,30,epochs,2
+0.94,0.79,"[[ 347   34  118  231]
+ [  32   44   30  133]
+ [ 271   53  977  399]
+ [ 264  102  347 6423]]",0.94,0.8,0.94,0.79,testLogs/run-FNNClassifier-epochs-20180514212212/,relu,500,300,35,epochs,2
+0.9,0.8,"[[ 298   35  172  225]
+ [  37   39   45  118]
+ [ 195   51 1107  347]
+ [ 181   93  496 6366]]",0.9,0.8,0.9,0.8,testLogs/run-FNNClassifier-activation-20180514213144/,relu,500,300,20,activation,2
+0.87,0.8,"[[ 270   50  141  269]
+ [  28   45   32  134]
+ [ 179   67  930  524]
+ [ 138   98  317 6583]]",0.88,0.79,0.87,0.8,testLogs/run-FNNClassifier-activation-20180514213757/,leaky_relu,500,300,20,activation,2
+0.61,0.43,"[[ 406   90   89  145]
+ [ 105   55   17   62]
+ [ 348  105  736  511]
+ [2111  506 1485 3034]]",0.61,0.66,0.61,0.43,testLogs/run-FNNClassifier-activation-20180514214419/,elu,500,300,20,activation,2
+0.9,0.78,"[[ 338   37  149  206]
+ [  42   35   40  122]
+ [ 260   52 1024  364]
+ [ 264   85  497 6290]]",0.9,0.79,0.9,0.78,testLogs/run-FNNClassifier-neurons-20180514215042/,relu,300,300,20,neurons,2
+0.89,0.78,"[[ 357   48  123  202]
+ [  40   60   37  102]
+ [ 287   74  980  359]
+ [ 314  147  406 6269]]",0.89,0.8,0.89,0.78,testLogs/run-FNNClassifier-neurons-20180514215519/,relu,400,400,20,neurons,2
+0.9,0.8,"[[ 333   24  140  233]
+ [  41   37   35  126]
+ [ 237   45  984  434]
+ [ 214   53  366 6503]]",0.9,0.8,0.9,0.8,testLogs/run-FNNClassifier-neurons-20180514220048/,relu,550,350,20,neurons,2
+0.89,0.8,"[[ 282   57  130  261]
+ [  22   50   26  141]
+ [ 197   58  963  482]
+ [ 156   79  317 6584]]",0.89,0.79,0.89,0.8,testLogs/run-FNNClassifier-neurons-20180514220727/,relu,200,100,20,neurons,2
+0.89,0.81,"[[ 256   30  143  301]
+ [  13   43   24  159]
+ [ 165   51  931  553]
+ [ 127   42  291 6676]]",0.89,0.79,0.89,0.81,testLogs/run-FNNClassifier-neurons-20180514221051/,relu,200,50,20,neurons,2
