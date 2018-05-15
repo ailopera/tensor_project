@@ -192,6 +192,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     if not smote == "":
         print(">> Applying SMOTE")
         trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
+        testDataInputs, test_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(testDataInputs, testData['Stance'])
     else:
         train_labels = trainData['Stance']
 
