@@ -73,7 +73,8 @@ def convert_to_int_classes(targetList):
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
     "epochs": 20, 'hidden_neurons': [300, 100] }, 
 
-def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
+def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
+    print(">>> hyperparams: ", str(hyperparams))
     tf.reset_default_graph() 
     date = datetime.utcnow().strftime("%Y%m%d")
     hour = datetime.utcnow().strftime("%H%M%S")
