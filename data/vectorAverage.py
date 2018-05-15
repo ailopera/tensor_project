@@ -195,16 +195,17 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
         testDataInputs, test_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(testDataInputs, testData['Stance'])
     else:
         train_labels = trainData['Stance']
-
+        test_labels = testData['Stance']
+    
     # Llamamos al clasificador con los datos compuestos
     start = time.time()
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), test_labels, classifier_config)
     elif model_executed == 'RF':
         # Modelo basado en un randomForest sencillo
-        classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
+        classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), test_labels)
     else:
         print(">>> ERROR: No se ha ejecutado ningún modelo")
 
