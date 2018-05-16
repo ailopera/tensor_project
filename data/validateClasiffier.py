@@ -9,31 +9,32 @@ from BOWModel2 import generateBOWModel
 
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
-common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
+#common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
+common_params = {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": ""}
 iterations = [
         { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 100]}, #Configuracion original
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 200]},
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [500, 300]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 200]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [500, 300]},
     
-        # { "activation_function": "relu", "config_tag": "epochs", "hidden_neurons": [500, 300], "epochs": 25},    
-        # { "activation_function": "relu", "config_tag": "epochs", "hidden_neurons": [500, 300], "epochs": 30},
-        # { "activation_function": "relu", "config_tag": "epochs", "hidden_neurons": [500, 300], "epochs": 35},
+        { "activation_function": "relu", "config_tag": "epochs", "hidden_neurons": [500, 300], "epochs": 25},    
+        { "activation_function": "relu", "config_tag": "epochs", "hidden_neurons": [500, 300], "epochs": 30},
+        { "activation_function": "relu", "config_tag": "epochs", "hidden_neurons": [500, 300], "epochs": 35},
         
-        # { "activation_function": "relu", "config_tag": "activation", "hidden_neurons": [500, 300]},
-        # { "activation_function": "leaky_relu", "config_tag": "activation", "hidden_neurons": [500, 300]},
-        # { "activation_function": "elu", "config_tag": "activation", "hidden_neurons": [500, 300]},
+        { "activation_function": "relu", "config_tag": "activation", "hidden_neurons": [500, 300]},
+        { "activation_function": "leaky_relu", "config_tag": "activation", "hidden_neurons": [500, 300]},
+        { "activation_function": "elu", "config_tag": "activation", "hidden_neurons": [500, 300]},
         
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [550, 350]},
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 400]},
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 300]},
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 100]},
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 50]},
-        # { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [50, 25]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [550, 350]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 400]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 300]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 100]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 50]},
+        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [50, 25]},
 
-        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150]}, # 3 capas
-        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [500, 275, 200]}, # 3 capas
-        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 300, 225, 150]}, # 4 capas
-        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75]}, # 4 capas
+        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150]}, # 3 capas
+        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [500, 275, 200]}, # 3 capas
+        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 300, 225, 150]}, # 4 capas
+        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75]}, # 4 capas
         { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 375, 300, 225, 150]}, # 5 capas
         { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375,300, 225, 150, 75]}  # 5 capas
 

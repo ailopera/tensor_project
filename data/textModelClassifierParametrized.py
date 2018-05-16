@@ -71,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100] }
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False }
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -80,7 +80,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     hour = datetime.utcnow().strftime("%H%M%S")
     start = time.time()
     # root_logdir = "testLogs"
-    root_logdir = "fnnLogs2"
+    root_logdir = "fnnLogs16"
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -96,7 +96,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # Hiperparametros del modelo
     valid_hidden_neuron_param = ("hidden_neurons" in hyperparams and len(hyperparams["hidden_neurons"]) >= 2)
     hidden_neurons = hyperparams["hidden_neurons"] if valid_hidden_neuron_param else default_hyperparams["hidden_neurons"]
-
+    early_stopping = hyperparams.get("early_stopping", default_hyperparams["early_stopping"])
     n_inputs = input_features.shape[1] #TamaÃ±o de la entrada
     # Numero de neuronas de la primera capa oculta
     n_hidden1 = hidden_neurons[0] 
@@ -224,29 +224,29 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         summary_writer = tf.summary.FileWriter(logdir + '_train', tf.get_default_graph())
         summary_writer_test = tf.summary.FileWriter(logdir + '_test', tf.get_default_graph())
         # Realizamos el entrenamiento fijando en n_epochs
-        minimun_loss = 1
-        early_stopping_threshold = round(n_iterations * 0.8)
+        minimun_loss = 1000 #Arbitrary initial value
+        early_stopping_threshold = round(n_iterations*2)
         executed_epochs = 0
         stop_training = False
+        loss_stacionality = 0
         for epoch in range(n_epochs):
-            if not stop_training: 
+            #print(">> Epoch ", epoch)
+            if stop_training or not early_stopping: 
                 for iteration in range(n_iterations):
                     # X_batch, y_batch = mnist.train.next_batch(batch_size)
                     X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                     _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
-                    loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels})
-                    if loss_test < minimun_loss:
-                        minimun_loss = loss_test
-                        loss_stacionality = 0
-                        # Guardamos el estado de la red
-                        save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
-                    else:
-                        loss_stacionality = loss_stacionality + 1
-                    #Escribimos las metricas en tensorboard
-                    # if iteration % 20 ==  0:
-                        # _, summary = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
-                        # summary_writer.add_summary(summary, epoch * n_iterations + iteration)
-                        # summary_writer.add_summary(summary_test, epoch * n_iterations + iteration)        
+                    #Comprobamos si el modelo va mejorando con respecto a los datos de entrenamiento
+                    if iteration % 20 ==  0:
+                     loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels})
+                     if loss_test < minimun_loss and early_stopping:
+                         minimun_loss = loss_test
+                         loss_stacionality = 0
+                         # Guardamos el estado de la red
+                         save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
+                     else:
+                         loss_stacionality = loss_stacionality + 1
+                             
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
                 acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
@@ -258,7 +258,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 summary_writer_test.flush() 
                 executed_epochs = executed_epochs + 1
                 
-                stop_training = loss_stacionality >= early_stopping_threshold
+                stop_training = loss_stacionality * 20 >= early_stopping_threshold
                 print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
             
         end = time.time()
@@ -308,7 +308,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "recall_test": round(recall_classSK,2),
             "activation_function": hyperparams["activation_function"],
             "hidden_neurons": hidden_neurons,
-            "epochs": n_epochs,
+            "epochs": executed_epochs,
             "config_tag": config_tag,
             "n_layers": n_layers,
             "execution_dir": logdir,
