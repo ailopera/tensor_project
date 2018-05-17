@@ -71,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False }
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": True, "learning_rate": 0.01 }
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -80,7 +80,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     hour = datetime.utcnow().strftime("%H%M%S")
     start = time.time()
     # root_logdir = "testLogs"
-    root_logdir = "fnnLogs16"
+    execution_date = time.strftime("%m-%d")
+    root_logdir = "fnnLogs" + execution_date + "_learningRate"
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -160,7 +161,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         loss = tf.reduce_mean(xentropy, name="loss")
 
     # Definimos el entrenamiento 
-    learning_rate = 0.01
+    learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
     with tf.name_scope("train"):
         optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         training_op = optimizer.minimize(loss)
@@ -231,7 +232,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         loss_stacionality = 0
         for epoch in range(n_epochs):
             #print(">> Epoch ", epoch)
-            if stop_training or not early_stopping: 
+            if not stop_training or not early_stopping: 
                 for iteration in range(n_iterations):
                     # X_batch, y_batch = mnist.train.next_batch(batch_size)
                     X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
