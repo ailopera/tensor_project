@@ -71,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": True, "learning_rate": 0.01, "dropout_rate": 1 }
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0 }
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -81,7 +81,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     start = time.time()
     # root_logdir = "testLogs"
     execution_date = time.strftime("%m-%d")
-    root_logdir = "fnnLogs" + execution_date + "_learningRate"
+    root_logdir = "fnnLogs" + execution_date
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -128,7 +128,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     #Tasa de dropout
     drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
-
+    print(">> type(dropout_rate): ", type(drop_rate))
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
@@ -139,7 +139,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
-    keep_prob = tf.placeholder(tf.float32)
+    keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
     with tf.name_scope("dnn"):
         input_dropout = tf.nn.dropout(X, keep_prob, name="dropout_input")
         hidden1 = tf.layers.dense(input_dropout, n_hidden1, name="hidden1", activation=activation)
@@ -245,7 +245,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                     _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch, keep_prob: drop_rate})
                     #Comprobamos si el modelo va mejorando con respecto a los datos de entrenamiento
                     if iteration % 20 ==  0:
-                     loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels})
+                     loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels, keep_prob: drop_rate})
                      if loss_test < minimun_loss and early_stopping:
                          minimun_loss = loss_test
                          loss_stacionality = 0
@@ -257,7 +257,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
                 acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
-                acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels, keep_prob: 1})
+                acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
                 
                 summary_writer.add_summary(summary_train, epoch * n_iterations)        
                 summary_writer.flush() 
@@ -271,13 +271,13 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
-        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels,, keep_prob: drop_rate})
+        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
         prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
 
-        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1})
-        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1})
+        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
+        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
         
-        logits = sess.run(logits,feed_dict={X: test_features, y: test_labels, keep_prob: 1} )
+        logits = sess.run(logits,feed_dict={X: test_features, y: test_labels, keep_prob: 1.0} )
         
         #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
         #print("Prediction: ", prediction_values)
