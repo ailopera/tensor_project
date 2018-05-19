@@ -71,7 +71,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": True, "learning_rate": 0.01 }
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": True, "learning_rate": 0.01, "dropout_rate": 1 }
 
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -126,6 +126,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         print(">>> ERROR: Wrong activation function specified")
         return
 
+    #Tasa de dropout
+    drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
 
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
@@ -134,12 +136,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Funcion de activacion: ", hyperparams["activation_function"])
     print("> Numero de capas ocultas: ", n_layers)
 
+    # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
-
+    keep_prob = tf.placeholder(tf.float32)
     with tf.name_scope("dnn"):
-        hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
-        hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation)
+        input_dropout = tf.nn.dropout(X, keep_prob, name="dropout_input")
+        hidden1 = tf.layers.dense(input_dropout, n_hidden1, name="hidden1", activation=activation)
+        dropout1 = tf.nn.dropout(hidden1, keep_prob, name="dropout_1_2")
+        hidden2 = tf.layers.dense(dropout1, n_hidden2, name="hidden2", activation=activation)
+        dropout2 = tf.nn.dropout(hidden2, keep_prob, name="dropout_2_out")
         if n_layers == 3:
             hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
             logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
@@ -153,7 +159,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
             logits = tf.layers.dense(hidden5, n_outputs, name="outputs")
         else:
-            logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
+            logits = tf.layers.dense(dropout2, n_outputs, name="outputs")
 
     # We define the cost function
     with tf.name_scope("loss"):
@@ -236,7 +242,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 for iteration in range(n_iterations):
                     # X_batch, y_batch = mnist.train.next_batch(batch_size)
                     X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
-                    _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch})
+                    _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch, keep_prob: drop_rate})
                     #Comprobamos si el modelo va mejorando con respecto a los datos de entrenamiento
                     if iteration % 20 ==  0:
                      loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels})
@@ -250,8 +256,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                              
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-                acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
-                acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
+                acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+                acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels, keep_prob: 1})
                 
                 summary_writer.add_summary(summary_train, epoch * n_iterations)        
                 summary_writer.flush() 
@@ -265,15 +271,13 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
-        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels})
-        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
-        # recall_class = sess.run(recall, feed_dict={X: test_features, y: test_labels})
-        # precision_class = sess.run(precision, feed_dict={X: test_features, y: test_labels})
-        # confusion_matrix_class = sess.run(confusion_matrix_class, feed_dict={X: test_features, y: test_labels})
-        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
-        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels})
+        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels,, keep_prob: drop_rate})
+        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
 
-        logits = sess.run(logits,feed_dict={X: test_features, y: test_labels} )
+        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1})
+        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1})
+        
+        logits = sess.run(logits,feed_dict={X: test_features, y: test_labels, keep_prob: 1} )
         
         #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
         #print("Prediction: ", prediction_values)

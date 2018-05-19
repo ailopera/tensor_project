@@ -33,16 +33,25 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [200, 50]},
         #{ "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [50, 25]},
 
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150]}, # 3 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150]}, # 3 capas
         #{ "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [500, 275, 200]}, # 3 capas
         #{ "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 300, 225, 150]}, # 4 capas
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75]}, # 4 capas
+        #{ "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75]}, # 4 capas
         #{ "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 375, 300, 225, 150]}, # 5 capas
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375,300, 225, 150, 75]},  # 5 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375,300, 225, 150, 75]},  # 5 capas
 
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150], "learning_rate": 0.1}, # 3 capas
-        { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75], "learning_rate": 0.1}, # 4 capas
-        { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [375,300, 225, 150, 75], "learning_rate": 0.1} # 5 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [450, 225, 150], "learning_rate": 0.1}, # 3 capas
+        # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75], "learning_rate": 0.1}, # 4 capas
+        # { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [375,300, 225, 150, 75], "learning_rate": 0.1} # 5 capas
+
+        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.25},
+        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.50},
+        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.75}
+
+        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [300, 100]},
+        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [300, 100]},
+        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [300, 100]}, 
+         
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
