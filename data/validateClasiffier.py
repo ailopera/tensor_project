@@ -48,9 +48,11 @@ iterations = [
         { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.50},
         { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.75}
 
-        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [300, 100]},
-        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [300, 100]},
-        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [300, 100]}, 
+        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [500, 250]},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 100, 100, 100]},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [150, 125, 100, 75]},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [125, 100, 100, 75, 50]},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 75, 50, 50, 25]} 
          
 ]
 
