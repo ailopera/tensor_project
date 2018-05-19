@@ -71,8 +71,8 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0 }
-
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False}
+  
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
     tf.reset_default_graph() 
@@ -81,7 +81,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     start = time.time()
     # root_logdir = "testLogs"
     execution_date = time.strftime("%m-%d")
-    root_logdir = "fnnLogs" + execution_date
+    root_logdir = "fnnLogs" + execution_date + "_architecture"
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -135,7 +135,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Numero de instancias de entrenamiento: ", train_samples)
     print("> Funcion de activacion: ", hyperparams["activation_function"])
     print("> Numero de capas ocultas: ", n_layers)
-
+    print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
+    
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
@@ -254,6 +255,10 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                      else:
                          loss_stacionality = loss_stacionality + 1
                              
+                if learning_decrease:
+                  #Reducimos el learning rate un 10% en cada epoch
+                  learning_rate = learning_rate * 0.9
+                
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
                 acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})

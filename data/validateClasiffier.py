@@ -44,15 +44,17 @@ iterations = [
         # { "activation_function": "relu", "config_tag": "layers", "hidden_neurons": [375, 225, 150, 75], "learning_rate": 0.1}, # 4 capas
         # { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [375,300, 225, 150, 75], "learning_rate": 0.1} # 5 capas
 
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.25},
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.50},
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.75}
+        #{ "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.25},
+        #{ "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.50},
+        #{ "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.75}
 
-        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [500, 250]},
-        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 100, 100, 100]},
-        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [150, 125, 100, 75]},
-        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [125, 100, 100, 75, 50]},
-        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 75, 50, 50, 25]} 
+        { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [500, 250],"learning_decrease": True, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 100, 100, 100], "learning_decrease": True, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [150, 125, 100, 75], "learning_decrease": True, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [125, 100, 100, 75, 50],"learning_decrease": True, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": True, "learning_rate": 0.1} 
+        
+        
          
 ]
 
