@@ -141,8 +141,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     y = tf.placeholder(tf.int64, shape=(None), name="y")
     keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
     with tf.name_scope("dnn"):
-        input_dropout = tf.nn.dropout(X, keep_prob, name="dropout_input")
-        hidden1 = tf.layers.dense(input_dropout, n_hidden1, name="hidden1", activation=activation)
+        # input_dropout = tf.nn.dropout(X, keep_prob, name="dropout_input")
+        hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
         dropout1 = tf.nn.dropout(hidden1, keep_prob, name="dropout_1_2")
         hidden2 = tf.layers.dense(dropout1, n_hidden2, name="hidden2", activation=activation)
         dropout2 = tf.nn.dropout(hidden2, keep_prob, name="dropout_2_out")
