@@ -128,7 +128,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     #Tasa de dropout
     drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
-    print(">> type(dropout_rate): ", type(drop_rate))
+    learning_decrease = hyperparams.get("learning_decrease", default_hyperparams["learning_decrease"])
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
@@ -136,6 +136,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Funcion de activacion: ", hyperparams["activation_function"])
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
+    print(">> Dropout rate: ", drop_rate)
     
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
@@ -193,6 +194,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     
     print("> Numero de epochs: ", n_epochs)
     print("> Learning rate: ", learning_rate)
+    print("> Learning rate decay: ", learning_decrease)
     print("> Tam. batch: ", batch_size)
     print("> Prueba: ", config_tag)
     
