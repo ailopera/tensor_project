@@ -156,7 +156,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         if n_layers >= 4:
             hidden4 = tf.layers.dense(dropout3, n_hidden4, name="hidden4", activation=activation)
             dropout4 = tf.nn.dropout(hidden4, keep_prob, name="dropout_4_out")
-        elif n_layers == 5:
+        if n_layers == 5:
             hidden5 = tf.layers.dense(dropout4, n_hidden5, name="hidden5", activation=activation)
             dropout5 = tf.nn.dropout(hidden5, keep_prob, name="dropout_5_out")
         
