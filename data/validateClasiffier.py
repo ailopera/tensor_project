@@ -13,6 +13,7 @@ from BOWModel2 import generateBOWModel
 common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
 #common_params = { "representation": "BOW", "classifier": "MLP", "min_df": 1, "max_df": 1.0, "smote": "all"}
 
+# configuraciones antiguas
 iterations = [
         { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 100]}, #Configuracion original
         #{ "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 200]},
@@ -48,14 +49,23 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.50},
         #{ "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.75}
 
-        { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [500, 250],"learning_decrease": True, "learning_rate": 0.1},
-        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 100, 100, 100], "learning_decrease": True, "learning_rate": 0.1},
-        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [150, 125, 100, 75], "learning_decrease": True, "learning_rate": 0.1},
-        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [125, 100, 100, 75, 50],"learning_decrease": True, "learning_rate": 0.1},
-        { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": True, "learning_rate": 0.1} 
-        
-        
-         
+        # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [500, 250],"learning_decrease": True, "learning_rate": 0.1},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 100, 100, 100], "learning_decrease": True, "learning_rate": 0.1},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [150, 125, 100, 75], "learning_decrease": True, "learning_rate": 0.1},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [125, 100, 100, 75, 50],"learning_decrease": True, "learning_rate": 0.1},
+        # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": True, "learning_rate": 0.1} 
+               
+]
+# Experimentación final
+iterations = [
+        # Ejecuciones base
+        { "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [500, 250]}, # 2 capas, aumentando número de neuronas
+        { "activation_function": "relu", "config_tag": "shallow", "hidden_neurons": [500, 250]}, # 2 capas, aumentando número de neuronas
+        # Ejecuciones aplicando regularización Dropout
+        # Ejecuciones aplicando regularización L1/L2
+        # Ejecuciones aplicando un learning rate decreciente
+
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
