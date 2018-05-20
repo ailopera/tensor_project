@@ -17,7 +17,9 @@ def write_metrics_to_file(metrics):
 		"precision_train", "precision_test",
         "recall_train", "recall_test" ,
         "n_layers", "hidden_neurons",
-        "epochs", "activation_function", "execution_dir", "execution_time"
+        "epochs", "activation_function",
+        "dropout_rate", "learning_rate", "learning_decrease",
+        "execution_dir", "execution_time"
     ]
     csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
@@ -81,7 +83,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     start = time.time()
     # root_logdir = "testLogs"
     execution_date = time.strftime("%m-%d")
-    root_logdir = "fnnLogs" + execution_date + "_architecture"
+    root_logdir = "fnnLogs/" + execution_date
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -142,26 +144,32 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
     keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
-    with tf.name_scope("dnn"):
-        # input_dropout = tf.nn.dropout(X, keep_prob, name="dropout_input")
+    with tf.name_scope("FNN"):
+        # Definimos las capas ocultas
         hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
-        dropout1 = tf.nn.dropout(hidden1, keep_prob, name="dropout_1_2")
+        dropout1 = tf.nn.dropout(hidden1, keep_prob, name="dropout_1_out")
         hidden2 = tf.layers.dense(dropout1, n_hidden2, name="hidden2", activation=activation)
         dropout2 = tf.nn.dropout(hidden2, keep_prob, name="dropout_2_out")
-        if n_layers == 3:
-            hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
-            logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
-        elif n_layers == 4:
-            hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
-            hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
-            logits = tf.layers.dense(hidden4, n_outputs, name="outputs")
+        if n_layers >= 3:
+            hidden3 = tf.layers.dense(dropout2, n_hidden3, name="hidden3", activation=activation)
+            dropout3 = tf.nn.dropout(hidden3, keep_prob, name="dropout_3_out")
+        if n_layers >= 4:
+            hidden4 = tf.layers.dense(dropout3, n_hidden4, name="hidden4", activation=activation)
+            dropout4 = tf.nn.dropout(hidden4, keep_prob, name="dropout_4_out")
         elif n_layers == 5:
-            hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
-            hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
-            hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
-            logits = tf.layers.dense(hidden5, n_outputs, name="outputs")
+            hidden5 = tf.layers.dense(dropout4, n_hidden5, name="hidden5", activation=activation)
+            dropout5 = tf.nn.dropout(hidden5, keep_prob, name="dropout_5_out")
+        
+        
+        # Definimos la capa de salida
+        if n_layers == 3:
+          logits = tf.layers.dense(dropout3, n_outputs, name="outputs")
+        elif n_layers == 4:
+          logits = tf.layers.dense(dropout4, n_outputs, name="outputs")
+        elif n_layers == 5:
+          logits = tf.layers.dense(dropout5, n_outputs, name="outputs")
         else:
-            logits = tf.layers.dense(dropout2, n_outputs, name="outputs")
+          logits = tf.layers.dense(dropout2, n_outputs, name="outputs")
 
     # We define the cost function
     with tf.name_scope("loss"):
@@ -257,9 +265,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                      else:
                          loss_stacionality = loss_stacionality + 1
                              
-                if learning_decrease:
+                if not learning_decrease == 1:
                   #Reducimos el learning rate un 10% en cada epoch
-                  learning_rate = learning_rate * 0.9
+                  learning_rate = learning_rate * learning_decrease
                 
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
@@ -323,6 +331,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "epochs": executed_epochs,
             "config_tag": config_tag,
             "n_layers": n_layers,
+            "dropout_rate": drop_rate,
+            "learning_rate": learning_rate,
+            "learning_decrease": learning_decrease,
             "execution_dir": logdir,
             "execution_time": end - start
 		}

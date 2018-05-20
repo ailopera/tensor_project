@@ -15,7 +15,7 @@ common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vector
 
 # configuraciones antiguas
 iterations = [
-        { "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [300, 100]}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
         #{ "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [400, 200]},
         #{ "activation_function": "relu", "config_tag": "neurons", "hidden_neurons": [500, 300]},
     
@@ -54,7 +54,25 @@ iterations = [
         # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [150, 125, 100, 75], "learning_decrease": True, "learning_rate": 0.1},
         # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [125, 100, 100, 75, 50],"learning_decrease": True, "learning_rate": 0.1},
         # { "activation_function": "relu", "config_tag": "architecture_deep", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": True, "learning_rate": 0.1} 
-               
+        
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers", "hidden_neurons": [300, 100],"dropout_rate": 0.50},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers", "hidden_neurons": [500, 250],"dropout_rate": 0.50},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers", "hidden_neurons": [250, 100, 50], "dropout_rate": 0.50},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers", "hidden_neurons": [150, 125, 100, 75], "dropout_rate": 0.50},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers", "hidden_neurons": [125, 100, 100, 75, 50], "dropout_rate": 0.50}, 
+
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers_25", "hidden_neurons": [300, 100],"dropout_rate": 0.25},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers_25", "hidden_neurons": [500, 250],"dropout_rate": 0.25},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers_25", "hidden_neurons": [250, 100, 50], "dropout_rate": 0.25},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers_25", "hidden_neurons": [150, 125, 100, 75], "dropout_rate": 0.25},
+        { "activation_function": "relu", "config_tag": "dropout_hidden_layers_25", "hidden_neurons": [125, 100, 100, 75, 50], "dropout_rate": 0.25},
+        
+        { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [500, 250], "learning_decrease": 0.9, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [100, 100, 100, 100], "learning_decrease": 0.9, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [150, 125, 100, 75], "learning_decrease": 0.9, "learning_rate": 0.1},
+        { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [125, 100, 100, 75, 50],"learning_decrease": 0.9, "learning_rate": 0.1}
+        #{ "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": 0.9, "learning_rate": 0.1} 
+          
 ]
 # Experimentación final
 iterations = [
