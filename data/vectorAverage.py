@@ -12,7 +12,7 @@ import gensim
 from gensim.models import Word2Vec, KeyedVectors
 from sklearn.preprocessing import Imputer
 import word2VecModel
-# import textModelClassifier # Primer modelo de clasificador basico, no parammetrizable
+import textModelClassifier # Primer modelo de clasificador basico, no parammetrizable
 import textModelClassifierParametrized
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
@@ -202,7 +202,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+        #classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+        classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
     elif model_executed == 'RF':
         # Modelo basado en un randomForest sencillo
         classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
