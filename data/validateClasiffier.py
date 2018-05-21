@@ -88,7 +88,7 @@ iterations = [
         # Ejecuciones aplicando regularización L2
         { "activation_function": "relu", "config_tag": "l2_scale_0.5", "hidden_neurons": [300, 100], "l2_scale": 0.5}, #Configuracion original
         { "activation_function": "relu", "config_tag": "l2_scale_2", "hidden_neurons": [300, 100], "l2_scale": 2}, #Configuracion original
-        { "activation_function": "relu", "config_tag": "l2_scale_4", "hidden_neurons": [300, 100], "l2_scale": 4}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "l2_scale_4", "hidden_neurons": [300, 100], "l2_scale": 4} #Configuracion original
         # Ejecuciones aplicando un learning rate decreciente
 
 ]
