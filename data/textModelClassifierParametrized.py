@@ -73,7 +73,8 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False}
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False, 
+    "l2_scale": 0.0}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -127,7 +128,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     else:
         print(">>> ERROR: Wrong activation function specified")
         return
-
+    l2_scale =  hyperparams.get("l2_scale", default_hyperparams["l2_scale"])
     #Tasa de dropout
     drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
     learning_decrease = hyperparams.get("learning_decrease", default_hyperparams["learning_decrease"])
@@ -139,6 +140,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
     print(">> Dropout rate: ", drop_rate)
+    print(">> L2 SCALE: ", l2_scale)
     
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
@@ -174,15 +176,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     
     else:
         with tf.name_scope("FNN"):
+            l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale)
             # Definimos las capas ocultas
-            hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
-            hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation)
+            hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation, kernel_regularizer=l2_regularizer)
+            hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation, kernel_regularizer=l2_regularizer)
             if n_layers >= 3:
-                hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
+                hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation, kernel_regularizer=l2_regularizer)
             if n_layers >= 4:
-                hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
+                hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation, kernel_regularizer=l2_regularizer)
             if n_layers == 5:
-                hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
+                hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation, kernel_regularizer=l2_regularizer)
             
             
             # Definimos la capa de salida
@@ -198,14 +201,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # We define the cost function
     with tf.name_scope("loss"):
         xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
+        reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
         loss = tf.reduce_mean(xentropy, name="loss")
+        penalized_loss = tf.add_n([loss] + reg_losses)
 
     # Definimos el entrenamiento 
     learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
     with tf.name_scope("train"):
         optimizer = tf.train.GradientDescentOptimizer(learning_rate)
-        training_op = optimizer.minimize(loss)
-
+        # training_op = optimizer.minimize(loss)
+        training_op = optimizer.minimize(penalized_loss)
     # Definimos las metricas
     # with tf.name_scope("eval"):
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
