@@ -204,9 +204,12 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         # We define the cost function
         with tf.name_scope("loss"):
             xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
-            reg_losses = tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
-            loss = tf.reduce_mean(xentropy, name="loss")
-            final_loss = tf.add(loss, reg_losses)
+            if not l2_scale == 0.0:
+                reg_losses = tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
+                loss = tf.reduce_mean(xentropy, name="loss")
+                final_loss = tf.add(loss, reg_losses)
+            else:
+                final_loss = tf.reduce_mean(xentropy, name="loss")
 
     # Definimos el entrenamiento 
     learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
@@ -214,7 +217,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
         training_op = optimizer.minimize(final_loss)
-        
+
     # Definimos las metricas
     # with tf.name_scope("eval"):
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
