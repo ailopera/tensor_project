@@ -139,14 +139,13 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Funcion de activacion: ", hyperparams["activation_function"])
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
-    print(">> Dropout rate: ", drop_rate)
-    print(">> L2 SCALE: ", l2_scale)
     
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
     keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
-    if not drop_rate == 1.0: 
+    if not drop_rate == 1.0:
+        print(">> Dropout rate: ", drop_rate)
         with tf.name_scope("FNN"):
             # Definimos las capas ocultas
             hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
@@ -175,6 +174,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 logits = tf.layers.dense(dropout2, n_outputs, name="outputs")
     
     else:
+        print(">> L2 SCALE: ", l2_scale)
         with tf.name_scope("FNN"):
             l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale)
             # Definimos las capas ocultas
