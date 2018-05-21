@@ -78,20 +78,20 @@ common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vector
 iterations = [
         # Ejecuciones base
         { "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
-        { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
+        { "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         # { "activation_function": "relu", "config_tag": "shallow", "hidden_neurons": [150, 125, 100, 75]}, 
         
         # Ejecuciones aplicando regularización Dropout
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.25}, #Configuracion original
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.50}, #Configuracion original
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "dropout_rate": 0.75}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": [300, 100], "dropout_rate": 0.25}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": [300, 100], "dropout_rate": 0.50}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": [300, 100], "dropout_rate": 0.75}, #Configuracion original
         # { "activation_function": "relu", "config_tag": "architecture_shallow", "hidden_neurons": [250, 100, 50]},
         # { "activation_function": "relu", "config_tag": "shallow", "hidden_neurons": [150, 125, 100, 75]}, 
         
         # Ejecuciones aplicando regularización L2
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "l2_scale": 0.5}, #Configuracion original
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "l2_scale": 2}, #Configuracion original
-        { "activation_function": "relu", "config_tag": "dropout", "hidden_neurons": [300, 100], "l2_scale": 4}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "l2_scale_0.5", "hidden_neurons": [300, 100], "l2_scale": 0.5}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "l2_scale_2", "hidden_neurons": [300, 100], "l2_scale": 2}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "l2_scale_4", "hidden_neurons": [300, 100], "l2_scale": 4}, #Configuracion original
         # Ejecuciones aplicando un learning rate decreciente
 
 ]
