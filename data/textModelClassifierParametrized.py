@@ -84,7 +84,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     start = time.time()
     # root_logdir = "testLogs"
     execution_date = time.strftime("%m-%d")
-    root_logdir = "fnnLogs/" + execution_date
+    root_logdir = "fnnLogs/" + execution_date + "_2"
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
