@@ -144,32 +144,56 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
     keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
-    with tf.name_scope("FNN"):
-        # Definimos las capas ocultas
-        hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
-        dropout1 = tf.nn.dropout(hidden1, keep_prob, name="dropout_1_out")
-        hidden2 = tf.layers.dense(dropout1, n_hidden2, name="hidden2", activation=activation)
-        dropout2 = tf.nn.dropout(hidden2, keep_prob, name="dropout_2_out")
-        if n_layers >= 3:
-            hidden3 = tf.layers.dense(dropout2, n_hidden3, name="hidden3", activation=activation)
-            dropout3 = tf.nn.dropout(hidden3, keep_prob, name="dropout_3_out")
-        if n_layers >= 4:
-            hidden4 = tf.layers.dense(dropout3, n_hidden4, name="hidden4", activation=activation)
-            dropout4 = tf.nn.dropout(hidden4, keep_prob, name="dropout_4_out")
-        if n_layers == 5:
-            hidden5 = tf.layers.dense(dropout4, n_hidden5, name="hidden5", activation=activation)
-            dropout5 = tf.nn.dropout(hidden5, keep_prob, name="dropout_5_out")
-        
-        
-        # Definimos la capa de salida
-        if n_layers == 3:
-          logits = tf.layers.dense(dropout3, n_outputs, name="outputs")
-        elif n_layers == 4:
-          logits = tf.layers.dense(dropout4, n_outputs, name="outputs")
-        elif n_layers == 5:
-          logits = tf.layers.dense(dropout5, n_outputs, name="outputs")
-        else:
-          logits = tf.layers.dense(dropout2, n_outputs, name="outputs")
+    if not drop_rate == 1.0: 
+        with tf.name_scope("FNN"):
+            # Definimos las capas ocultas
+            hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
+            dropout1 = tf.nn.dropout(hidden1, keep_prob, name="dropout_1_out")
+            hidden2 = tf.layers.dense(dropout1, n_hidden2, name="hidden2", activation=activation)
+            dropout2 = tf.nn.dropout(hidden2, keep_prob, name="dropout_2_out")
+            if n_layers >= 3:
+                hidden3 = tf.layers.dense(dropout2, n_hidden3, name="hidden3", activation=activation)
+                dropout3 = tf.nn.dropout(hidden3, keep_prob, name="dropout_3_out")
+            if n_layers >= 4:
+                hidden4 = tf.layers.dense(dropout3, n_hidden4, name="hidden4", activation=activation)
+                dropout4 = tf.nn.dropout(hidden4, keep_prob, name="dropout_4_out")
+            if n_layers == 5:
+                hidden5 = tf.layers.dense(dropout4, n_hidden5, name="hidden5", activation=activation)
+                dropout5 = tf.nn.dropout(hidden5, keep_prob, name="dropout_5_out")
+            
+            
+            # Definimos la capa de salida
+            if n_layers == 3:
+                logits = tf.layers.dense(dropout3, n_outputs, name="outputs")
+            elif n_layers == 4:
+                logits = tf.layers.dense(dropout4, n_outputs, name="outputs")
+            elif n_layers == 5:
+                logits = tf.layers.dense(dropout5, n_outputs, name="outputs")
+            else:
+                logits = tf.layers.dense(dropout2, n_outputs, name="outputs")
+    
+    else:
+        with tf.name_scope("FNN"):
+            # Definimos las capas ocultas
+            hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
+            hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation)
+            if n_layers >= 3:
+                hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
+            if n_layers >= 4:
+                hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
+            if n_layers == 5:
+                hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
+            
+            
+            # Definimos la capa de salida
+            if n_layers == 3:
+                logits = tf.layers.dense(hidden3, n_outputs, name="outputs")
+            elif n_layers == 4:
+                logits = tf.layers.dense(hidden4, n_outputs, name="outputs")
+            elif n_layers == 5:
+                logits = tf.layers.dense(hidden5, n_outputs, name="outputs")
+            else:
+                logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
 
     # We define the cost function
     with tf.name_scope("loss"):
