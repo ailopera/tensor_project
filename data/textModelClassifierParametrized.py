@@ -179,17 +179,18 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     else:
         print(">> L2 SCALE: ", l2_scale)
         with tf.name_scope("FNN"):
-            l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale)
-            # Definimos las capas ocultas
-            hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation, kernel_regularizer=l2_regularizer)
-            hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation, kernel_regularizer=l2_regularizer)
-            if n_layers >= 3:
-                hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation, kernel_regularizer=l2_regularizer)
-            if n_layers >= 4:
-                hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation, kernel_regularizer=l2_regularizer)
-            if n_layers == 5:
-                hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation, kernel_regularizer=l2_regularizer)
-            
+            l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale) if not l2_scale == 0.0 else None
+            with tf.contrib.framework.arg_scope([tf.layers.dense], kernel_regularizer=l2_regularizer):    
+                # Definimos las capas ocultas
+                hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
+                hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation)
+                if n_layers >= 3:
+                    hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
+                if n_layers >= 4:
+                    hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
+                if n_layers == 5:
+                    hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
+                
             
             # Definimos la capa de salida
             if n_layers == 3:
@@ -285,6 +286,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         loss_stacionality = 0
         for epoch in range(n_epochs):
             #print(">> Epoch ", epoch)
+            print("tf.graphKeys: ", str(tf.GraphKeys))
             if not stop_training or not early_stopping: 
                 for iteration in range(n_iterations):
                     # X_batch, y_batch = mnist.train.next_batch(batch_size)
