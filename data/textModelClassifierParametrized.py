@@ -84,7 +84,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     start = time.time()
     # root_logdir = "testLogs"
     execution_date = time.strftime("%m-%d")
-    root_logdir = "fnnLogs/" + execution_date + "_2"
+    root_logdir = "fnnLogs/" + execution_date
     tag = "FNNClassifier"
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
@@ -246,7 +246,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
     # Descomentar los que resulten interesantes de visualizar
     tf.summary.scalar('Accuracy', accuracy)
-    tf.summary.scalar('Loss', loss)
+    tf.summary.scalar('Loss', final_loss)
     tf.summary.histogram('Xentropy', xentropy)
     # hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
     # hidden_2_weights = [v for v in tf.global_variables() if v.name == "hidden2/kernel:0"][0]
@@ -292,7 +292,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                     _, summary = sess.run([training_op, merged_summary_op], feed_dict={X: X_batch, y: y_batch, keep_prob: drop_rate})
                     #Comprobamos si el modelo va mejorando con respecto a los datos de entrenamiento
                     if iteration % 20 ==  0:
-                     loss_test = sess.run(loss, feed_dict={X: test_features, y: test_labels, keep_prob: drop_rate})
+                     loss_test = sess.run(final_loss, feed_dict={X: test_features, y: test_labels, keep_prob: drop_rate})
                      if loss_test < minimun_loss and early_stopping:
                          minimun_loss = loss_test
                          loss_stacionality = 0
