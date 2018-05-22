@@ -1,0 +1,17 @@
+date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecisionSK,recallSK,SMOTE
+2018-05-21 19:47,vector_Average,600,~/GoogleNews-vectors-negative300.bin,78.79,4.95,30.96,3.49,8.88,561.9,39220,9805,MLP,417.17,0.96,0.78,"[[ 424   12   98  196]
+ [  72   25   27  115]
+ [ 362   42  863  433]
+ [ 456   27  325 6328]]",0.79,0.78,all
+2018-05-21 19:56,vector_Average,600,~/GoogleNews-vectors-negative300.bin,45.96,4.73,32.65,3.45,8.59,462.25,39220,9805,MLP,349.71,0.97,0.78,"[[ 383   13  100  234]
+ [  59   26   23  131]
+ [ 321   39  927  413]
+ [ 440   40  391 6265]]",0.79,0.78,all
+2018-05-21 21:46,vector_Average,600,~/GoogleNews-vectors-negative300.bin,46.98,5.58,31.21,4.04,8.5,445.23,39220,9805,MLP,332.37,0.25,0.17,"[[   0    0  730    0]
+ [   0    0  239    0]
+ [   0    0 1700    0]
+ [   0    0 7136    0]]",0.03,0.17,all
+2018-05-21 21:58,vector_Average,600,~/GoogleNews-vectors-negative300.bin,48.63,6.23,33.21,4.24,9.48,472.57,39220,9805,MLP,352.58,0.25,0.17,"[[   0    0  730    0]
+ [   0    0  239    0]
+ [   0    0 1700    0]
+ [   0    0 7136    0]]",0.03,0.17,all

@@ -1,0 +1,5 @@
+date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecision,recall,averagePrecisionSK,recallSK,SMOTE
+2018-05-21 20:33,vector_Average,600,~/GoogleNews-vectors-negative300.bin,49.32,5.0,31.93,3.77,9.04,230.99,39220,9805,MLP,115.06,0.97,0.79,"[[ 379   10  116  225]
+ [  62   25   22  130]
+ [ 278   21  947  454]
+ [ 371   23  395 6347]]",0.96,0.92,0.79,0.79,all

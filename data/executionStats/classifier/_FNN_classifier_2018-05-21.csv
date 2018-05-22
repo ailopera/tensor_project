@@ -1,0 +1,17 @@
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,execution_dir,execution_time
+original,0.96,0.78,"[[ 424   12   98  196]
+ [  72   25   27  115]
+ [ 362   42  863  433]
+ [ 456   27  325 6328]]",0.96,0.79,0.96,0.78,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-21/20180521/run-FNNClassifier-original-194006/,413.34609293937683
+original,0.97,0.78,"[[ 383   13  100  234]
+ [  59   26   23  131]
+ [ 321   39  927  413]
+ [ 440   40  391 6265]]",0.97,0.79,0.97,0.78,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-21/20180521/run-FNNClassifier-original-195052/,346.6305046081543
+l2_scale_0.5,0.25,0.17,"[[   0    0  730    0]
+ [   0    0  239    0]
+ [   0    0 1700    0]
+ [   0    0 7136    0]]",0.06,0.03,0.25,0.17,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-21/20180521/run-FNNClassifier-l2_scale_0.5-214035/,329.218594789505
+l2_scale_0.5,0.25,0.17,"[[   0    0  730    0]
+ [   0    0  239    0]
+ [   0    0 1700    0]
+ [   0    0 7136    0]]",0.06,0.03,0.25,0.17,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-21/20180521/run-FNNClassifier-l2_scale_0.5-215249/,349.35265350341797
