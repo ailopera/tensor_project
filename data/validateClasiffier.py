@@ -9,8 +9,9 @@ from BOWModel2 import generateBOWModel
 
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
-#common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
-common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
+common_params = {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
+#common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
+
 #common_params = { "representation": "BOW", "classifier": "MLP", "min_df": 1, "max_df": 1.0, "smote": "all"}
 
 # configuraciones antiguas
@@ -77,7 +78,7 @@ common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vector
 # Experimentación final
 iterations = [
         # Ejecuciones base
-         #{ "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
          #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         
         # Ejecuciones aplicando regularización Dropout
@@ -88,11 +89,12 @@ iterations = [
         # Ejecuciones aplicando regularización L2
         { "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": [300, 100], "l2_scale": 0.001},
         { "activation_function": "relu", "config_tag": "l2_scale_0.01", "hidden_neurons": [300, 100], "l2_scale": 0.01},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.25", "hidden_neurons": [300, 100], "l2_scale": 0.25} 
+        { "activation_function": "relu", "config_tag": "l2_scale_0.02", "hidden_neurons": [300, 100], "l2_scale": 0.02}, 
+        { "activation_function": "relu", "config_tag": "l2_scale_0.05", "hidden_neurons": [300, 100], "l2_scale": 0.05}, 
         
         # Ejecuciones aumentando el numero de capas
-         # { "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]}, #I
-        #{ "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [150, 100, 50]}, # J
+        { "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]}, #I
+        { "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [150, 100, 50]}, # J
         # Ejecuciones aplicando un learning rate decreciente
 
 ]
