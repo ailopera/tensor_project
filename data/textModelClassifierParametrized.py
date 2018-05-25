@@ -180,27 +180,27 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         print(">> L2 SCALE: ", l2_scale)
         with tf.name_scope("FNN"):
             l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale) if not l2_scale == 0.0 else None
-            with tf.contrib.framework.arg_scope([tf.layers.dense], kernel_regularizer=l2_regularizer):    
-                # Definimos las capas ocultas
-                hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation)
-                hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation)
-                if n_layers >= 3:
-                    hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation)
-                if n_layers >= 4:
-                    hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation)
-                if n_layers == 5:
-                    hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation)
-                
+            #with tf.contrib.framework.arg_scope([tf.layers.dense], kernel_regularizer=l2_regularizer):    
+            # Definimos las capas ocultas
+            hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation, kernel_regularizer=l2_regularizer)
+            hidden2 = tf.layers.dense(hidden1, n_hidden2, name="hidden2", activation=activation, kernel_regularizer=l2_regularizer)
+            if n_layers >= 3:
+                hidden3 = tf.layers.dense(hidden2, n_hidden3, name="hidden3", activation=activation, kernel_regularizer=l2_regularizer)
+            if n_layers >= 4:
+                hidden4 = tf.layers.dense(hidden3, n_hidden4, name="hidden4", activation=activation, kernel_regularizer=l2_regularizer)
+            if n_layers == 5:
+                hidden5 = tf.layers.dense(hidden4, n_hidden5, name="hidden5", activation=activation, kernel_regularizer=l2_regularizer)
+            
             
             # Definimos la capa de salida
             if n_layers == 3:
-                logits = tf.layers.dense(hidden3, n_outputs, name="outputs")
+                logits = tf.layers.dense(hidden3, n_outputs, name="outputs", kernel_regularizer=l2_regularizer)
             elif n_layers == 4:
-                logits = tf.layers.dense(hidden4, n_outputs, name="outputs")
+                logits = tf.layers.dense(hidden4, n_outputs, name="outputs", kernel_regularizer=l2_regularizer)
             elif n_layers == 5:
-                logits = tf.layers.dense(hidden5, n_outputs, name="outputs")
+                logits = tf.layers.dense(hidden5, n_outputs, name="outputs", kernel_regularizer=l2_regularizer)
             else:
-                logits = tf.layers.dense(hidden2, n_outputs, name="outputs")
+                logits = tf.layers.dense(hidden2, n_outputs, name="outputs", kernel_regularizer=l2_regularizer)
 
         # We define the cost function
         with tf.name_scope("loss"):
@@ -286,7 +286,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         loss_stacionality = 0
         for epoch in range(n_epochs):
             #print(">> Epoch ", epoch)
-            print("tf.graphKeys: ", str(tf.GraphKeys))
+            #print("tf.graphKeys: ", str(tf.GraphKeys))
             if not stop_training or not early_stopping: 
                 for iteration in range(n_iterations):
                     # X_batch, y_batch = mnist.train.next_batch(batch_size)
@@ -309,7 +309,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-                acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+                acc_train, summary_train, r_losses = sess.run([accuracy, merged_summary_op,reg_losses], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
                 acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
                 
                 summary_writer.add_summary(summary_train, epoch * n_iterations)        
@@ -319,8 +319,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 executed_epochs = executed_epochs + 1
                 
                 stop_training = loss_stacionality * 20 >= early_stopping_threshold
+                #reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
                 print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
-            
+                print(" REG LOSSES: ", str(r_losses))
         end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
