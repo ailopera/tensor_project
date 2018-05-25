@@ -179,7 +179,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     else:
         print(">> L2 SCALE: ", l2_scale)
         with tf.name_scope("FNN"):
-            l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale) if not l2_scale == 0.0 else None
+            l2_regularizer = tf.contrib.layers.l2_regularizer(scale=l2_scale) if l2_scale >= 0.0 else None
             #with tf.contrib.framework.arg_scope([tf.layers.dense], kernel_regularizer=l2_regularizer):    
             # Definimos las capas ocultas
             hidden1 = tf.layers.dense(X, n_hidden1, name="hidden1", activation=activation, kernel_regularizer=l2_regularizer)
@@ -205,10 +205,10 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         # We define the cost function
         with tf.name_scope("loss"):
             xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
-            if not l2_scale == 0.0:
-                reg_losses = tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
-                loss = tf.reduce_mean(xentropy, name="loss")
-                final_loss = tf.add(loss, reg_losses)
+            if l2_scale >= 0.0:
+                reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+                loss = tf.reduce_mean(xentropy, name="base_loss")
+                final_loss = tf.add_n([loss] + reg_losses, name="loss")
             else:
                 final_loss = tf.reduce_mean(xentropy, name="loss")
 
@@ -309,7 +309,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-                acc_train, summary_train, r_losses = sess.run([accuracy, merged_summary_op,reg_losses], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+                acc_train, summary_train, r_losses, b_loss, f_loss = sess.run([accuracy, merged_summary_op,reg_losses, loss, final_loss], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
                 acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
                 
                 summary_writer.add_summary(summary_train, epoch * n_iterations)        
@@ -321,7 +321,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 stop_training = loss_stacionality * 20 >= early_stopping_threshold
                 #reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
                 print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
+                print(" BASE LOSS: ", str(b_loss))
                 print(" REG LOSSES: ", str(r_losses))
+                print(" FINAL LOSS: ", str(f_loss))
         end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
