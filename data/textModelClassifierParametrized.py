@@ -74,7 +74,7 @@ def convert_to_int_classes(targetList):
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
     "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False, 
-    "l2_scale": 0.0}
+    "l2_scale": 0.0, 'batch_size': 50}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -233,7 +233,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         
     #### Fase de ejecucion ###
     n_epochs = hyperparams["epochs"] if "epochs" in hyperparams else default_hyperparams["epochs"]
-    batch_size = 50
+    batch_size = hyperparams.get("batch_size" , default_hyperparams["batch_size"])
 
     n_iterations = round(train_samples / batch_size)
     
@@ -321,9 +321,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 stop_training = loss_stacionality * 20 >= early_stopping_threshold
                 #reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
                 print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
-                print(" BASE LOSS: ", str(b_loss))
-                print(" REG LOSSES: ", str(r_losses))
-                print(" FINAL LOSS: ", str(f_loss))
+                print("> BASE LOSS: ", str(b_loss))
+                print("> REG LOSSES: ", str(r_losses))
+                print("> FINAL LOSS: ", str(f_loss))
         end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
@@ -373,7 +373,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "config_tag": config_tag,
             "n_layers": n_layers,
             "dropout_rate": drop_rate,
-            "learning_rate": learning_rate,
+            "learning_rate": str(learning_rate),
             "learning_decrease": learning_decrease,
             "execution_dir": logdir,
             "execution_time": end - start
