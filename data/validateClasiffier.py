@@ -84,7 +84,9 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         
         # Early Stopping sobre la arquitectura base
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01}, 
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
         
         # Ejecuciones aplicando regularización Dropout
         { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
@@ -139,8 +141,8 @@ for classifier_config in iterations:
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
           executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
-        elif common_params['representation'] == 'BOW':
-          generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
+        # elif common_params['representation'] == 'BOW':
+        #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")
 
 end = time.time()
@@ -158,9 +160,9 @@ for iteration in iterations:
         print(">>> Executing Configuration: ", classifier_config)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
-          executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], classifier_config)
-        elif common_params['representation'] == 'BOW':
-          generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
+          executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+        # elif common_params['representation'] == 'BOW':
+        #   generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")
 
 end = time.time()

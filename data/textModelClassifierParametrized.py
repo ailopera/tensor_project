@@ -10,7 +10,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_arquitectura_original"
+EXECUTION_TAG = "_arquitectura_original_2"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
@@ -76,7 +76,7 @@ def convert_to_int_classes(targetList):
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
     "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False, 
-    "l2_scale": 0.0, 'batch_size': 50}
+    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -134,6 +134,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     #Tasa de dropout
     drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
     learning_decrease = hyperparams.get("learning_decrease", default_hyperparams["learning_decrease"])
+    early_stopping_patience = hyperparams.get("early_stopping_patience", default_hyperparams["early_stopping_patience"])
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
@@ -282,7 +283,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         summary_writer_test = tf.summary.FileWriter(logdir + '_test', tf.get_default_graph())
         # Realizamos el entrenamiento fijando en n_epochs
         minimun_loss = 1000 #Arbitrary initial value
-        early_stopping_threshold = round(n_iterations*2)
+        early_stopping_threshold = round(n_iterations * early_stopping_patience)
         executed_epochs = 0
         stop_training = False
         loss_stacionality = 0
