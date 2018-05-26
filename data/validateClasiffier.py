@@ -87,7 +87,7 @@ iterations = [
         { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
         { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
         { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
-        
+
         # Ejecuciones aplicando regularización Dropout
         { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
         { "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
@@ -157,7 +157,7 @@ print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
         # executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, common_params["smote"], classifier_config)
-        print(">>> Executing Configuration: ", classifier_config)
+        print(">>> Executing Configuration: ", iteration)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
           executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
