@@ -77,30 +77,35 @@ common_params = {"representation":"vectorAverage","model": "300features_15minwor
 # ]
 
 # Experimentación final
+base_arquitecture = [300, 100]
 iterations = [
         # Ejecuciones base
-        #{ "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
-         #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
+        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
+        
+        # Early Stopping sobre la arquitectura base
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01}, 
         
         # Ejecuciones aplicando regularización Dropout
-        #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": [300, 100], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
-        #{ "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": [300, 100], "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
-        #{ "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": [300, 100], "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
+        { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
         
         # Ejecuciones aplicando regularización L2
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": [300, 100], "l2_scale": 0.001, "learning_rate": 0.01},
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": [300, 100], "l2_scale": 0.002, "learning_rate": 0.01},
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": [300, 100], "l2_scale": 0.005, "learning_rate": 0.01}, 
+        { "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
+        
         
         # Ejecuciones aumentando el numero de capas
-        { "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
-        { "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [300, 100, 100, 50]},
+        # { "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
+        # { "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [300, 100, 100, 50]},
         
         #Pruebas combinadas
-        { "activation_function": "relu", "config_tag": "ampliacion_capa_dropout", "hidden_neurons": [300, 100, 100], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "ampliacion_capa_l2_scale", "hidden_neurons": [300, 100, 100], "epochs": 20, "l2_scale": 0.001, "learning_rate": 0.01},
-        { "activation_function": "relu", "config_tag": "ampliacion_capa_2_dropout", "hidden_neurons": [300, 100, 100, 50], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "ampliacion_capa_2_l2_scale", "hidden_neurons": [300, 100, 100, 50], "epochs": 20, "l2_scale": 0.001, "learning_rate": 0.01}
+        # { "activation_function": "relu", "config_tag": "ampliacion_capa_dropout", "hidden_neurons": [300, 100, 100], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        # { "activation_function": "relu", "config_tag": "ampliacion_capa_l2_scale", "hidden_neurons": [300, 100, 100], "epochs": 20, "l2_scale": 0.001, "learning_rate": 0.01},
+        # { "activation_function": "relu", "config_tag": "ampliacion_capa_2_dropout", "hidden_neurons": [300, 100, 100, 50], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        # { "activation_function": "relu", "config_tag": "ampliacion_capa_2_l2_scale", "hidden_neurons": [300, 100, 100, 50], "epochs": 20, "l2_scale": 0.001, "learning_rate": 0.01}
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
@@ -148,9 +153,16 @@ print("---------------------- TEST ------------------------------")
 print(">> Executing different model configurations over test data")
 print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
-#for iteration in iterations:
-        #executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, common_params["smote"], classifier_config)
-        
+for iteration in iterations:
+        # executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, common_params["smote"], classifier_config)
+        print(">>> Executing Configuration: ", classifier_config)
+        # Execute model with the configuration specified 
+        if common_params['representation'] == 'vectorAverage':
+          executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], classifier_config)
+        elif common_params['representation'] == 'BOW':
+          generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
+        print("------------------------------------------------------")
+
 end = time.time()
 testExecutionTime = end - start
 
