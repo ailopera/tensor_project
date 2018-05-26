@@ -309,7 +309,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-                acc_train, summary_train, r_losses, b_loss, f_loss = sess.run([accuracy, merged_summary_op,reg_losses, loss, final_loss], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+                #acc_train, summary_train, r_losses, b_loss, f_loss = sess.run([accuracy, merged_summary_op,reg_losses, loss, final_loss], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+                acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
                 acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
                 
                 summary_writer.add_summary(summary_train, epoch * n_iterations)        
@@ -321,9 +322,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 stop_training = loss_stacionality * 20 >= early_stopping_threshold
                 #reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
                 print(epoch, "Train accuracy: ", acc_train, " Test accuracy: ", acc_test)
-                print(" BASE LOSS: ", str(b_loss))
-                print(" REG LOSSES: ", str(r_losses))
-                print(" FINAL LOSS: ", str(f_loss))
+                #print("> BASE LOSS: ", str(b_loss))
+                #print("> REG LOSSES: ", str(r_losses))
+                #print("> FINAL LOSS: ", str(f_loss))
         end = time.time()
         # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
