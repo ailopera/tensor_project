@@ -80,28 +80,30 @@ common_params = {"representation":"vectorAverage","model": "300features_15minwor
 base_arquitecture = [300, 100]
 iterations = [
         # Ejecuciones base
-        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
         #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         
         # Early Stopping sobre la arquitectura base
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
         
         # Ejecuciones aplicando regularización Dropout
-        { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
-        
+        #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
+        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
-        { "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
+        
         
         
         # Ejecuciones aumentando el numero de capas
-        # { "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
-        # { "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [300, 100, 100, 50]},
+        #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
+        #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
+        #{ "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [300, 100, 100, 50]},
         
         #Pruebas combinadas
         # { "activation_function": "relu", "config_tag": "ampliacion_capa_dropout", "hidden_neurons": [300, 100, 100], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
