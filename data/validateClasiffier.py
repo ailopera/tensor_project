@@ -72,32 +72,35 @@ common_params = {"representation":"vectorAverage","model": "300features_15minwor
         # { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [100, 100, 100, 100], "learning_decrease": 0.9, "learning_rate": 0.1},
         # { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [150, 125, 100, 75], "learning_decrease": 0.9, "learning_rate": 0.1},
         # { "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [125, 100, 100, 75, 50],"learning_decrease": 0.9, "learning_rate": 0.1}
-        #{ "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": 0.9, "learning_rate": 0.1}           
+        #{ "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": 0.9, "learning_rate": 0.1}          # Ejecuciones aumentando el tamano del batch
+        #{ "activation_function": "relu", "config_tag": "ampliando_batch", "hidden_neurons": [300, 100], 'batch_size': 150}  
 # ]
 
 # Experimentación final
 iterations = [
         # Ejecuciones base
-        { "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "original", "hidden_neurons": [300, 100]}, #Configuracion original
          #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         
         # Ejecuciones aplicando regularización Dropout
-        #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": [300, 100], "dropout_rate": 0.25, "epochs": 30, "learning_rate": 0.05},
-        #{ "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": [300, 100], "dropout_rate": 0.50, "epochs": 30, "learning_rate": 0.05}, 
-         #{ "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": [300, 100], "dropout_rate": 0.75}, 
+        #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": [300, 100], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": [300, 100], "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": [300, 100], "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
         
         # Ejecuciones aplicando regularización L2
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": [300, 100], "l2_scale": 0.001, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.01", "hidden_neurons": [300, 100], "l2_scale": 0.01, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.015", "hidden_neurons": [300, 100], "l2_scale": 0.015, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.02", "hidden_neurons": [300, 100], "l2_scale": 0.02, "learning_rate": 0.05} 
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.05", "hidden_neurons": [300, 100], "l2_scale": 0.05, "learning_rate": 0.05}, 
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": [300, 100], "l2_scale": 0.001, "learning_rate": 0.01},
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": [300, 100], "l2_scale": 0.002, "learning_rate": 0.01},
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": [300, 100], "l2_scale": 0.005, "learning_rate": 0.01}, 
         
         # Ejecuciones aumentando el numero de capas
-        #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]}, #I
-        #{ "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [300, 100, 100, 50]}, # J
-        # Ejecuciones aplicando un learning rate decreciente
-
+        { "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
+        { "activation_function": "relu", "config_tag": "ampliacion_capa_2", "hidden_neurons": [300, 100, 100, 50]},
+        
+        #Pruebas combinadas
+        { "activation_function": "relu", "config_tag": "ampliacion_capa_dropout", "hidden_neurons": [300, 100, 100], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "ampliacion_capa_l2_scale", "hidden_neurons": [300, 100, 100], "epochs": 20, "l2_scale": 0.001, "learning_rate": 0.01},
+        { "activation_function": "relu", "config_tag": "ampliacion_capa_2_dropout", "hidden_neurons": [300, 100, 100, 50], "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "ampliacion_capa_2_l2_scale", "hidden_neurons": [300, 100, 100, 50], "epochs": 20, "l2_scale": 0.001, "learning_rate": 0.01}
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
