@@ -6,16 +6,16 @@ import math
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
 
 #Particionado 2
-# inputPath = "total_data_aggregated.csv"
-# # header = "Headline,ArticleBody,Stance,BodyIDS"
-# outputTrainPath = "train_partition.csv"
-# outputTestPath = "test_partition.csv"
+inputPath = "total_data_aggregated.csv"
+# header = "Headline,ArticleBody,Stance,BodyIDS"
+outputTrainPath = "train_partition.csv"
+outputTestPath = "test_partition.csv"
 
 #Particionado 3
-inputPath = "competition_data_aggregated.csv"
-# header = "Headline,ArticleBody,Stance,BodyIDS"
-outputTrainPath = "train_partition_3.csv"
-outputTestPath = "test_partition_3.csv"
+# inputPath = "competition_data_aggregated.csv"
+# # header = "Headline,ArticleBody,Stance,BodyIDS"
+# outputTrainPath = "train_partition_3.csv"
+# outputTestPath = "test_partition_3.csv"
 
 print(">> Fichero de entrada:", inputPath)
 # inputFile = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
