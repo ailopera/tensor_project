@@ -10,7 +10,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_arquitectura_original_2"
+EXECUTION_TAG = "_arquitectura_original_p3"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
@@ -20,7 +20,7 @@ def write_metrics_to_file(metrics):
         "recall_train", "recall_test" ,
         "n_layers", "hidden_neurons",
         "epochs", "activation_function",
-        "dropout_rate", "learning_rate", "learning_decrease",
+        "dropout_rate", "learning_rate", "learning_decrease", "early_stopping_patience",
         "execution_dir", "execution_time"
     ]
     csv_output_dir = "./executionStats/classifier/"
@@ -379,6 +379,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "dropout_rate": drop_rate,
             "learning_rate": str(learning_rate),
             "learning_decrease": learning_decrease,
+            "early_stopping_patience": early_stopping_patience,
             "execution_dir": logdir,
             "execution_time": end - start
 		}

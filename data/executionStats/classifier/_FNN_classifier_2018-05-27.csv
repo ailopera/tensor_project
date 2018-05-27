@@ -1,13 +1,1 @@
-config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,execution_dir,execution_time
-l2_scale_0.001,0.87,0.74,"[[ 157   33  109  165]
- [  27   25   38  122]
- [ 133   38  419  289]
- [ 162   51  171 3143]]",0.87,0.72,0.87,0.74,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-26_arquitectura_original_2/20180526/run-FNNClassifier-l2_scale_0.001-235734/,292.211275100708
-l2_scale_0.002,0.85,0.74,"[[ 157   27  105  175]
- [  28   21   46  117]
- [ 121   22  432  304]
- [ 164   31  184 3148]]",0.85,0.72,0.85,0.74,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-27_arquitectura_original_2/20180527/run-FNNClassifier-l2_scale_0.002-000350/,291.99887442588806
-l2_scale_0.005,0.78,0.7,"[[ 156   34   71  203]
- [  40   27   18  127]
- [ 141   32  356  350]
- [ 237   51  202 3037]]",0.79,0.69,0.78,0.7,2,"[300, 100]",20,relu,1.0,0.0,False,fnnLogs/05-27_arquitectura_original_2/20180527/run-FNNClassifier-l2_scale_0.005-001005/,294.19388699531555
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patienceexecution_dir,execution_time

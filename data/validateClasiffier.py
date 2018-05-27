@@ -93,11 +93,12 @@ iterations = [
         { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
         { "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
         { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
-        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
+        { "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
         { "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
         { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
         { "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.007", "hidden_neurons": base_arquitecture, "l2_scale": 0.007, "learning_rate": 0.01}
         
         
         
