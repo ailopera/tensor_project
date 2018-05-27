@@ -1,0 +1,25 @@
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patience,execution_dir,execution_time
+base_arquitecture,0.99,0.85,"[[ 567   31  149   97]
+ [  53   81   42   29]
+ [ 327   28 1406  277]
+ [ 242    6  307 7293]]",0.99,0.86,0.99,0.85,3,"[250, 150, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-base_arquitecture-162534/,514.3074221611023
+dropout_75,0.98,0.88,"[[ 575   19  187   63]
+ [  41   86   57   21]
+ [ 290   23 1525  200]
+ [ 167    5  244 7432]]",0.98,0.89,0.98,0.88,3,"[250, 150, 100]",20,relu,0.75,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-dropout_75-163632/,536.9922113418579
+l2_scale_0.002,0.98,0.84,"[[ 582   41  151   70]
+ [  45   98   48   14]
+ [ 285   55 1520  178]
+ [ 304   19  553 6972]]",0.98,0.86,0.98,0.84,3,"[250, 150, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-l2_scale_0.002-164745/,451.13577222824097
+base_arquitecture,0.99,0.86,"[[ 578   25  168   73]
+ [  57   82   43   23]
+ [ 272   22 1457  287]
+ [ 200   18  330 7300]]",0.99,0.87,0.99,0.86,3,"[250, 150, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-base_arquitecture-173219/,406.1806194782257
+dropout_75,0.99,0.88,"[[ 598   32  146   68]
+ [  39  102   44   20]
+ [ 299   48 1492  199]
+ [ 156   16  247 7429]]",0.99,0.89,0.99,0.88,3,"[250, 150, 100]",20,relu,0.75,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-dropout_75-174126/,493.64113998413086
+l2_scale_0.002,0.98,0.84,"[[ 580   53  158   53]
+ [  39  105   46   15]
+ [ 320   66 1489  163]
+ [ 253   40  511 7044]]",0.98,0.87,0.98,0.84,3,"[250, 150, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-l2_scale_0.002-175159/,453.2325553894043

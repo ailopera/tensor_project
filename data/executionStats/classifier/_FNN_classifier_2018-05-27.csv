@@ -1,0 +1,45 @@
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patience,execution_dir,execution_time
+base_arquitecture,0.89,0.64,"[[ 681  126  437  659]
+ [ 102   78  138  379]
+ [ 589  162 2361 1352]
+ [ 220   90  379 4954]]",0.89,0.62,0.89,0.64,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-base_arquitecture-201248/,420.18796491622925
+base_arquitecture_early_stopping_2,0.83,0.6,"[[ 625  100  295  883]
+ [  85   77   52  483]
+ [ 470   94 1839 2061]
+ [ 192   38  281 5132]]",0.83,0.61,0.83,0.6,2,"[300, 100]",12,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-base_arquitecture_early_stopping_2-202121/,254.32481217384338
+base_arquitecture_early_stopping_1.5,0.86,0.62,"[[ 812  131  338  622]
+ [ 145  114  107  331]
+ [ 840  184 2095 1345]
+ [ 346   94  324 4879]]",0.86,0.63,0.86,0.62,2,"[300, 100]",15,relu,1.0,0.0,False,1.5,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-base_arquitecture_early_stopping_1.5-202710/,316.44113183021545
+base_arquitecture_early_stopping_3,0.86,0.64,"[[ 634  124  399  746]
+ [  79   86  102  430]
+ [ 492  184 2305 1483]
+ [ 193   88  317 5045]]",0.86,0.63,0.86,0.64,2,"[300, 100]",15,relu,1.0,0.0,False,3,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-base_arquitecture_early_stopping_3-203359/,316.2851560115814
+dropout_25,0.82,0.62,"[[ 847  204  500  352]
+ [ 145  143  206  203]
+ [ 782  367 2613  702]
+ [ 416  186  762 4279]]",0.82,0.63,0.82,0.62,2,"[300, 100]",20,relu,0.25,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-dropout_25-204047/,498.4059364795685
+dropout_35,0.87,0.66,"[[ 569   50  797  487]
+ [  62   50  296  289]
+ [ 348  112 3114  890]
+ [ 148   63  826 4606]]",0.87,0.63,0.87,0.66,2,"[300, 100]",20,relu,0.35,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-dropout_35-205040/,498.2038128376007
+dropout_50,0.91,0.64,"[[ 580  136  693  494]
+ [  63   91  248  295]
+ [ 510  198 2825  931]
+ [ 170  143  747 4583]]",0.91,0.62,0.91,0.64,2,"[300, 100]",20,relu,0.5,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-dropout_50-210035/,553.1514089107513
+l2_scale_0.001,0.87,0.63,"[[ 812  169  306  616]
+ [ 117  144   91  345]
+ [ 746  229 2159 1330]
+ [ 290  118  321 4914]]",0.87,0.64,0.87,0.63,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-l2_scale_0.001-211123/,462.05628871917725
+l2_scale_0.002,0.84,0.64,"[[ 670  114  374  745]
+ [  91   89   92  425]
+ [ 486  136 2323 1519]
+ [ 202   66  312 5063]]",0.85,0.63,0.84,0.64,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-l2_scale_0.002-212042/,484.14254879951477
+l2_scale_0.005,0.77,0.61,"[[1145  120  316  322]
+ [ 283  122   92  200]
+ [1152  179 2222  911]
+ [ 820  107  461 4255]]",0.78,0.65,0.77,0.61,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-l2_scale_0.005-213021/,531.4086966514587
+l2_scale_0.001,0.88,0.66,"[[ 341   64  889  609]
+ [  17   41  267  372]
+ [ 195   76 3220  973]
+ [  54   43  705 4841]]",0.91,0.63,0.88,0.66,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/05-27_arquitectura_original_p3_2/20180527/run-FNNClassifier-l2_scale_0.001-214223/,429.8482916355133
