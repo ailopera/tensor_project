@@ -5,11 +5,13 @@ import math
 
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
 
+#Particionado 2
 # inputPath = "total_data_aggregated.csv"
 # # header = "Headline,ArticleBody,Stance,BodyIDS"
 # outputTrainPath = "train_partition.csv"
 # outputTestPath = "test_partition.csv"
 
+#Particionado 3
 inputPath = "competition_data_aggregated.csv"
 # header = "Headline,ArticleBody,Stance,BodyIDS"
 outputTrainPath = "train_partition_3.csv"
@@ -39,7 +41,10 @@ with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testF
     df.sample(frac=1)
 
     # Creamos las dos particiones de datos
-    train_batch_size = math.ceil(len(df) * 0.8)
+    #Particionado 2
+    #train_batch_size = math.ceil(len(df) * 0.8)
+    # Particionado 3 (Como solo utilizaremos la de test, cambiamos la division entre train/test)
+    train_batch_size = math.ceil(len(df) * 0.5)
     train_data = df[:train_batch_size]
     test_data = df[train_batch_size:]
     print(">> Muestras de entrenamiento y validación: ", len(train_data))
