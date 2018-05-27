@@ -13,7 +13,7 @@ outputTestPath = "test_partition_3.csv"
 
 print(">> Fichero de entrada:", inputPath)
 # inputFile = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
-df = pd.read_csv(inputPath,header=0,delimiter=",", quoting=1)
+df = pd.read_csv(inputPath,header=0,delimiter=";", quoting=1)
 
 with open(outputTrainPath, 'w') as trainFile, open(outputTestPath, 'w') as testFile:
     print(">> Fichero de train generado:", outputTrainPath)
