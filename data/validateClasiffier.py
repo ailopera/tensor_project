@@ -80,7 +80,7 @@ common_params = {"representation":"vectorAverage","model": "300features_15minwor
 base_arquitecture = [300, 100]
 iterations = [
         # Ejecuciones base
-        #{ "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
+        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
         #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         
         # Early Stopping sobre la arquitectura base
@@ -90,14 +90,14 @@ iterations = [
         { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
 
         # Ejecuciones aplicando regularización Dropout
-        #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
-        #{ "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
-        #{ "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
+        { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
         { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
+        { "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
         
         
         
@@ -119,9 +119,15 @@ iterations = [
 #testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
 # Segundo particionado
 trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+# Tercer particionado
+testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
+
+
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
+
+
 
 # Get size of batch
 start = time.time()

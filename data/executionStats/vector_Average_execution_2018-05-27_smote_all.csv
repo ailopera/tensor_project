@@ -1,0 +1,13 @@
+date,executionDesc,textModelFeatures,modelName,loadModelTime,trainDataFormattingTime,trainDataFeatureVecsTime,testDataFormattingTime,testDataFeatureVecsTime,totalExecutionTime,trainInstances,testInstances,modelTrained,modelExecutionTime,trainAccuracy,testAccuracy,confusionMatrix,averagePrecisionSK,recallSK,SMOTE
+2018-05-27 00:02,vector_Average,600,300features_15minwords_10contextALL,0.21,4.74,50.05,2.15,5.87,372.5,39220,5082,MLP,296.01,0.87,0.74,"[[ 157   33  109  165]
+ [  27   25   38  122]
+ [ 133   38  419  289]
+ [ 162   51  171 3143]]",0.72,0.74,all
+2018-05-27 00:08,vector_Average,600,300features_15minwords_10contextALL,0.2,5.44,51.22,2.03,6.26,373.98,39220,5082,MLP,295.48,0.85,0.74,"[[ 157   27  105  175]
+ [  28   21   46  117]
+ [ 121   22  432  304]
+ [ 164   31  184 3148]]",0.72,0.74,all
+2018-05-27 00:15,vector_Average,600,300features_15minwords_10contextALL,0.21,5.32,51.24,2.05,6.18,376.63,39220,5082,MLP,297.94,0.78,0.7,"[[ 156   34   71  203]
+ [  40   27   18  127]
+ [ 141   32  356  350]
+ [ 237   51  202 3037]]",0.69,0.7,all
