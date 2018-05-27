@@ -1,1 +1,0 @@
-config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patienceexecution_dir,execution_time

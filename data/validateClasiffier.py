@@ -9,8 +9,8 @@ from BOWModel2 import generateBOWModel
 
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
-common_params = {"representation":"vectorAverage","model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
-#common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
+#common_params = {"representation":"vectorAverage","model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
+common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
 
 #common_params = { "representation": "BOW", "classifier": "MLP", "min_df": 1, "max_df": 1.0, "smote": "all"}
 
@@ -77,7 +77,11 @@ common_params = {"representation":"vectorAverage","model": "300features_15minwor
 # ]
 
 # Experimentación final
-base_arquitecture = [300, 100]
+#base_arquitecture = [300, 100]
+#base_arquitecture = [300, 100, 100]
+#base_arquitecture = [300,250,150,100]
+base_arquitecture = [250,150,100,75]
+base_arquitecture = [250,150,100]
 iterations = [
         # Ejecuciones base
         { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
@@ -85,19 +89,19 @@ iterations = [
         
         # Early Stopping sobre la arquitectura base
 
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
 
         # Ejecuciones aplicando regularización Dropout
-        { "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
+        #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "dropout_35", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "dropout_50", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.05}, 
         { "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
-        { "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.01},
         { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.01},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.01}
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.007", "hidden_neurons": base_arquitecture, "l2_scale": 0.007, "learning_rate": 0.01}
         
         
@@ -119,13 +123,13 @@ iterations = [
 #trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
 # Segundo particionado
-#trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-#testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 
 # Tercer particionado (Solo cambia la particion de test)
-trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
-
+#trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/competition_data_aggregated.csv"
 
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
