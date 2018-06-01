@@ -13,7 +13,8 @@ from gensim.models import Word2Vec, KeyedVectors
 from sklearn.preprocessing import Imputer
 import word2VecModel
 #import textModelClassifier # Primer modelo de clasificador basico, no parammetrizable
-import textModelClassifierParametrized
+# import textModelClassifierParametrized # modelo de clasificador paramatretrizado
+import recurrentClassifier
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 LOG_ENABLED = False
