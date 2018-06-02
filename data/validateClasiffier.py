@@ -120,8 +120,8 @@ iterations = [
 
 # Configuraciones del clasificador recurrente
 iterations = [ 
-  #{"recurrrent": True, "architecture": "simple"},
-  {"recurrrent": True, "architecture": "multi"}
+  {"recurrrent": True, "architecture": "simple", "config_tag": "RNN_simple"},
+  {"recurrrent": True, "architecture": "multi", "config_tag": "RNN multicapa"}
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
@@ -129,12 +129,12 @@ iterations = [
 #trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
 # Segundo particionado
-#trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-#testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 
 # Tercer particionado (Solo cambia la particion de test)
-trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
+# trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+# testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/competition_data_aggregated.csv"
 
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
@@ -158,14 +158,14 @@ validation_data = train_df[train_proportion:]
 print(">>> LEN train data: ", len(train_data))
 print(">>> LEN validation data: ", len(validation_data))
 
-# for classifier_config in iterations:
-#         print(">>> Executing Configuration: ", classifier_config)
-#         # Execute model with the configuration specified 
-#         if common_params['representation'] == 'vectorAverage':
-#           executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
-#         # elif common_params['representation'] == 'BOW':
-#         #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
-#         print("------------------------------------------------------")
+for classifier_config in iterations:
+        print(">>> Executing Configuration: ", classifier_config)
+        # Execute model with the configuration specified 
+        if common_params['representation'] == 'vectorAverage':
+          executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+        # elif common_params['representation'] == 'BOW':
+        #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
+        print("------------------------------------------------------")
 
 end = time.time()
 trainValidationTime = end - start

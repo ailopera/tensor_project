@@ -11,6 +11,24 @@ import time
 EXECUTION_TAG = "prueba_2"
 
 ### Funciones auxiliares
+def write_metrics_to_file(metrics):
+    header = ["config_tag", "train_accuracy", "test_accuracy", "confusion_matrix",
+		"precision_train", "precision_test",
+        "recall_train", "recall_test" ,
+        "execution_dir", "execution_time"
+    ]
+    csv_output_dir = "./executionStats/classifier/RNN"
+    date = time.strftime("%Y-%m-%d")
+    output_file = csv_output_dir + '_RNN_classifier_' + date + '.csv'
+    with open(output_file, 'a') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames = header)
+        newFile = os.stat(output_file).st_size == 0
+        if newFile:
+            writer.writeheader()
+        writer.writerow(metrics)
+        print(">> Stats exported to: ", output_file)
+        print("############################################################################")
+
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
     training_shape = train_data.shape[0]
@@ -50,6 +68,7 @@ def convert_to_int_classes(targetList):
 ### Clasificador ###
 default_hyperparams = { "arquitecture": "simple", "config_tag": "default"  }
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
+    print(">>> hyperparams: ", str(hyperparams))
     tf.reset_default_graph() 
     date = datetime.utcnow().strftime("%Y%m%d")
     hour = datetime.utcnow().strftime("%H%M%S")
@@ -84,6 +103,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     if arquitecture == "simple":
         with tf.name_scope("rnn"):
             basic_cell = tf.contrib.rnn.BasicRNNCell(num_units=n_neurons)
+            # lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons)
             outputs, states = tf.nn.dynamic_rnn(basic_cell, X, dtype=tf.float32)
             logits = tf.layers.dense(states, n_outputs)
     elif arquitecture == "multi":
@@ -91,7 +111,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         with tf.name_scope("rnn"):
             layers = [tf.contrib.rnn.BasicRNNCell(num_units = n_neurons)
                     for layer in range(n_layers)]
-            
+            #layers = [tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons)
+            #        for layer in range(n_layers)]
             multi_layer_cell = tf.contrib.rnn.MultiRNNCell(layers)
             outputs, states = tf.nn.dynamic_rnn(multi_layer_cell, X, dtype=tf.float32)
 
@@ -120,7 +141,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     
     n_iterations = round(train_samples / batch_size)
     print("> Numero de instancias de entrenamiento: ", train_samples)
-    
+    print("> Numero de epochs: ", n_epochs)
+    print("> Learning rate: ", learning_rate)
+    print("> Tam. batch: ", batch_size)
+    print("> Prueba: ", config_tag)
+
     #Definimos los escalares que visualizaremos
     tf.summary.scalar('Accuracy', accuracy)
     tf.summary.scalar('Loss', loss)
@@ -156,7 +181,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             # Imprimimos el grafo para verlo desde tensorflow
             file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
             
-         # Ejecutamos las metricas finales
+        end = time.time()
+        # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
         acc_final_train = sess.run(accuracy, feed_dict={X: train_features, y: train_labels})
         prediction_values_train = sess.run(prediction, feed_dict={X: train_features, y: train_labels})
@@ -180,5 +206,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "precision_test": round(precision_classSK,2),
             "recall_train": round(recall_train,2),
             "recall_test": round(recall_classSK,2),
-		}  
+            "execution_dir": logdir,
+            "execution_time": end - start
+		}
+    write_metrics_to_file(metrics)
     return metrics
