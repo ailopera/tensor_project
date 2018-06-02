@@ -104,9 +104,10 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
         training_op = optimizer.minimize(loss)
 
-    correct = tf.nn.in_top_k(logits, y, 1)
-    accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
-
+    with tf.name_scope("metrics"):
+        correct = tf.nn.in_top_k(logits, y, 1)
+        prediction=tf.argmax(logits,1)
+        accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -137,7 +138,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
             acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
             
-            acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
+            # Redimensionamos los datos de test
+            train_features = input_features.reshape((-1, n_steps, n_inputs))
+            acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: train_features, y: train_labels})
             acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
 
             summary_writer.add_summary(summary_train, epoch * n_iterations)        
@@ -154,8 +157,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             
          # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
-        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
-        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+        acc_final_train = sess.run(accuracy, feed_dict={X: train_features, y: train_labels, keep_prob: drop_rate})
+        prediction_values_train = sess.run(prediction, feed_dict={X: train_features, y: train_labels, keep_prob: drop_rate})
 
         acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
         prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
