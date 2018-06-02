@@ -8,7 +8,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_arquitectura_singleLayer"
+EXECUTION_TAG = "prueba_2"
 
 ### Funciones auxiliares
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
@@ -48,6 +48,7 @@ def convert_to_int_classes(targetList):
 
 
 ### Clasificador ###
+default_hyperparams = { "arquitecture": "simple", "config_tag": "default"  }
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
     date = datetime.utcnow().strftime("%Y%m%d")
@@ -57,8 +58,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     execution_date = time.strftime("%m-%d")
     root_logdir = "RNNLogs/" + execution_date + EXECUTION_TAG
     tag = "RNNClassifier"
-    config_tag = "Prueba"
-    #config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
+    #config_tag = "Prueba"
+    config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
     logdir = "{}/{}/run-{}-{}-{}/".format(root_logdir, subdir , tag, config_tag, hour)
 
@@ -67,7 +68,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     test_labels = convert_to_int_classes(test_targets)
 
     print(">> Input shape: ", input_features.shape)
-    arquitecture = "simple"
+    arquitecture = hyperparams.get("arquitecture", default_hyperparams["arquitecture"])
     n_steps = 2
     n_inputs = 300
     
@@ -157,11 +158,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             
          # Ejecutamos las metricas finales
         sess.run(tf.local_variables_initializer())
-        acc_final_train = sess.run(accuracy, feed_dict={X: train_features, y: train_labels, keep_prob: drop_rate})
-        prediction_values_train = sess.run(prediction, feed_dict={X: train_features, y: train_labels, keep_prob: drop_rate})
+        acc_final_train = sess.run(accuracy, feed_dict={X: train_features, y: train_labels})
+        prediction_values_train = sess.run(prediction, feed_dict={X: train_features, y: train_labels})
 
-        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
-        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
+        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels})
+        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels})
        
         # Calculamos precision, recall y confusion matrix utilizando sklearn
         precision_train = precision_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])

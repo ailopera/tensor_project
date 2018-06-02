@@ -120,7 +120,8 @@ iterations = [
 
 # Configuraciones del clasificador recurrente
 iterations = [ 
-  {"recurrrent": True}
+  #{"recurrrent": True, "architecture": "simple"},
+  {"recurrrent": True, "architecture": "multi"}
 ]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
