@@ -8,6 +8,8 @@ import csv
 import os
 import time
 
+EXECUTION_TAG = "_arquitectura_singleLayer"
+
 ### Funciones auxiliares
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
 def next_batch(batch_size, train_data, target_data):
