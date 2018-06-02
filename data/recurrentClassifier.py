@@ -109,8 +109,16 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
     n_iterations = round(train_samples / batch_size)
     print("> Numero de instancias de entrenamiento: ", train_samples)
     
+    #Definimos los escalares que visualizaremos
+    tf.summary.scalar('Accuracy', accuracy)
+    tf.summary.scalar('Loss', final_loss)
+    merged_summary_op = tf.summary.merge_all()
+    
     with tf.Session() as sess:
         init.run()
+        # Creamos el writter
+        summary_writer = tf.summary.FileWriter(logdir + '_train', tf.get_default_graph())
+        summary_writer_test = tf.summary.FileWriter(logdir + '_test', tf.get_default_graph())
         for epoch in range(n_epochs):
             for iteration in range(n_iterations):
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
@@ -118,8 +126,18 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
                 sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
             acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
+            
+            acc_train, summary_train = sess.run([accuracy, merged_summary_op], feed_dict={X: input_features, y: train_labels})
+            acc_test, summary_test = sess.run([accuracy, merged_summary_op], feed_dict={X: test_features, y: test_labels})
+
+            summary_writer.add_summary(summary_train, epoch * n_iterations)        
+            summary_writer.flush() 
+            summary_writer_test.add_summary(summary_test, epoch * n_iterations)        
+            summary_writer_test.flush() 
+
             print(epoch, "Train accuracy:", acc_train, "Test accuracy:", acc_test)
 
-            # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
-            acc_train_summary = tf.summary.scalar('Train Accuracy', acc_train)
-            acc_test_summary = tf.summary.scalar('Test Accuracy', acc_test)
+            # Guardamos la version actual del modelo entrenado
+            save_path = saver.save(sess, "./my_model_final.ckpt")
+            # Imprimimos el grafo para verlo desde tensorflow
+            file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
