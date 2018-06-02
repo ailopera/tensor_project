@@ -1,4 +1,12 @@
 import tensorflow as tf
+import numpy as np
+from datetime import datetime
+import random
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
+
+import csv
+import os
+import time
 
 ### Funciones auxiliares
 # Toma N muestras de forma aleatoria a partir de los datos de entrada 
@@ -40,10 +48,17 @@ def convert_to_int_classes(targetList):
 ### Clasificador ###
 def modelClassifier(input_features, target, test_features, test_targets, configuration=None):
     tf.reset_default_graph() 
-    now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    root_logdir = "logs"
-    tag = "tensorClassifierWithDense"
-    logdir = "{}/run-{}-{}/".format(root_logdir,tag, now)
+    date = datetime.utcnow().strftime("%Y%m%d")
+    hour = datetime.utcnow().strftime("%H%M%S")
+    start = time.time()
+    # root_logdir = "testLogs"
+    execution_date = time.strftime("%m-%d")
+    root_logdir = "RNNLogs/" + execution_date + EXECUTION_TAG
+    tag = "RNNClassifier"
+    config_tag = "Prueba"
+    #config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
+    subdir = date
+    logdir = "{}/{}/run-{}-{}-{}/".format(root_logdir, subdir , tag, config_tag, hour)
 
     # Convertimos a enteros las clases
     train_labels = convert_to_int_classes(target)
@@ -51,11 +66,15 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
 
 
     print(">> Input shape: ", input_features.shape)
-    n_steps = input_features.shape[0]
-    n_inputs = input_features.shape[1]
+    n_steps = 2
+    n_inputs = 300
+    
     n_neurons = 150
     n_outputs = 4
 
+    # Redimensionamos los datos de test
+    test_features = test_features.reshape((-1, n_steps, n_inputs))
+    
     X = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
     y = tf.placeholder(tf.int32, [None])
 
@@ -80,18 +99,23 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
-    n_epochs = 100
+    n_epochs = 20
     batch_size = 150
-
+    
+    train_samples = input_features.shape[0] # Numero de ejemplos
+    
+    n_iterations = round(train_samples / batch_size)
+    print("> Numero de instancias de entrenamiento: ", train_samples)
+    
     with tf.Session() as sess:
         init.run()
         for epoch in range(n_epochs):
-            for iteration in range(mnist.train.num_examples // batch_size):
+            for iteration in range(n_iterations):
                 X_batch, y_batch = next_batch(batch_size, input_features, train_labels)
                 X_batch = X_batch.reshape((-1, n_steps, n_inputs))
                 sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
             acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
-            acc_test = accuracy.eval(feed_dict={X: X_test, y: y_test})
+            acc_test = accuracy.eval(feed_dict={X: test_features, y: test_labels})
             print(epoch, "Train accuracy:", acc_train, "Test accuracy:", acc_test)
 
             # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard

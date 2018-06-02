@@ -202,8 +202,11 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     start = time.time()
     classification_results = {}
     if model_executed == 'MLP':
-        # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+        #Modelo basado en red neuronal recurrente
+        classification_results = recurrentClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+    
+        # Modelo basado en un MultiLayer Perceptron (Version parametrizada y sin parametrizar)
+        #classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
         #classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
     elif model_executed == 'RF':
         # Modelo basado en un randomForest sencillo
