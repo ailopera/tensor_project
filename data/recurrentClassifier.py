@@ -95,8 +95,6 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             outputs, states = tf.nn.dynamic_rnn(multi_layer_cell, X, dtype=tf.float32)
 
 
-
-
     with tf.name_scope("loss"):
         xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
         loss = tf.reduce_mean(xentropy)
@@ -154,6 +152,14 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             # Imprimimos el grafo para verlo desde tensorflow
             file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
             
+         # Ejecutamos las metricas finales
+        sess.run(tf.local_variables_initializer())
+        acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+        prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
+
+        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
+        prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
+       
         # Calculamos precision, recall y confusion matrix utilizando sklearn
         precision_train = precision_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])
         recall_train = recall_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])
