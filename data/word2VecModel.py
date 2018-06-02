@@ -78,7 +78,7 @@ def news_to_wordlist(news, remove_stopwords=False,clean_text=True):
 
 #Function to split a news piece int parsed sentences. Returns a 
 # list of sentences, where each sentence is a list of words
-def news_to_sentences(news, tokenizer, remove_stopwords=False):
+def news_to_sentences(news, tokenizer=tokenizer, remove_stopwords=False):
     # 1. Use the NLTK tokenizer to split the paragraph into sentences
     raw_sentences = tokenizer.tokenize(news.strip())
 
