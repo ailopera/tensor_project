@@ -111,7 +111,7 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
     
     #Definimos los escalares que visualizaremos
     tf.summary.scalar('Accuracy', accuracy)
-    tf.summary.scalar('Loss', final_loss)
+    tf.summary.scalar('Loss', loss)
     merged_summary_op = tf.summary.merge_all()
     
     with tf.Session() as sess:
@@ -141,3 +141,22 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
             save_path = saver.save(sess, "./my_model_final.ckpt")
             # Imprimimos el grafo para verlo desde tensorflow
             file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+            
+        # Calculamos precision, recall y confusion matrix utilizando sklearn
+        precision_train = precision_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])
+        recall_train = recall_score(train_labels, prediction_values_train, average="weighted", labels=[0,1,2,3])
+        
+        confusion_matrix_class = confusion_matrix(test_labels, prediction_values,labels=[0,1,2,3])
+        precision_classSK = precision_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+        recall_classSK = recall_score(test_labels, prediction_values, average="weighted", labels=[0,1,2,3])
+    
+    metrics = {
+            "train_accuracy": round(acc_final_train,2),
+            "test_accuracy": round(acc_final_test,2),
+            "confusion_matrix": confusion_matrix_class,
+            "precision_train":round(precision_train,2),
+            "precision_test": round(precision_classSK,2),
+            "recall_train": round(recall_train,2),
+            "recall_test": round(recall_classSK,2),
+		}  
+   return metrics
