@@ -48,7 +48,7 @@ def convert_to_int_classes(targetList):
 
 
 ### Clasificador ###
-def modelClassifier(input_features, target, test_features, test_targets, configuration=None):
+def modelClassifier(input_features, target, test_features, test_targets, hyperparams=None):
     tf.reset_default_graph() 
     date = datetime.utcnow().strftime("%Y%m%d")
     hour = datetime.utcnow().strftime("%H%M%S")
@@ -66,8 +66,8 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
     train_labels = convert_to_int_classes(target)
     test_labels = convert_to_int_classes(test_targets)
 
-
     print(">> Input shape: ", input_features.shape)
+    arquitecture = "simple"
     n_steps = 2
     n_inputs = 300
     
@@ -80,10 +80,22 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
     X = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
     y = tf.placeholder(tf.int32, [None])
 
-    with tf.name_scope("rnn"):
-        basic_cell = tf.contrib.rnn.BasicRNNCell(num_units=n_neurons)
-        outputs, states = tf.nn.dynamic_rnn(basic_cell, X, dtype=tf.float32)
-        logits = tf.layers.dense(states, n_outputs)
+    if arquitecture == "simple":
+        with tf.name_scope("rnn"):
+            basic_cell = tf.contrib.rnn.BasicRNNCell(num_units=n_neurons)
+            outputs, states = tf.nn.dynamic_rnn(basic_cell, X, dtype=tf.float32)
+            logits = tf.layers.dense(states, n_outputs)
+    elif arquitecture == "multi":
+        n_layers = 3
+        with tf.name_scope("rnn"):
+            layers = [tf.contrib.rnn.BasicRNNCell(num_units = n_neurons)
+                    for layer in range(n_layers)]
+            
+            multi_layer_cell = tf.contrib.rnn.MultiRNNCell(layers)
+            outputs, states = tf.nn.dynamic_rnn(multi_layer_cell, X, dtype=tf.float32)
+
+
+
 
     with tf.name_scope("loss"):
         xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
@@ -113,7 +125,7 @@ def modelClassifier(input_features, target, test_features, test_targets, configu
     tf.summary.scalar('Accuracy', accuracy)
     tf.summary.scalar('Loss', final_loss)
     merged_summary_op = tf.summary.merge_all()
-    
+
     with tf.Session() as sess:
         init.run()
         # Creamos el writter
