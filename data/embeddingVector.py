@@ -148,6 +148,16 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     #writeTextStats(clean_train_headlines, "headline")
     #writeTextStats(clean_train_articleBodies)
     
+    # Limitamos el tama�o de los cuerpos de noticia
+    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_headlines)	
+    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_articleBodies)
+    
+    print("clean train headlines example: ", clean_train_headlines[0])
+    print("------------------------------------------------------------")
+    print("clean train headlines example: ", clean_train_articleBodies[0])
+    print("------------------------------------------------------------")
+    
+
     # Obtenemos los vectores de caracteristicas de cada frase, sustituyendo cada termino por su representacion de embedding
     print(">> Getting feature vectors for train headlines...")
     start = time.time()
@@ -158,16 +168,8 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     trainFeatureVecsTime = end - start
     print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
     
-    # Limitamos el tama�o de los cuerpos de noticia
-    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_headlines)	
-    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_articleBodies)
-    
-    print("clean train headlines example: ", clean_train_headlines[0])
-    print("------------------------------------------------------------")
-    print("clean train headlines example: ", clean_train_articleBodies[0])
-    print("------------------------------------------------------------")
-    
-    
+    print(">> trainDataVecsHeadline shape: ", trainDataVecsHeadline.shape)
+    print(">> trainDataVecsHeadline shape: ", trainDataVecsArticleBody.shape)
     # # Hacemos un append del vector de headline y el de la noticia (ponemos primero el titular)
     # trainDataInputs = []
     # for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
