@@ -156,7 +156,6 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     print("------------------------------------------------------------")
     print("clean train headlines example: ", clean_train_articleBodies[0])
     print("------------------------------------------------------------")
-    
 
     # Obtenemos los vectores de caracteristicas de cada frase, sustituyendo cada termino por su representacion de embedding
     print(">> Getting feature vectors for train headlines...")
