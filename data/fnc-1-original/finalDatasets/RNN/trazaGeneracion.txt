@@ -1,0 +1,5 @@
+Noticias distintas para el entrenamiento y validación:  2026
+>> Noticias distintas para el testeo del modelo:  506
+>> Fichero de entrada: RNN/total_data_aggregated.csv
+>> Fichero de train generado: RNN/train_partition_split.csv
+>> Fichero de test generado: RNN/test_partition_split.csv
