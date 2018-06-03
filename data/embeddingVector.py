@@ -91,11 +91,7 @@ def getFeatureVecs(news, model, num_features):
         
         newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
         counter = counter + 1
-
-    # Version paralela del computo de vectores de caracteristicas
-    # num_cores = multiprocessing.cpu_count()
-    # newsFeatureVecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeFeatureVec)(report, model, num_features, index2word_set) for report in news)
-
+        
     return newsFeatureVecs	
 
 

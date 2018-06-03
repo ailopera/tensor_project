@@ -31,7 +31,7 @@ def lemmatizeWord(posTag):
 # Body -> textTag: "articleBody"
 #          outputFilePath:"./fnc-1-original/cleanDatasets/train_bodies_clean.csv"
 
-def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cleanStopWords = True):
+def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cleanStopWords = True, maintainDots=False):
     # Read the dataset
     #INPUT_FILE = "train_bodies_example.csv"
     # INPUT_FILE = "train_bodies.csv"
@@ -57,8 +57,11 @@ def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cle
         for index,line in trainFile.iterrows():        
             # 1. Change all numbers by "NUM" tag and remove all puntuation symbols by a single space
             body = re.sub("[0-9]+", "NUM", line[textTag])
-            body = re.sub("[^a-zA-Z]", " ", body)
-            
+            if maintainDots:
+                body = re.sub("[^a-zA-Z\.]", " ", body)
+            else: 
+                body = re.sub("[^a-zA-Z]", " ", body)
+                
             # 2. Convert to lower case all characters in body
             body = body.lower()
             

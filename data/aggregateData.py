@@ -19,8 +19,13 @@ if __name__ == "__main__":
         print("> Wrong name supplied. Must be competition, train or test")
         exit()
 
+    # Primera parte del estudio: experimentacion con modelos de representacion y MLP
+    # inputPath = "./fnc-1-original/"
+    # outputPath = inputPath + "/aggregatedDatasets/"
+
+    # Segunda parte del estudio: experimentacion con flujos de texto y RNN
     inputPath = "./fnc-1-original/"
-    outputPath = inputPath + "/aggregatedDatasets/"
+    outputPath = inputPath + "/aggregatedDatasets/RNN"
 
     # Cargamos ficheros de stances y bodies 
     stancesPrefixPath = filePath.replace('$file','stances')

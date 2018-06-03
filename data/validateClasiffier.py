@@ -120,7 +120,7 @@ iterations = [
 
 # Configuraciones del clasificador recurrente
 iterations = [ 
-  {"recurrrent": True, "architecture": "simple", "config_tag": "RNN_simple"},
+#   {"recurrrent": True, "architecture": "simple", "config_tag": "RNN_simple"},
   {"recurrrent": True, "architecture": "multi", "config_tag": "RNN multicapa"}
 ]
 
@@ -174,23 +174,23 @@ trainValidationTime = end - start
 start = time.time()
 # Execute test with test data
 # Execute the same iterations with final validation data
-print("---------------------- TEST ------------------------------")
-print(">> Executing different model configurations over test data")
-print(">>> LEN train data: ", train_data.shape[0])
-print(">>> LEN test data: ", test_df.shape[0])
-for iteration in iterations:
+# print("---------------------- TEST ------------------------------")
+# print(">> Executing different model configurations over test data")
+# print(">>> LEN train data: ", train_data.shape[0])
+# print(">>> LEN test data: ", test_df.shape[0])
+# for iteration in iterations:
         
-        print(">>> Executing Configuration: ", iteration)
-        # Execute model with the configuration specified 
-        if common_params['representation'] == 'vectorAverage':
-        #   executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
-            executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
-        # elif common_params['representation'] == 'BOW':
-        #   generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
-        print("------------------------------------------------------")
+#         print(">>> Executing Configuration: ", iteration)
+#         # Execute model with the configuration specified 
+#         if common_params['representation'] == 'vectorAverage':
+#         #   executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+#             executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+#         # elif common_params['representation'] == 'BOW':
+#         #   generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
+#         print("------------------------------------------------------")
 
-end = time.time()
-testExecutionTime = end - start
+# end = time.time()
+# testExecutionTime = end - start
 
 print(">> TRAIN-VALIDATION EXECUTION TIME: ", trainValidationTime)
 print(">> TEST EXECUTION TIME: ", testExecutionTime)
