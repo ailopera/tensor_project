@@ -102,20 +102,22 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
 
     if arquitecture == "simple":
         with tf.name_scope("rnn"):
-            basic_cell = tf.contrib.rnn.BasicRNNCell(num_units=n_neurons)
-            # lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons)
-            outputs, states = tf.nn.dynamic_rnn(basic_cell, X, dtype=tf.float32)
-            logits = tf.layers.dense(states, n_outputs)
+            #basic_cell = tf.contrib.rnn.BasicRNNCell(num_units=n_neurons)
+            lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons)
+            outputs, states = tf.nn.dynamic_rnn(lstm_cell, X, dtype=tf.float32)
+            top_layer_h_state = states[-1]
+            logits = tf.layers.dense(top_layer_h_state, n_outputs)
     elif arquitecture == "multi":
         n_layers = 3
         with tf.name_scope("rnn"):
-            layers = [tf.contrib.rnn.BasicRNNCell(num_units = n_neurons)
-                    for layer in range(n_layers)]
-            #layers = [tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons)
+            #layers = [tf.contrib.rnn.BasicRNNCell(num_units = n_neurons)
             #        for layer in range(n_layers)]
+            layers = [tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons)
+                    for layer in range(n_layers)]
             multi_layer_cell = tf.contrib.rnn.MultiRNNCell(layers)
             outputs, states = tf.nn.dynamic_rnn(multi_layer_cell, X, dtype=tf.float32)
-
+            top_layer_h_state = states[-1]
+            logits = tf.layers.dense(top_layer_h_state, n_outputs)
 
     with tf.name_scope("loss"):
         xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
