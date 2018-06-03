@@ -51,20 +51,20 @@ def writeTextStats(cleaned_texts, label="articleBody"):
                     "MaxSentenceLength": max_sentence_len }
                 writer.writerow(row)
 
-def makeFeatureVec(words, model, num_features, index2word_set, log=False):
+def makeFeatureVec(sentences_list, model, num_features, index2word_set, log=False):
     #Function to average all of the word vectors in a given paragraph
     #Pre-initialize an empty numpy array (for speed)
     # featureVec = np.zeros((num_features,), dtype="float32")
     featureVec = []
     nwords = 0.
-    
-    # Obtenemos una lista de listas que representan todas las frases texto
-    sentences_list = word2VecModel.news_to_sentences(words)
+
     #Loop over each word in the review and, if it is in the model's vocabulary, 
     # add its feature vector to the total
     feature_sentence = []
     for sentence in sentences_list:
-        for word in words:
+        # Limitamos el tamano maximo de frase
+        sentence = sentence[:MAX_WORDS]
+        for word in sentence:
             if word in index2word_set:
                 nwords = nwords + 1
                 feature_sentence = np.append(feature_sentence, model[word])
@@ -98,13 +98,17 @@ def getFeatureVecs(news, model, num_features):
     return newsFeatureVecs	
 
 
-
-def resizeText(text):
-    text = text.resize((MAX_SENTENCES,MAX_WORDS))
-    return text
+# Hace un pad a 0's del vector de embedding generado
+def padText(text_embedding):
+    text_embedding = text_embedding.resize((MAX_SENTENCES,MAX_WORDS))
+    zero_sentence = np.zeros((300), dtype="float32")
+    for sentence_embedding in text_embedding:
+        sentence_embedding = np.pad(sentence_embedding, MAX_WORDS, 'constant', constant_values = 0.0)
+    text_embedding = np.pad(text_embedding, MAX_SENTENCES, 'constant', constant_values = zero_sentence)
+    return text_embedding
 
 def makeSentenceList(text):
-    wordList = word2VecModel.news_to_sentences(text, tokenizer=None, remove_stopwords=False, use_tokenizer=False)
+    wordList = word2VecModel.news_to_sentences(text, tokenizer=None, remove_stopwords=False, use_tokenizer=False, max_sentence_size=MAX_SENTENCES)
     return wordList
 
 def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=None, testData=None, validation=False, smote="", classifier_config=None):
@@ -148,9 +152,6 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     #writeTextStats(clean_train_headlines, "headline")
     #writeTextStats(clean_train_articleBodies)
     
-    # Limitamos el tama�o de los cuerpos de noticia
-    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_headlines)	
-    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_articleBodies)
     
     print("clean train headlines example: ", clean_train_headlines[0])
     print("------------------------------------------------------------")
@@ -169,6 +170,16 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     
     print(">> trainDataVecsHeadline shape: ", trainDataVecsHeadline.shape)
     print(">> trainDataVecsHeadline shape: ", trainDataVecsArticleBody.shape)
+    
+    print(">> Padding training embeddings...")
+    start = time.time()
+    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(padText)(text) for text in trainData['Headline'])	
+    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(padText)(text) for text in trainData['ArticleBody'])
+    end = time.time()
+    
+    trainDataPaddingTime = end - start
+    print("> Time spent on padding training embeddings: ", trainDataPaddingTime)
+
     # # Hacemos un append del vector de headline y el de la noticia (ponemos primero el titular)
     # trainDataInputs = []
     # for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
