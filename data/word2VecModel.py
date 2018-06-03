@@ -78,13 +78,13 @@ def news_to_wordlist(news, remove_stopwords=False,clean_text=True):
 
 #Function to split a news piece int parsed sentences. Returns a 
 # list of sentences, where each sentence is a list of words
-def news_to_sentences(news, tokenizer=tokenizer, remove_stopwords=False, use_tokenizer=True):
+def news_to_sentences(news, tokenizer=tokenizer, remove_stopwords=False, use_tokenizer=True,max_sentence_size=150):
     if use_tokenizer:
         # 1. Use the NLTK tokenizer to split the paragraph into sentences
         raw_sentences = tokenizer.tokenize(news.strip())
     else:
         #raw_sentences = re.split( "\.", news ) # Es mas lento que el metodo nativo de str
-        raw_sentences = news.split('.')
+        raw_sentences = news.split('.')[:max_sentence_size]
 
     #Loop over each sentence
     sentences = []
