@@ -163,7 +163,7 @@ for classifier_config in iterations:
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
         #   executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
-        executeVectorFeaturing(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+            executeVectorFeaturing(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")
@@ -184,7 +184,7 @@ for iteration in iterations:
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
         #   executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
-          executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+            executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")

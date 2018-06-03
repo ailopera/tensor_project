@@ -35,7 +35,7 @@ LOG_ENABLED = False
 
 def writeTextStats(cleaned_texts, label="articleBody"):
     output_file = "stats/trainDataStats_" + label +".csv"
-    with open(output_file, 'a') s csv_file:
+    with open(output_file, 'a') as csv_file:
         header = ["SentenceCount", "MaxSentenceLength"]
         writer = csv.DictWriter(csv_file, fieldnames = header)
         newFile = os.stat(output_file).st_size == 0 
@@ -44,7 +44,7 @@ def writeTextStats(cleaned_texts, label="articleBody"):
             writer.writeheader()
             for text in cleaned_texts:
                 max_sentence_len = len(max(text, key=len)) 
-                row = { "SentenceCount": len(text)
+                row = { "SentenceCount": len(text),
                     "MaxSentenceLength": max_sentence_len }
                 writer.writerow(row)
 
@@ -104,7 +104,7 @@ def makeWordList(text):
     wordList = word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
     return wordList
 
-def executeVectorFeaturing(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False, smote="", classifier_config=None):
+def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=None, testData=None, validation=False, smote="", classifier_config=None):
     # basePath = "./fnc-1-original/aggregatedDatasets/"
     num_features = 300
     # executionDesc = "vector_Emmbeddings"
