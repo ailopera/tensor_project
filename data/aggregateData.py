@@ -30,24 +30,23 @@ if __name__ == "__main__":
     # Cargamos ficheros de stances y bodies 
     stancesPrefixPath = filePath.replace('$file','stances')
     bodiesPrefixPath = filePath.replace('$file','bodies')
+    
+    inputBodyFile = inputPath + bodiesPrefixPath + ".csv"
+    inputStanceFile = inputPath + stancesPrefixPath + ".csv"
 
+    outputBodyFile = outputPath + bodiesPrefixPath + "_clean.csv"
+    outputStanceFile = outputPath + stancesPrefixPath + "_clean.csv"
+    aggregatedFile = outputPath + baseFilename + "_data_aggregated.csv"
+    
     #Limpiamos fichero de bodies y stances
-    # 1. Datasets para la experimentacion de MLP
-    # inputBodyFile = inputPath + bodiesPrefixPath + ".csv"
-    # inputStanceFile = inputPath + stancesPrefixPath + ".csv"
+    # 1. Generacion de datasets para la experimentacion de MLP
     # print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
     # cleanData.cleanTextData(False,inputBodyFile,outputBodyFile,False)
     # print(">> Limpiando fichero de bodies ", inputStanceFile, " y generando fichero ", outputStanceFile)
     # cleanData.cleanTextData(True,inputStanceFile,outputStanceFile,False)
 
 
-    # 2. Datasets para la experimentacion de RNN
-    inputBodyFile = inputPath + ""+ bodiesPrefixPath + ".csv"
-    inputStanceFile = inputPath + "/RNN/" + stancesPrefixPath + ".csv"
-
-    outputBodyFile = outputPath + bodiesPrefixPath + "_clean.csv"
-    outputStanceFile = outputPath + "/RNN/" + stancesPrefixPath + "_clean.csv"
-    
+    # 2. Generacion de datasets para la experimentacion de RNN
     print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
     cleanData.cleanTextData(False,inputBodyFile,outputBodyFile, printLogs=False, maintainDots = True)
     print(">> Limpiando fichero de bodies ", inputStanceFile, " y generando fichero ", outputStanceFile)
@@ -58,10 +57,6 @@ if __name__ == "__main__":
     cleanedStanceData = pd.read_csv(outputStanceFile, header=0,delimiter=",", quoting=1)
     cleanedBodyData = pd.read_csv(outputBodyFile, header=0,delimiter=",", quoting=1, index_col='Body ID')
 
-    # Creamos un indice para poder buscar en base a el mas adelante
-    #cleanedBodyData.set_index("Body ID")
-
-    aggregatedFile = outputPath + baseFilename + "_data_aggregated.csv"
     
     # bodyFileDict = loadBodyDict(cleanedBodyData)
     print(">> Escribiendo resultados en ", aggregatedFile)
