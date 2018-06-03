@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     # Segunda parte del estudio: experimentacion con flujos de texto y RNN
     inputPath = "./fnc-1-original/"
-    outputPath = inputPath + "/aggregatedDatasets/RNN"
+    outputPath = inputPath + "/aggregatedDatasets/RNN/"
 
     # Cargamos ficheros de stances y bodies 
     stancesPrefixPath = filePath.replace('$file','stances')
