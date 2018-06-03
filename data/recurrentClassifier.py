@@ -52,7 +52,7 @@ def next_batch(batch_size, train_data, target_data):
 
 
 def convert_to_int_classes(targetList):
-    map = {
+    mapping = {
         "agree": 0,
         "disagree": 1,
         "discuss": 2,
@@ -60,7 +60,7 @@ def convert_to_int_classes(targetList):
     }
     int_classes = []
     for elem in targetList:
-        int_classes.append(map[elem])
+        int_classes.append(mapping[elem])
         
     return np.array(int_classes)
 

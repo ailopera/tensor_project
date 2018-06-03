@@ -33,6 +33,20 @@ LOG_ENABLED = False
 
 # Aplicamos SMOTE para contrarrestar el desbalanceo de muestras
 
+def writeTextStats(cleaned_texts, label="articleBody"):
+    output_file = "stats/trainDataStats_" + label +".csv"
+    with open(output_file, 'a') s csv_file:
+        header = ["SentenceCount", "MaxSentenceLength"]
+        writer = csv.DictWriter(csv_file, fieldnames = header)
+        newFile = os.stat(output_file).st_size == 0 
+        if newFile:
+            print("Writting Training stats for ", label)
+            writer.writeheader()
+            for text in cleaned_texts:
+                max_sentence_len = len(max(text, key=len)) 
+                row = { "SentenceCount": len(text)
+                    "MaxSentenceLength": max_sentence_len }
+                writer.writerow(row)
 
 def makeFeatureVec(words, model, num_features, index2word_set, log=False):
     #Function to average all of the word vectors in a given paragraph
@@ -128,90 +142,91 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     trainDataFormattingTime = end - start
     print("> Time spent on formatting training data: ", trainDataFormattingTime)
     
-    print(">> Getting feature vectors for train headlines...")
-    start = time.time()
-    trainDataVecsHeadline = getFeatureVecs(clean_train_headlines, model, num_features)
-    print(">> Getting feature vectors for train articleBodies...")
-    trainDataVecsArticleBody = getFeatureVecs(clean_train_articleBodies, model, num_features)
-    end = time.time()
-    trainFeatureVecsTime = end - start
-    print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
+    # Escribimos en un csv la longitud de cada frase y cuerpo de noticia
+    writeTextStats(clean_train_headlines, "headline")
+    writeTextStats(clean_train_articleBodies)
+
+    # print(">> Getting feature vectors for train headlines...")
+    # start = time.time()
+    # trainDataVecsHeadline = getFeatureVecs(clean_train_headlines, model, num_features)
+    # print(">> Getting feature vectors for train articleBodies...")
+    # trainDataVecsArticleBody = getFeatureVecs(clean_train_articleBodies, model, num_features)
+    # end = time.time()
+    # trainFeatureVecsTime = end - start
+    # print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
     
-    # Hacemos un append del vector de headline y el de la noticia
-    trainDataInputs = []
-    for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
-        trainSample = np.append(sample[0],sample[1])
-        trainDataInputs.append(trainSample)
+    # # Hacemos un append del vector de headline y el de la noticia
+    # trainDataInputs = []
+    # for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
+    #     trainSample = np.append(sample[0],sample[1])
+    #     trainDataInputs.append(trainSample)
     
-    # Hacemos lo mismo con los datos de test
-    print(">> Generating word2vec input model and applying vector average for test data...")
-    # testDataPath = basePath + "test_data_aggregated_mini.csv"
+    # # Hacemos lo mismo con los datos de test
+    # print(">> Generating word2vec input model and applying embedding represenntation for test data...")
+    # # testDataPath = basePath + "test_data_aggregated_mini.csv"
 
-    clean_test_articleBodies = []
-    clean_test_headlines = []
-    testDataVecs = {}
+    # clean_test_articleBodies = []
+    # clean_test_headlines = []
+    # testDataVecs = {}
 
-    start = time.time()
-    clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['Headline'])
-    clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
-    end = time.time()
-    testDataFormattingTime = end - start
-    print(">> Time spent on formatting testing data: ", testDataFormattingTime)
+    # start = time.time()
+    # clean_test_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['Headline'])
+    # clean_test_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in testData['ArticleBody'])
+    # end = time.time()
+    # testDataFormattingTime = end - start
+    # print(">> Time spent on formatting testing data: ", testDataFormattingTime)
 
 
-    print(">> Getting feature vectors for test articleBodies...")
-    start = time.time()
-    testDataVecsArticleBody = getFeatureVecs(clean_test_articleBodies, model, num_features)
-    print(">> Getting feature vectors for test headlines...")
-    testDataVecsHeadline = getFeatureVecs(clean_test_headlines, model, num_features)
-    end = time.time()
-    testDataFeatureVecsTime = end - start
-    print(">> Time spent on getting feature vectors for training data...", testDataFeatureVecsTime)
+    # print(">> Getting feature vectors for test articleBodies...")
+    # start = time.time()
+    # testDataVecsArticleBody = getFeatureVecs(clean_test_articleBodies, model, num_features)
+    # print(">> Getting feature vectors for test headlines...")
+    # testDataVecsHeadline = getFeatureVecs(clean_test_headlines, model, num_features)
+    # end = time.time()
+    # testDataFeatureVecsTime = end - start
+    # print(">> Time spent on getting feature vectors for training data...", testDataFeatureVecsTime)
     
-    # Creamos un vector de 1x600 que contiene el titular y el cuerpo de noticia asociado, para alimentar el modelo de Machine Learning
-    testDataInputs = []
-    for sample in zip(testDataVecsHeadline, testDataVecsArticleBody):
-        testSample = np.append(sample[0],sample[1])
-        testDataInputs.append(testSample)
+    # # Creamos un vector de 1x600 que contiene el titular y el cuerpo de noticia asociado, para alimentar el modelo de Machine Learning
+    # testDataInputs = []
+    # for sample in zip(testDataVecsHeadline, testDataVecsArticleBody):
+    #     testSample = np.append(sample[0],sample[1])
+    #     testDataInputs.append(testSample)
 
-    print("> Tamaño de los datos de entrada (entrenamiento): ", trainData.shape)
-    print("> Tamaño de los datos de entrada (test): ", testData.shape)
+    # print("> Tamaño de los datos de entrada (entrenamiento): ", trainData.shape)
+    # print("> Tamaño de los datos de entrada (test): ", testData.shape)
+
     
 
-    #Inferimos las muestras erroneas
-    trainDataInputs = Imputer().fit_transform(trainDataInputs)
-    testDataInputs = Imputer().fit_transform(testDataInputs)
-    #Aplicamos SMOTE si procede
-    if not smote == "":
-        print(">> Applying SMOTE")
-        trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
-        #testDataInputs, test_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(testDataInputs, testData['Stance'])
-    else:
-        train_labels = trainData['Stance']
+    # #Inferimos las muestras erroneas
+    # trainDataInputs = Imputer().fit_transform(trainDataInputs)
+    # testDataInputs = Imputer().fit_transform(testDataInputs)
+    # #Aplicamos SMOTE si procede
+    # if not smote == "":
+    #     print(">> Applying SMOTE")
+    #     trainDataInputs, train_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(trainDataInputs, trainData['Stance'])
+    #     #testDataInputs, test_labels = SMOTE(ratio=smote,random_state=None, n_jobs=4).fit_sample(testDataInputs, testData['Stance'])
+    # else:
+    #     train_labels = trainData['Stance']
 
     
     # Llamamos al clasificador con los datos compuestos
-    start = time.time()
-    classification_results = {}
-    if model_executed == 'MLP':
-        #Modelo basado en red neuronal recurrente
-        classification_results = recurrentClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
-    
-        # Modelo basado en un MultiLayer Perceptron (Version parametrizada y sin parametrizar)
-        #classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
-        #classification_results = textModelClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
-    elif model_executed == 'RF':
-        # Modelo basado en un randomForest sencillo
-        classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
-    else:
-        print(">>> ERROR: No se ha ejecutado ningún modelo")
+    # start = time.time()
+    # classification_results = {}
+    # if model_executed == 'MLP':
+    #     #Modelo basado en red neuronal recurrente
+    #     classification_results = recurrentClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+    # elif model_executed == 'RF':
+    #     # Modelo basado en un randomForest sencillo
+    #     classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
+    # else:
+    #     print(">>> ERROR: No se ha ejecutado ningún modelo")
 
-    end = time.time()
-    modelExecutionTime = end - start
-    execution_end = end
-    totalExecutionTime = execution_end - execution_start
-    print("> Time spent on fiting and predicting: ", modelExecutionTime)
-    print(">> Metrics: ", classification_results)
+    # end = time.time()
+    # modelExecutionTime = end - start
+    # execution_end = end
+    # totalExecutionTime = execution_end - execution_start
+    # print("> Time spent on fiting and predicting: ", modelExecutionTime)
+    # print(">> Metrics: ", classification_results)
 
     
     

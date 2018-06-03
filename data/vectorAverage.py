@@ -19,7 +19,7 @@ from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 LOG_ENABLED = False
 
-#  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la review
+#  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la noticia/titular
 # (si forman parte del vocabulario del modelo)
 def makeFeatureVec(words, model, num_features, index2word_set, log=False):
     #Function to average all of the word vectors in a given paragraph
