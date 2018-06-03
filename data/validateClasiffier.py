@@ -137,6 +137,12 @@ testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 # testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/competition_data_aggregated.csv"
 
+# Particionado para la experimentacion con RNN
+# Segundo particionado
+trainDataPath = "./fnc-1-original/finalDatasets/RNN/train_partition_split.csv"
+testDataPath = "./fnc-1-original/finalDatasets/RNN/test_partition_split.csv"
+
+
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 
