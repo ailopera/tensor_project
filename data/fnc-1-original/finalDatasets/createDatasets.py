@@ -4,11 +4,17 @@ import pandas as pd
 import math
 
 # Pequeño script que se encarga de realizar las particiones de datos que se van a utilizar en este trabajo
+# NOTA: Este script comprueba que se utilicen cuerpos de noticia unicos en cada particion
 
 inputPath = "total_data_aggregated.csv"
 # header = "Headline,ArticleBody,Stance,BodyIDS"
-outputTrainPath = "train_partition_split.csv"
-outputTestPath = "test_partition_split.csv"
+# Primera parte de la experimentacion: BOW,vectorAverage y MLP
+# outputTrainPath = "train_partition_split.csv"
+# outputTestPath = "test_partition_split.csv"
+
+# Segunda parte de la experimentacion: flujos de texto y RNN
+outputTrainPath = "RNN/train_partition_split.csv"
+outputTestPath = "RNN/test_partition_split.csv"
 
 bodyIds = list(range(2532))
 #print(bodyIds)
