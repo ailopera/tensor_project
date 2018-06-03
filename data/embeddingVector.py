@@ -80,8 +80,9 @@ def getFeatureVecs(news, model, num_features):
     counter = 0
 
     # Reservamos espacio para un array de dos dimensiones, por velocidad
-    newsFeatureVecs = np.zeros((len(news), num_features), dtype="float32")
-
+    # newsFeatureVecs = np.zeros((len(news), num_features), dtype="float32")
+    
+    newsFeatureVecs = []
     #Indexwords is a list that contains the names of the words in the model's vocabulary. Convert it to a set, for speed
     index2word_set = set(model.wv.index2word)
     
