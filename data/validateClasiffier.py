@@ -129,16 +129,15 @@ iterations = [
 #trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
 # Segundo particionado
-trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+#trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 
 # Tercer particionado (Solo cambia la particion de test)
 # trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
 # testDataPath = "./fnc-1-original/finalDatasets/test_partition_3.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/competition_data_aggregated.csv"
 
-# Particionado para la experimentacion con RNN
-# Segundo particionado
+# Particionado para la experimentacion con RNN (Dataset con simbolos de puntuacion)
 trainDataPath = "./fnc-1-original/finalDatasets/RNN/train_partition_split.csv"
 testDataPath = "./fnc-1-original/finalDatasets/RNN/test_partition_split.csv"
 
@@ -199,7 +198,7 @@ start = time.time()
 # testExecutionTime = end - start
 
 print(">> TRAIN-VALIDATION EXECUTION TIME: ", trainValidationTime)
-print(">> TEST EXECUTION TIME: ", testExecutionTime)
+#print(">> TEST EXECUTION TIME: ", testExecutionTime)
 
 # Export data to a csv file
 csvOutputDir = "./executionStats/"
