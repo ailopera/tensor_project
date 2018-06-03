@@ -91,13 +91,13 @@ def getFeatureVecs(news, model, num_features):
         
         newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
         counter = counter + 1
-        
+
     return newsFeatureVecs	
 
 
 
-def makeWordList(text):
-    wordList = word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
+def makeSentenceList(text):
+    wordList = news_to_sentences(text, tokenizer=None, remove_stopwords=False, use_tokenizer=False)
     return wordList
 
 def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=None, testData=None, validation=False, smote="", classifier_config=None):
@@ -120,10 +120,7 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     print("> Tiempo empleado en cargar el modelo: ", loadModelTime)
     
 
-    # Generamos representaciones de vectores de medias
-    # En este caso si quitamos las stopwords, a diferencia a cuando creamos el modelo
-    # Las stopwords pueden introducir ruido en el calculo de los vectores de medias
-    
+    # Dividimos el texto en frases, generando una lista de listas
     print(">> Generating word2vec input model and getting embeddings for train data...")
     clean_train_headlines = []
     clean_train_articleBodies = []
@@ -131,8 +128,8 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     num_cores = multiprocessing.cpu_count()
 
     start = time.time()
-    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['Headline'])	
-    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeWordList)(line) for line in trainData['ArticleBody'])
+    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeSentenceList)(text) for text in trainData['Headline'])	
+    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeSentenceList)(text) for text in trainData['ArticleBody'])
     end = time.time()
     
     trainDataFormattingTime = end - start
@@ -142,6 +139,7 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     writeTextStats(clean_train_headlines, "headline")
     writeTextStats(clean_train_articleBodies)
 
+    # Obtenemos los vectores de caracteristicas de cada frase, sustituyendo cada termino por su representacion de embedding
     # print(">> Getting feature vectors for train headlines...")
     # start = time.time()
     # trainDataVecsHeadline = getFeatureVecs(clean_train_headlines, model, num_features)
@@ -151,7 +149,7 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     # trainFeatureVecsTime = end - start
     # print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
     
-    # # Hacemos un append del vector de headline y el de la noticia
+    # # Hacemos un append del vector de headline y el de la noticia (ponemos primero el titular)
     # trainDataInputs = []
     # for sample in zip(trainDataVecsHeadline, trainDataVecsArticleBody):
     #     trainSample = np.append(sample[0],sample[1])
@@ -208,15 +206,10 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     # Llamamos al clasificador con los datos compuestos
     # start = time.time()
     # classification_results = {}
-    # if model_executed == 'MLP':
-    #     #Modelo basado en red neuronal recurrente
-    #     classification_results = recurrentClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
-    # elif model_executed == 'RF':
-    #     # Modelo basado en un randomForest sencillo
-    #     classification_results = randomClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])
-    # else:
-    #     print(">>> ERROR: No se ha ejecutado ningún modelo")
-
+    
+    #Modelo basado en red neuronal recurrente (RNN)
+    #classification_results = recurrentClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+    
     # end = time.time()
     # modelExecutionTime = end - start
     # execution_end = end

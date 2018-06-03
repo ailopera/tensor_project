@@ -21,27 +21,38 @@ if __name__ == "__main__":
 
     # Primera parte del estudio: experimentacion con modelos de representacion y MLP
     # inputPath = "./fnc-1-original/"
-    # outputPath = inputPath + "/aggregatedDatasets/"
+    # outputPath = inputPath + "aggregatedDatasets/"
 
     # Segunda parte del estudio: experimentacion con flujos de texto y RNN
     inputPath = "./fnc-1-original/"
-    outputPath = inputPath + "/aggregatedDatasets/RNN/"
+    outputPath = inputPath + "aggregatedDatasets/RNN/"
 
     # Cargamos ficheros de stances y bodies 
     stancesPrefixPath = filePath.replace('$file','stances')
     bodiesPrefixPath = filePath.replace('$file','bodies')
 
     #Limpiamos fichero de bodies y stances
-    inputBodyFile = inputPath + bodiesPrefixPath + ".csv"
-    inputStanceFile = inputPath + stancesPrefixPath + ".csv"
-    
+    # 1. Datasets para la experimentacion de MLP
+    # inputBodyFile = inputPath + bodiesPrefixPath + ".csv"
+    # inputStanceFile = inputPath + stancesPrefixPath + ".csv"
+    # print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
+    # cleanData.cleanTextData(False,inputBodyFile,outputBodyFile,False)
+    # print(">> Limpiando fichero de bodies ", inputStanceFile, " y generando fichero ", outputStanceFile)
+    # cleanData.cleanTextData(True,inputStanceFile,outputStanceFile,False)
+
+
+    # 2. Datasets para la experimentacion de RNN
+    inputBodyFile = inputPath + ""+ bodiesPrefixPath + ".csv"
+    inputStanceFile = inputPath + "/RNN/" + stancesPrefixPath + ".csv"
+
     outputBodyFile = outputPath + bodiesPrefixPath + "_clean.csv"
-    outputStanceFile = outputPath + stancesPrefixPath + "_clean.csv"
+    outputStanceFile = outputPath + "/RNN/" + stancesPrefixPath + "_clean.csv"
     
     print(">> Limpiando fichero de bodies ", inputBodyFile, " y generando fichero ", outputBodyFile)
-    cleanData.cleanTextData(False,inputBodyFile,outputBodyFile,False)
+    cleanData.cleanTextData(False,inputBodyFile,outputBodyFile, printLogs=False, maintainDots = True)
     print(">> Limpiando fichero de bodies ", inputStanceFile, " y generando fichero ", outputStanceFile)
-    cleanData.cleanTextData(True,inputStanceFile,outputStanceFile,False)
+    cleanData.cleanTextData(True,inputStanceFile,outputStanceFile, printLogs=False, maintainDots = True)
+
 
     # Abrimos el fichero de stances y lo vamos recorriendo para hacer el agregado de los datos
     cleanedStanceData = pd.read_csv(outputStanceFile, header=0,delimiter=",", quoting=1)

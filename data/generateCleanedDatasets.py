@@ -4,9 +4,11 @@ from cleanData import cleanTextData
 
 
 # Body -> textTag: "articleBody"
-#          outputFilePath:"./fnc-1-original/cleanDatasets/train_bodies_clean.csv"
-# Primera parte del trabajo: experimentacion con vectoraverage y bow + MLP
+#          outputFilePath:"./fnc-1-original/cleanDatasets/train_bodies_cle  an.csv"
+# Este es un script anterior a aggregateData.py. El script de aggregate data limpia
+# y agrega los datasets en un solo script
 
+# Primera parte del trabajo: experimentacion con vectoraverage y bow + MLP
 ### STANCES ###
 # inputStancesPath = "./fnc-1-original/train_stances.csv"
 # outputStancesPath = "./fnc-1-original/cleanDatasets/train_stances_clean.csv"

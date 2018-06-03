@@ -27,9 +27,6 @@ def makeFeatureVec(words, model, num_features, index2word_set, log=False):
     featureVec = np.zeros((num_features,), dtype="float32")
     nwords = 0.
     
-    # #Indexwords is a list that contains the names of the words in the model's vocabulary. Convert it to a set, for speed
-    # index2word_set = set(model.wv.index2word)
-
     #Loop over each word in the review and, if it is in the model's vocabulary, 
     # add its feature vector to the total
     for word in words:
@@ -60,16 +57,8 @@ def getAvgFeatureVecs(news, model, num_features):
         if counter%1000. == 0. and LOG_ENABLED:
             print("> Report", counter," of ", len(news))
         
-        #log = True if counter == 100 else False
-        #if log:
-        #	print("> Report", counter," of ", len(news))
-        # Call the function (defined above) that makes average feature vectors
         newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
         counter = counter + 1
-
-    # Version paralela del computo de vectores de caracteristicas
-    # num_cores = multiprocessing.cpu_count()
-    # newsFeatureVecs = Parallel(n_jobs=num_cores, verbose= 10)(delayed(makeFeatureVec)(report, model, num_features, index2word_set) for report in news)
 
     return newsFeatureVecs	
 
