@@ -15,6 +15,9 @@ from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 LOG_ENABLED = False
 
+MAX_SENTENCES = 100
+MAX_WORDS = 150
+
 # Check-list
 # Cargamos los datasets
 
@@ -96,6 +99,10 @@ def getFeatureVecs(news, model, num_features):
 
 
 
+def resizeText(text):
+    text = text.resize((MAX_SENTENCES,MAX_WORDS))
+    return text
+
 def makeSentenceList(text):
     wordList = word2VecModel.news_to_sentences(text, tokenizer=None, remove_stopwords=False, use_tokenizer=False)
     return wordList
@@ -141,20 +148,25 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     #writeTextStats(clean_train_headlines, "headline")
     #writeTextStats(clean_train_articleBodies)
     
-    
-    # Limitamos el tamaño de los cuerpos de noticia
-    max_sentences = 100
-    max_words = 150
-    
     # Obtenemos los vectores de caracteristicas de cada frase, sustituyendo cada termino por su representacion de embedding
-    # print(">> Getting feature vectors for train headlines...")
-    # start = time.time()
-    # trainDataVecsHeadline = getFeatureVecs(clean_train_headlines, model, num_features)
-    # print(">> Getting feature vectors for train articleBodies...")
-    # trainDataVecsArticleBody = getFeatureVecs(clean_train_articleBodies, model, num_features)
-    # end = time.time()
-    # trainFeatureVecsTime = end - start
-    # print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
+    print(">> Getting feature vectors for train headlines...")
+    start = time.time()
+    trainDataVecsHeadline = getFeatureVecs(clean_train_headlines, model, num_features)
+    print(">> Getting feature vectors for train articleBodies...")
+    trainDataVecsArticleBody = getFeatureVecs(clean_train_articleBodies, model, num_features)
+    end = time.time()
+    trainFeatureVecsTime = end - start
+    print(">> Time spent on getting feature vectors for training data: ", trainFeatureVecsTime)
+    
+    # Limitamos el tamaï¿½o de los cuerpos de noticia
+    clean_train_headlines = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_headlines)	
+    clean_train_articleBodies = Parallel(n_jobs=num_cores, verbose= 10)(delayed(resizeText)(text) for text in clean_train_articleBodies)
+    
+    print("clean train headlines example: ", clean_train_headlines[0])
+    print("------------------------------------------------------------")
+    print("clean train headlines example: ", clean_train_articleBodies[0])
+    print("------------------------------------------------------------")
+    
     
     # # Hacemos un append del vector de headline y el de la noticia (ponemos primero el titular)
     # trainDataInputs = []
