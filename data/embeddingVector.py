@@ -104,7 +104,7 @@ def makeWordList(text):
     wordList = word2VecModel.news_to_wordlist(text,remove_stopwords=True, clean_text=False)
     return wordList
 
-def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False, smote="", classifier_config=None):
+def executeVectorFeaturing(word2vec_model, model_executed, binary, train_data=None, test_data=None, validation=False, smote="", classifier_config=None):
     # basePath = "./fnc-1-original/aggregatedDatasets/"
     num_features = 300
     # executionDesc = "vector_Emmbeddings"

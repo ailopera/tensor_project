@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import KFold, train_test_split
 from vectorAverage import executeVectorAverage
 from BOWModel2 import generateBOWModel
-
+from embeddingVector import executeVectorFeaturing
 # Script que realiza la validación de modelos
 # Uso: python validateClasiffier.py
 
@@ -162,7 +162,8 @@ for classifier_config in iterations:
         print(">>> Executing Configuration: ", classifier_config)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
-          executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+        #   executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+        executeVectorFeaturing(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")
@@ -178,11 +179,12 @@ print(">> Executing different model configurations over test data")
 print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
-        # executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, test_df, False, common_params["smote"], classifier_config)
+        
         print(">>> Executing Configuration: ", iteration)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
-          executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+        #   executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+          executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")
