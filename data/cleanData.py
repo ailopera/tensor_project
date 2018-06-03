@@ -59,6 +59,7 @@ def cleanTextData(stanceData,inputFilePath, outputFilePath, printLogs=False, cle
             body = re.sub("[0-9]+", "NUM", line[textTag])
             if maintainDots:
                 body = re.sub("[^a-zA-Z\.]", " ", body)
+                body = re.sub("[\.\.\.]", ".", body) #Eliminamos los puntos suspensivos
             else: 
                 body = re.sub("[^a-zA-Z]", " ", body)
                 

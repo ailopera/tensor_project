@@ -83,6 +83,7 @@ def news_to_sentences(news, tokenizer=tokenizer, remove_stopwords=False, use_tok
         # 1. Use the NLTK tokenizer to split the paragraph into sentences
         raw_sentences = tokenizer.tokenize(news.strip())
     else:
+        #raw_sentences = re.split( "\.", news ) # Es mas lento que el metodo nativo de str
         raw_sentences = news.split('.')
 
     #Loop over each sentence

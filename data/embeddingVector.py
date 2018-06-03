@@ -97,7 +97,7 @@ def getFeatureVecs(news, model, num_features):
 
 
 def makeSentenceList(text):
-    wordList = news_to_sentences(text, tokenizer=None, remove_stopwords=False, use_tokenizer=False)
+    wordList = word2VecModel.news_to_sentences(text, tokenizer=None, remove_stopwords=False, use_tokenizer=False)
     return wordList
 
 def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=None, testData=None, validation=False, smote="", classifier_config=None):
@@ -136,6 +136,8 @@ def executeVectorFeaturing(word2vec_model, model_executed, binary, trainData=Non
     print("> Time spent on formatting training data: ", trainDataFormattingTime)
     
     # Escribimos en un csv la longitud de cada frase y cuerpo de noticia
+    print("clean train headlines example: ", clean_train_headlines[0])
+    print("clean train headlines example: ", clean_train_articleBodies[0])
     writeTextStats(clean_train_headlines, "headline")
     writeTextStats(clean_train_articleBodies)
 
