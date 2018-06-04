@@ -17,19 +17,22 @@ db = client['newsData']
 # Abrimos el fichero de bodies original y lo almacenamos en la BBDD
 print(">> Writting stances data...")
 print(">> Total Stances: ", stancesData.shape)
-for line in stancesData.iterrows(): 
+stance_id = 1
+for index, line in stancesData.iterrows(): 
     stance = {
+        "stanceId": stance_id,
         "headline": line["Headline"],
         "bodyId": line["Body ID"],
         "correctStance": line["Stance"],
         "partition": LABEL
     }
+    stance_id = stance_id + 1
     db.Stances.insert(stance)
 
 # Abrimos el fichero de headline+stances original y lo almacenamos en la BBDD
 print(">> Writing bodies data...")
 print(">> Total Bodies: ", bodiesData.shape)
-for line in bodiesData.iterrows():
+for index, line in bodiesData.iterrows():
     body = {
         "bodyId": line["Body ID"],
         "articleBody": line["articleBody"],
