@@ -63,7 +63,8 @@ def makeFeatureVec(sentences_list, model, num_features, index2word_set, log=Fals
     feature_sentence = []
     for sentence in sentences_list:
         # Limitamos el tamano maximo de frase
-        sentence = sentence[:MAX_WORDS]
+        if len(sentence) > MAX_WORDS:
+          sentence = sentence[:MAX_WORDS]
         for word in sentence:
             if word in index2word_set:
                 nwords = nwords + 1
@@ -92,8 +93,8 @@ def getFeatureVecs(news, model, num_features):
         if counter%1000. == 0. and LOG_ENABLED:
             print("> Report", counter," of ", len(news))
         
-        
-        newsFeatureVecs[counter] = makeFeatureVec(report, model, num_features, index2word_set)
+        featureVec = makeFeatureVec(report, model, num_features, index2word_set)
+        newsFeatureVecs.append(featureVec)
         counter = counter + 1
 
     return newsFeatureVecs	

@@ -84,7 +84,9 @@ def news_to_sentences(news, tokenizer=tokenizer, remove_stopwords=False, use_tok
         raw_sentences = tokenizer.tokenize(news.strip())
     else:
         #raw_sentences = re.split( "\.", news ) # Es mas lento que el metodo nativo de str
-        raw_sentences = news.split('.')[:max_sentence_size]
+        raw_sentences = news.split('.')
+        if len(raw_sentences) > max_sentence_size:
+          raw_sentences = raw_sentences[:max_sentence_size]
 
     #Loop over each sentence
     sentences = []
