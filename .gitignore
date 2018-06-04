@@ -87,3 +87,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+#Tensor-project log dirs
+/data/logs
+/data/fnnLogs
+/data/RNNLogs
