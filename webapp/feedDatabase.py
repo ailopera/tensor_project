@@ -10,7 +10,7 @@ bodies_file = base_dir + LABEL + "_test_bodies.csv"
 
 
 client = MongoClient('localhost', 27017)
-db = client.newsData()
+db = client['newsData']
 # Abrimos el fichero de bodies original y lo almacenamos en la BBDD
 with open(stances_file, 'r') as stances:
     for line in stances: 
@@ -20,7 +20,7 @@ with open(stances_file, 'r') as stances:
             "correctStance": line["Stance"],
             "label": LABEL
         }
-        db.Stances.insert(stance)
+        db.stances.insert(stance)
 
 # Abrimos el fichero de headline+stances original y lo almacenamos en la BBDD
 with open(bodies_file, 'r') as bodies:
@@ -30,4 +30,4 @@ with open(bodies_file, 'r') as bodies:
             "articleBody": line["articleBody"],
             "label": LABEL
         }
-        db.Bodies.insert(body)
+        db.bodies.insert(body)
