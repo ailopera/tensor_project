@@ -71,16 +71,16 @@ validation_data = train_df[train_proportion:]
 print(">>> LEN train data: ", len(train_data))
 print(">>> LEN validation data: ", len(validation_data))
 
-for iteration in iterations:
-        print(">>> Executing Configuration: ", iteration)
-        # Execute model with the configuration specified 
-        if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data,False, "all")
-        elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, "")
-        elif validation == "clusters":
-                executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
-        print("------------------------------------------------------")
+# for iteration in iterations:
+#         print(">>> Executing Configuration: ", iteration)
+#         # Execute model with the configuration specified 
+#         if validation == "vectorAverage":
+#                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data,False, "all")
+#         elif validation == "BOW":
+#                 generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, "")
+#         # elif validation == "clusters":
+#                 # executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
+#         print("------------------------------------------------------")
 
 end = time.time()
 trainValidationTime = end - start
@@ -97,8 +97,8 @@ for iteration in iterations:
                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "all")
         elif validation == "BOW":
                 generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "all")
-        elif validation == "clusters":
-                executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
+        # elif validation == "clusters":
+                # executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
 end = time.time()
 testExecutionTime = end - start
 

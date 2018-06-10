@@ -287,6 +287,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         executed_epochs = 0
         stop_training = False
         loss_stacionality = 0
+        logits_results = None
         for epoch in range(n_epochs):
             #print(">> Epoch ", epoch)
             #print("tf.graphKeys: ", str(tf.GraphKeys))
@@ -334,11 +335,13 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         acc_final_train = sess.run(accuracy, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
         prediction_values_train = sess.run(prediction, feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
 
-        acc_final_test = sess.run(accuracy, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
+        acc_final_test, logits_results = sess.run([accuracy, logits], feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
         prediction_values = sess.run(prediction, feed_dict={X: test_features, y: test_labels, keep_prob: 1.0})
+        # Obtenemos el score del clasificador, para pintar la curva ROC
         
-        logits = sess.run(logits,feed_dict={X: test_features, y: test_labels, keep_prob: 1.0} )
+        y_score = np.array(logits_results)
         
+        # logits_test = sess.run(logits,feed_dict={X: test_features, y: test_labels, keep_prob: 1.0} )
         #accuracy_prediction = sess.run(accuracy_prediction,feed_dict={X: test_features, y: test_labels} )
         #print("Prediction: ", prediction_values)
         #print("Longitud de predictions: ", sess.run(tf.size(prediction_values)))
@@ -381,7 +384,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "learning_decrease": learning_decrease,
             "early_stopping_patience": early_stopping_patience,
             "execution_dir": logdir,
-            "execution_time": end - start
+            "execution_time": end - start,
+            "y_true": test_labels,
+            "y_score": y_score
 		}
         print(">> MLP Metrics: ")
         print(metrics)

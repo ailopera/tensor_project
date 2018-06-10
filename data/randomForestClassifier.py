@@ -45,14 +45,18 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     print(">> Average precision (micro): ", average_precision)
     print(">> Recall: ", recall)
 
+    y_score = forest.predict_proba(test_labels)
+
     metrics = {
 	 	"train_accuracy": round(train_accuracy,2),
 		"test_accuracy": round(test_accuracy,2),
 		"confusion_matrix": confussion_matrix,
-		"average_precision": round(average_precision,2),
-		"recall": round(recall,2),
-   "average_precisionSK": 0,
-    "recallSK": 0,
+		"precision_test": round(average_precision,2),
+		"precision_train": 0,
+        "recall_test": round(recall,2),
+        "precision_test": 0,
+        "y_true": test_labels,
+        "y_score": y_score
 		}
 	
     return metrics

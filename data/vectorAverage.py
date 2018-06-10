@@ -17,6 +17,8 @@ import word2VecModel
 import recurrentClassifier
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
+import utils
+
 LOG_ENABLED = False
 
 #  Calculamos la representación basada en el vector de medias de las palabras que aparecen en la noticia/titular
@@ -210,18 +212,33 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     print("> Time spent on fiting and predicting: ", modelExecutionTime)
     print(">> Metrics: ", classification_results)
 
+    # Si estamos ante resultados de test, realizamos el computo de las curvas ROC 
+    if not validation: 
+        print(">> Ploting ROC curves...")
+        utils.defineROCCurves(classification_results["y_true"], classification_results["y_score"], word2vec_model)
+
+
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
     csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
-    validationDesc = "validation" if validation else ""
     additionalDesc = "_smote_" +  smote if not smote == "" else ""
-    output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + additionalDesc +".csv"
-    fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
-        "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
-        "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecisionSK", "recallSK", "SMOTE"]
+    output_file = csvOutputDir + executionDesc + "_execution_" + date + additionalDesc +".csv"
     
+    # fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
+    #     "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
+    #     "trainInstances", "testInstances", "modelTrained", "modelExecutionTime","trainAccuracy", "testAccuracy",\
+    #     "confusionMatrix", "averagePrecisionSK", "recallSK", "SMOTE"]
+    
+    fieldNames = [
+        "date", "executionDesc", "textModelFeatures", "modelName",
+        "modelExecutionTime", "trainInstances","testInstances",
+        "modelTrained", "totalExecutionTime",
+        "trainAccuracy", "testAccuracy",
+        "trainPrecision", "testPrecision",
+        "trainRecall", "testRecall",
+        "confusionMatrix" ,"SMOTE"
+    ]
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
         executionData = {
@@ -229,21 +246,23 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
          "executionDesc": executionDesc, 
          "textModelFeatures": np.array(trainDataInputs).shape[1], 
          "modelName": word2vec_model,
-         "loadModelTime": round(loadModelTime,2),
-         "trainDataFormattingTime": round(trainDataFormattingTime,2),
-         "trainDataFeatureVecsTime": round(trainFeatureVecsTime,2),
-         "testDataFormattingTime": round(testDataFormattingTime,2),
-         "testDataFeatureVecsTime": round(testDataFeatureVecsTime,2),
-         "totalExecutionTime": round(totalExecutionTime,2),
+        #  "loadModelTime": round(loadModelTime,2),
+        #  "trainDataFormattingTime": round(trainDataFormattingTime,2),
+        #  "trainDataFeatureVecsTime": round(trainFeatureVecsTime,2),
+        #  "testDataFormattingTime": round(testDataFormattingTime,2),
+        #  "testDataFeatureVecsTime": round(testDataFeatureVecsTime,2),
+         "modelExecutionTime": round(modelExecutionTime,2),
          "trainInstances": trainData.shape[0],
          "testInstances": testData.shape[0],
          "modelTrained": model_executed,
-         "modelExecutionTime": round(modelExecutionTime,2),
+         "totalExecutionTime": round(totalExecutionTime,2),
          "trainAccuracy": classification_results["train_accuracy"],
          "testAccuracy": classification_results["test_accuracy"],
+         "trainPrecision": classification_results["precision_train"],
+         "testPrecision": classification_results["precision_test"],
+         "trainRecall": classification_results["recall_train"],
+         "testRecall": classification_results["recall_test"],
          "confusionMatrix": classification_results["confusion_matrix"],
-         "averagePrecisionSK": classification_results["precision_test"],
-         "recallSK": classification_results["recall_test"],
          "SMOTE": smote
          }
          
@@ -253,10 +272,11 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
         writer.writerow(executionData)
         print(">> Stats exported to: ", output_file)
 
+
     #Escribimos la distribuci�n de etiquetas del dataset generado por smote, en un csv con una sola columna
     if not smote == "":
       fieldNames = ["Stance"]
-      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + ".csv"
+      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + "_smote_" + smote + ".csv"
       with open(output_file, 'a') as csv_file:
         newFile = os.stat(output_file).st_size == 0
         if newFile:
