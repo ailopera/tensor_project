@@ -384,11 +384,12 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "learning_decrease": learning_decrease,
             "early_stopping_patience": early_stopping_patience,
             "execution_dir": logdir,
-            "execution_time": end - start,
-            "y_true": test_labels,
-            "y_score": y_score
-		}
+            "execution_time": end - start
+		    }
         print(">> MLP Metrics: ")
         print(metrics)
         write_metrics_to_file(metrics)
+        #Anadimos dos campos extra
+        metrics["y_true"]= test_labels
+        metrics["y_score"] = y_score
         return metrics

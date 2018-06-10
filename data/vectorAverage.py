@@ -13,8 +13,8 @@ from gensim.models import Word2Vec, KeyedVectors
 from sklearn.preprocessing import Imputer
 import word2VecModel
 #import textModelClassifier # Primer modelo de clasificador basico, no parammetrizable
-# import textModelClassifierParametrized # modelo de clasificador paramatretrizado
-import recurrentClassifier
+import textModelClassifierParametrized # modelo de clasificador paramatretrizado
+#import recurrentClassifier
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 import utils
@@ -194,7 +194,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     classification_results = {}
     if model_executed == 'MLP':
         #Modelo basado en red neuronal recurrente
-        classification_results = recurrentClassifier.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)
+        classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'])#, classifier_config)
     
         # Modelo basado en un MultiLayer Perceptron (Version parametrizada y sin parametrizar)
         #classification_results = textModelClassifierParametrized.modelClassifier(np.array(trainDataInputs), train_labels, np.array(testDataInputs), testData['Stance'], classifier_config)

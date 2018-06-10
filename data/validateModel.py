@@ -94,9 +94,9 @@ print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "all")
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "all", None)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "all")
+                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "all", None)
         # elif validation == "clusters":
                 # executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
 end = time.time()
