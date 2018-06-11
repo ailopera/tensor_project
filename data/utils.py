@@ -1,9 +1,12 @@
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 
 #  Utilidades varias
-n_classes = 4
+n_classes = 3 # Clases: 0, 1, 2, 3
+
 
 def plotROCCurves(fpr, tpr, roc_auc, color, label):
     # Plot of a ROC curve for a specific class
@@ -20,11 +23,16 @@ def plotROCCurves(fpr, tpr, roc_auc, color, label):
     plt.legend(loc="lower right")
     # plt.show()
     fig = plt.figure()
-    filename = label + '.png'
+    filename = "prueba" + '.png'
     fig.savefig(filename, bbox_inches='tight') 
 
 # Pinta las curvas ROC para los datos de test
 def defineROCCurves(y_test, y_score, execution_label):
+    
+    print(">>> Execution label: ", execution_label)
+    print(">>> Y_test shape: ", y_test.shape)
+    print(">>> Y_Score shape: ", y_score.shape)
+    
     # Compute ROC curve and ROC area for each class
     fpr = dict()
     tpr = dict()
@@ -32,7 +40,8 @@ def defineROCCurves(y_test, y_score, execution_label):
 
     colors = ['darkorange', 'darkorange', 'darkorange', 'darkorange']    
     for i in range(n_classes):
-        fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
+        pos_label = i
+        fpr[i], tpr[i], _ = roc_curve(y_test, y_score[:, i], pos_label)
         roc_auc[i] = auc(fpr[i], tpr[i])
         label = execution_label+str(i)
         plotROCCurves(fpr[i], tpr[i], roc_auc[i], colors[i], label)
