@@ -303,7 +303,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                          minimun_loss = loss_test
                          loss_stacionality = 0
                          # Guardamos el estado de la red
-                         save_path = saver.save(sess, logdir + "/my_model_final.ckpt")
+                         save_path = saver.save(sess, logdir + "/models/my_model_final.ckpt")
                      else:
                          loss_stacionality = loss_stacionality + 1
                              
