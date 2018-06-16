@@ -6,7 +6,8 @@ sys.path.insert(0, '../data/')
 import vectorAverage 
 import word2VecModel
 
-BASE_PATH = "../data/models/"
+#BASE_PATH = "../data/models/"
+BASE_PATH = "../data/"
 MODEL_NAME = BASE_PATH + "my_model_final.ckpt"
 class_names= ["agree", "disagree", "discuss", "unrelated"]
 
