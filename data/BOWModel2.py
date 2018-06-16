@@ -7,6 +7,8 @@ import textModelClassifier
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 
+import utils
+
 # Pequeña funcion auxiliar para explorar las features de una representacion
 def getFeaturesInfo(features):
     print(">>> features.shape: ", features.shape) 
@@ -45,7 +47,7 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
 def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False, smote=""):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
-
+    execution_label = executionDesc + "_minDF_" + min_df + "_maxDF_" + max_df
     # Paso 0: Cargamos los datasets de entrada por defecto
     print(">> Loading data...")
     execution_start = time.time()
@@ -120,17 +122,29 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     totalExecutionTime = execution_end - execution_start
     # print(">> Classification Results: ", classification_results)
 
+
+    # Si estamos ante resultados de test, realizamos el computo de las curvas ROC 
+    if not validation: 
+        print(">> Ploting ROC curves...")
+        utils.defineROCCurves(classification_results["y_true"], classification_results["y_score"], execution_label)
+
+
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
     # Se genera un fichero por dia
     csvOutputDir = "./executionStats/"
     date = time.strftime("%Y-%m-%d")
-    validationDesc = "validation" if validation else ""
+    # validationDesc = "validation" if validation else ""
     additionalDesc = "_smote_" +  smote if not smote == "" else ""
-    output_file = csvOutputDir + executionDesc + "_execution_" + date + validationDesc + additionalDesc + ".csv"
-    fieldNames = ["date", "executionDesc", "textModelFeatures", "modelName", "loadModelTime", \
-        "trainDataFormattingTime","trainDataFeatureVecsTime","testDataFormattingTime","testDataFeatureVecsTime", "totalExecutionTime",\
-        "trainInstances", "testInstances","min_df", "max_df", "modelTrained", "modelExecutionTime", "trainAccuracy", "testAccuracy",\
-        "confusionMatrix", "averagePrecision", "recall", "vectorizerFitTime", "averagePrecisionSK", "recallSK", "SMOTE"]
+    output_file = csvOutputDir + executionDesc + "_execution_" + date + additionalDesc + ".csv"
+    fieldNames = ["date","executionDesc", 
+        "textModelFeatures","totalExecutionTime",
+        "trainInstances","testInstances",
+        "min_df","max_df",
+        "modelTrained","modelExecutionTime",
+        "trainAccuracy","testAccuracy",
+        "trainPrecision","testPrecision",
+        "trainRecall","testRecall",
+        "confusionMatrix","vectorizerFitTime","SMOTE"]
     
     with open(output_file, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldNames)
@@ -138,12 +152,12 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
          "date": time.strftime("%Y-%m-%d %H:%M"),
          "executionDesc": executionDesc, 
          "textModelFeatures": train_data_features.shape[1], 
-         "modelName": "",
-         "loadModelTime": "",
-         "trainDataFormattingTime": 0,
-         "trainDataFeatureVecsTime": round(trainDataFeatureVecsTime,2),
-         "testDataFormattingTime": 0,
-         "testDataFeatureVecsTime": round(testDataFeatureVecsTime,2),
+        #  "modelName": "",
+        #  "loadModelTime": "",
+        #  "trainDataFormattingTime": 0,
+        #  "trainDataFeatureVecsTime": round(trainDataFeatureVecsTime,2),
+        #  "testDataFormattingTime": 0,
+        #  "testDataFeatureVecsTime": round(testDataFeatureVecsTime,2),
          "totalExecutionTime": round(totalExecutionTime,2),
          "trainInstances": train_data.shape[0],
          "testInstances": test_data.shape[0],
@@ -153,12 +167,12 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
          "modelExecutionTime": round(modelExecutionTime,2),
          "trainAccuracy": classification_results["train_accuracy"],
          "testAccuracy": classification_results["test_accuracy"],
+         "trainPrecision": classification_results["precision_train"],
+         "testPrecision": classification_results["precision_test"],
+         "trainRecall": classification_results["recall_train"],
+         "testRecall": classification_results["recall_test"],
          "confusionMatrix": classification_results["confusion_matrix"],
-         "averagePrecision": classification_results["average_precision"],
-         "recall": classification_results["recall"],
          "vectorizerFitTime": round(vectorizerFitTime,2),
-         "averagePrecisionSK": classification_results["average_precisionSK"],
-         "recallSK": classification_results["recallSK"],
          "SMOTE": smote
          }
          

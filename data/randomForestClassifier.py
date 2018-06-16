@@ -53,7 +53,7 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     print(">> Confussion matrix: ")
     print(confussion_matrix)
 
-    y_score = forest.predict_proba(test_labels)
+    y_score = forest.predict_proba(testDataFeatures)
 
     metrics = {
 	 	"train_accuracy": round(train_accuracy,2),
