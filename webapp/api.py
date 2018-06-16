@@ -36,4 +36,4 @@ class Stances(Resource):
 api.add_resource(Stances,'/stances')
 
 if __name__ == '__main__':
-    app.run(port='5002')
+    app.run(port='5000')
