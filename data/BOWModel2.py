@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
-import textModelClassifier
+import textModelClassifierParametrized
 from randomForestClassifier import randomClassifier
 from imblearn.over_sampling import SMOTE
 
@@ -47,7 +47,7 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
 def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False, smote=""):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
-    execution_label = executionDesc + "_minDF_" + min_df + "_maxDF_" + max_df
+    execution_label = executionDesc + "_minDF_" + str(min_df) + "_maxDF_" + str(max_df)
     # Paso 0: Cargamos los datasets de entrada por defecto
     print(">> Loading data...")
     execution_start = time.time()
@@ -110,7 +110,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     classification_results = {}
     if model_executed == 'MLP':
         # Modelo basado en un MultiLayer Perceptron
-        classification_results = textModelClassifier.modelClassifier(train_data_features, train_labels, test_data_features, test_data['Stance'])
+        classification_results = textModelClassifierParametrized.modelClassifier(train_data_features, train_labels, test_data_features, test_data['Stance'])
     elif model_executed == 'RF':
         # Inferimos las representaciones con valores incorrectos (NaN, Inf)
         # train_data_features = Imputer().fit_transform(trainDataInputs)
@@ -186,7 +186,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
     #Escribimos la distribuci�n de etiquetas del dataset generado por smote, en un csv con una sola columna
     if not smote == "":
       fieldNames = ["Stance"]
-      output_file = csvOutputDir + executionDesc + "_smoteData_" + date + validationDesc + "_smote_" + smote + ".csv"
+      output_file = csvOutputDir + executionDesc + "_smoteData_" + date  + "_smote_" + smote + ".csv"
       
       with open(output_file, 'a') as csv_file:
         newFile = os.stat(output_file).st_size == 0

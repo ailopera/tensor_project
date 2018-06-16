@@ -19,7 +19,7 @@ api = Api(app)
 print(">> Loading word2vec Model...")
 word2vec_model = '../../GoogleNews-vectors-negative300.bin'
 model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model, binary=True)
-    
+print(">> Done! ")
 
 # Manejadores de la api
 class Stances(Resource):

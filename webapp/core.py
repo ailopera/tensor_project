@@ -25,11 +25,17 @@ def generateFeatureVector(text,model):
 Obtiene la prediccion a partir del vector de titular y cuerpo de noticia
 """
 def predictStance(headline, articleBody, model):
-    tf.reset_default_graph()
-
+    print(">> Obteniendo vectores de embedding de la entrada")
     headline_embedding = generateFeatureVector(headline, model)
     articleBody_embedding = generateFeatureVector(articleBody, model)
     input_sample = np.append(headline_embedding, articleBody_embedding)
+    
+    tf.reset_default_graph()
+    #n_inputs = input_sample.shape[0]
+    X = tf.placeholder(tf.float32, shape=(None), name="X")
+    y = tf.placeholder(tf.int64, shape=(None), name="y")
+    keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
+
     
     default_label = 0
     saver = tf.train.import_meta_graph(MODEL_NAME + ".meta")  # this loads the graph structure
@@ -37,6 +43,7 @@ def predictStance(headline, articleBody, model):
 
     with tf.Session() as sess:
         saver.restore(sess, MODEL_NAME)  # this restores the graph's state
-        stance = sess.run('prediction:0', feed_dict={X: input_sample, y: default_label, keep_prob: 1.0}) # not shown in the book
+        print("tf.graphKeys: ", [n.name for n in tf.get_default_graph().as_graph_def().node])
+        stance = sess.run('prediction:0', feed_dict={X: input_sample, y: default_label, keep_prob: 1.0})
         print(">> Prediction: ", stance)
         return class_names[stance]

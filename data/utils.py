@@ -14,7 +14,7 @@ def plotROCCurves(fpr, tpr, roc_auc, color, label, class_name):
     lw = 2
     plt.plot(fpr, tpr, color=color,
             lw=lw, label='Curva ROC (area = %0.2f)' % roc_auc, figure = fig)
-    plt.plot([0, 1], [0, 1], color='black', lw=lw, linestyle='..')
+    plt.plot([0, 1], [0, 1], color='black', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel(' Tasa de Falsos Positivos (FP)')
@@ -28,7 +28,7 @@ def plotROCCurves(fpr, tpr, roc_auc, color, label, class_name):
 
 # Pinta las curvas ROC para los datos de test
 def defineROCCurves(y_test, y_score, execution_label):
-    
+    label = execution_label.replace("~","").replace("/","").replace(".","")
     print(">>> Execution label: ", execution_label)
     print(">>> Y_test shape: ", y_test.shape)
     print(">>> Y_Score shape: ", y_score.shape)
@@ -44,7 +44,7 @@ def defineROCCurves(y_test, y_score, execution_label):
         fpr[i], tpr[i], _ = roc_curve(y_test, y_score[:, i], pos_label)
         roc_auc[i] = auc(fpr[i], tpr[i])
         # label = execution_label
-        plotROCCurves(fpr[i], tpr[i], roc_auc[i], colors[i], execution_label, class_names[i])
+        plotROCCurves(fpr[i], tpr[i], roc_auc[i], colors[i], label, class_names[i])
     
     # Compute micro-average ROC curve and ROC area
     # fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
