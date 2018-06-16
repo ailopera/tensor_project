@@ -14,7 +14,7 @@ vectorAverage_iterations = [
         {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False}, \
         {"model": "300features_15minwords_10contextALL", "classifier": "RF", "binaryModel": False}, \
                 
-        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True}
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True}, \
         {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True}
         ]
 
