@@ -1,0 +1,25 @@
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patience,execution_dir,execution_time
+DEFAULT,0.89,0.86,"[[ 526  120  140   58]
+ [  21  115   38   31]
+ [ 330  105 1410  193]
+ [ 135   55  293 7365]]",0.89,0.88,0.89,0.86,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-12_arquitectura_original_p3_2/20180612/run-FNNClassifier-DEFAULT-195902/,407.8917405605316
+DEFAULT,0.9,0.85,"[[ 605   86   93   60]
+ [  43  113   19   30]
+ [ 487   95 1250  206]
+ [ 210   52  260 7326]]",0.9,0.87,0.9,0.85,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-12_arquitectura_original_p3_2/20180612/run-FNNClassifier-DEFAULT-202933/,411.33218932151794
+DEFAULT,0.9,0.86,"[[ 507   88  184   65]
+ [  28  107   46   24]
+ [ 294   78 1477  189]
+ [ 141   48  362 7297]]",0.9,0.87,0.9,0.86,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-12_arquitectura_original_p3_2/20180612/run-FNNClassifier-DEFAULT-204608/,361.5312430858612
+DEFAULT,0.9,0.85,"[[ 573   92  112   67]
+ [  36  108   25   36]
+ [ 427   98 1307  206]
+ [ 181   57  287 7323]]",0.9,0.87,0.9,0.85,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-12_arquitectura_original_p3_2/20180612/run-FNNClassifier-DEFAULT-210502/,343.55522775650024
+DEFAULT,0.89,0.84,"[[ 571  113  118   42]
+ [  32  112   34   27]
+ [ 449  125 1299  165]
+ [ 237   73  352 7186]]",0.89,0.87,0.89,0.84,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-12_arquitectura_original_p3_2/20180612/run-FNNClassifier-DEFAULT-211239/,382.58329367637634
+DEFAULT,0.89,0.85,"[[ 538  110  125   71]
+ [  28  114   25   38]
+ [ 397  123 1294  224]
+ [ 145   50  284 7369]]",0.89,0.87,0.89,0.85,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-12_arquitectura_original_p3_2/20180612/run-FNNClassifier-DEFAULT-212433/,347.5630660057068

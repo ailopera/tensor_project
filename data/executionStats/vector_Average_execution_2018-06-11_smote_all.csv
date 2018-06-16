@@ -1,0 +1,5 @@
+date,executionDesc,textModelFeatures,modelName,modelExecutionTime,trainInstances,testInstances,modelTrained,totalExecutionTime,trainAccuracy,testAccuracy,trainPrecision,testPrecision,trainRecall,testRecall,confusionMatrix,SMOTE
+2018-06-11 22:41,vector_Average,600,300features_15minwords_10contextALL,365.23,39220,10935,MLP,449.34,0.9,0.86,0.9,0.87,0.9,0.86,"[[ 527   89  160   68]
+ [  25  106   36   38]
+ [ 332   89 1395  222]
+ [ 138   29  303 7378]]",all

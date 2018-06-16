@@ -1,0 +1,29 @@
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patience,execution_dir,execution_time
+DEFAULT,0.96,0.84,"[[ 592   48  134   70]
+ [  50   93   47   15]
+ [ 363   55 1352  268]
+ [ 314   37  395 7102]]",0.96,0.86,0.96,0.84,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-204748/,430.8704946041107
+DEFAULT,0.89,0.84,"[[ 593   98  102   51]
+ [  31  110   34   30]
+ [ 488  101 1284  165]
+ [ 262   63  325 7198]]",0.89,0.87,0.89,0.84,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-211117/,432.3707675933838
+DEFAULT,0.89,0.84,"[[ 591   81  125   47]
+ [  42  107   26   30]
+ [ 512   72 1297  157]
+ [ 211   41  353 7243]]",0.9,0.87,0.89,0.84,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-213157/,395.8038296699524
+DEFAULT,0.89,0.85,"[[ 593   64  123   64]
+ [  43  102   27   33]
+ [ 448   67 1327  196]
+ [ 214   50  336 7248]]",0.9,0.87,0.89,0.85,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-214403/,369.41907382011414
+DEFAULT,0.9,0.85,"[[ 565   84  132   63]
+ [  42  106   28   29]
+ [ 424   81 1335  198]
+ [ 186   43  293 7326]]",0.9,0.87,0.9,0.85,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-215830/,362.75810074806213
+DEFAULT,0.89,0.86,"[[ 540  105  133   66]
+ [  30  109   33   33]
+ [ 373  106 1376  183]
+ [ 169   46  288 7345]]",0.89,0.87,0.89,0.86,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-221900/,367.24825739860535
+DEFAULT,0.9,0.86,"[[ 527   89  160   68]
+ [  25  106   36   38]
+ [ 332   89 1395  222]
+ [ 138   29  303 7378]]",0.9,0.87,0.9,0.86,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-11_arquitectura_original_p3_2/20180611/run-FNNClassifier-DEFAULT-223506/,361.76800322532654
