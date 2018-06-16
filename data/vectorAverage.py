@@ -76,7 +76,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     executionDesc = "vector_Average"
     # stances_model_name = sys.argv[1]
     # bodies_model_name = sys.argv[2]
-        
+    execution_label = word2vec_model + model_executed + smote
     # model = KeyedVectors.load_word2vec_format(model_name)
     start = time.time()
     execution_start = start
@@ -215,7 +215,7 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     # Si estamos ante resultados de test, realizamos el computo de las curvas ROC 
     if not validation: 
         print(">> Ploting ROC curves...")
-        utils.defineROCCurves(classification_results["y_true"], classification_results["y_score"], word2vec_model)
+        utils.defineROCCurves(classification_results["y_true"], classification_results["y_score"], execution_label)
 
 
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante
