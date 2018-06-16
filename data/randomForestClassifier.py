@@ -31,30 +31,38 @@ def randomClassifier(trainDataFeatures, trainTargets, testDataFeatures, testTarg
     print("> Predicting test dataset...")
     prediction = forest.predict(testDataFeatures)
 
-	#  Evaluate the results
+	# Metricas de entrenamiento
     train_accuracy = accuracy_score(train_labels, forest.predict(trainDataFeatures))
+    precision_train = precision_score(train_labels, forest.predict(trainDataFeatures), average='weighted', labels=[0,1,2,3])
+    recall_train = recall_score(train_labels, forest.predict(trainDataFeatures), average='weighted', labels=[0,1,2,3])
+    
+    # Metricas de test
     test_accuracy = accuracy_score(test_labels, prediction)
+    precision_test = precision_score(test_labels, prediction, average='weighted', labels=[0,1,2,3])
+    recall_test = recall_score(test_labels, prediction, average='weighted', labels=[0,1,2,3])
+
     confussion_matrix = confusion_matrix(test_labels, prediction,labels=[0,1,2,3])
-    average_precision = precision_score(test_labels, prediction, average='weighted', labels=[0,1,2,3])
-    recall = recall_score(test_labels, prediction, average='weighted', labels=[0,1,2,3])
 
     print(">> Accuracy achieved with the train set: ", train_accuracy)	
     print(">> Accuracy achieved with the test set: ", test_accuracy)
+    print(">> Precision test: ", precision_train)
+    print(">> Precision test: ", precision_test)
+    print(">> Recall train: ", recall_train)
+    print(">> Recall test: ", recall_test)
+
     print(">> Confussion matrix: ")
     print(confussion_matrix)
-    print(">> Average precision (micro): ", average_precision)
-    print(">> Recall: ", recall)
 
     y_score = forest.predict_proba(test_labels)
 
     metrics = {
 	 	"train_accuracy": round(train_accuracy,2),
 		"test_accuracy": round(test_accuracy,2),
-		"confusion_matrix": confussion_matrix,
-		"precision_test": round(average_precision,2),
-		"precision_train": 0,
-        "recall_test": round(recall,2),
-        "precision_test": 0,
+		"precision_train": round(precision_train,2),
+        "precision_test": round(precision_test,2),
+        "recall_train": round(recall_train,2),
+        "recall_test": round(recall_test,2),
+        "confusion_matrix": confussion_matrix,
         "y_true": test_labels,
         "y_score": y_score
 		}

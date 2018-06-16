@@ -8,13 +8,14 @@ from BOWModel2 import generateBOWModel
 # Uso: python validateModel.py BOW | vectorAverage
 validation = sys.argv[1]
 
+SMOTE = "all"
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
 vectorAverage_iterations = [
         {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False}, \
-        #{"model": "300features_15minwords_10contextALL", "classifier": "RF", "binaryModel": False}, \
+        {"model": "300features_15minwords_10contextALL", "classifier": "RF", "binaryModel": False}, \
                 
-        #{"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True}
-        #{"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True}
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True}
+        {"model": "~/GoogleNews-vectors-negative300.bin", "classifier": "RF", "binaryModel": True}
         ]
 
 bow_iterations = [{ "classifier": "MLP", "min_df": 1, "max_df": 1.0}, \
@@ -44,6 +45,7 @@ clusters_iterations = [{"model": "~/GoogleNews-vectors-negative300.bin", "classi
 # Primer particionado
 #trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
+
 # Segundo particionado
 trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
 testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
@@ -71,16 +73,16 @@ validation_data = train_df[train_proportion:]
 print(">>> LEN train data: ", len(train_data))
 print(">>> LEN validation data: ", len(validation_data))
 
-# for iteration in iterations:
-#         print(">>> Executing Configuration: ", iteration)
-#         # Execute model with the configuration specified 
-#         if validation == "vectorAverage":
-#                 executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data,False, "all")
-#         elif validation == "BOW":
-#                 generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],False, "")
-#         # elif validation == "clusters":
-#                 # executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
-#         print("------------------------------------------------------")
+for iteration in iterations:
+        print(">>> Executing Configuration: ", iteration)
+        # Execute model with the configuration specified 
+        if validation == "vectorAverage":
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, validation_data,True, SMOTE)
+        elif validation == "BOW":
+                generateBOWModel(iteration["classifier"], train_data, validation_data, iteration["min_df"], iteration["max_df"],True, SMOTE)
+        # elif validation == "clusters":
+                # executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, validation_data)
+        print("------------------------------------------------------")
 
 end = time.time()
 trainValidationTime = end - start
@@ -94,9 +96,9 @@ print(">>> LEN train data: ", train_data.shape[0])
 print(">>> LEN test data: ", test_df.shape[0])
 for iteration in iterations:
         if validation == "vectorAverage":
-                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, "all", None)
+                executeVectorAverage(iteration["model"],iteration["classifier"], iteration["binaryModel"], train_data, test_df, False, SMOTE, None)
         elif validation == "BOW":
-                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, "all", None)
+                generateBOWModel(iteration["classifier"], train_data, test_df, iteration["min_df"], iteration["max_df"], False, SMOTE, None)
         # elif validation == "clusters":
                 # executeClusterization(iteration["model"], iteration["binaryModel"], iteration["classifier"], iteration["clusterSize"] ,train_data, test_df)
 end = time.time()
