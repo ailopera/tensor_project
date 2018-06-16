@@ -91,7 +91,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     config_tag = hyperparams.get("config_tag" , default_hyperparams["config_tag"])
     subdir = date
     logdir = "{}/{}/run-{}-{}-{}/".format(root_logdir, subdir , tag, config_tag, hour)
-      
+    print(">> LOG DIR: ", logdir)
     # Convertimos a enteros las clases
     train_labels = convert_to_int_classes(target)
     test_labels = convert_to_int_classes(test_targets)
@@ -225,7 +225,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # Definimos las metricas
     # with tf.name_scope("eval"):
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
-    prediction=tf.argmax(logits,1)
+    prediction=tf.argmax(logits,1,name="prediction")
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     recall = tf.metrics.recall(y, prediction)
     precision = tf.metrics.precision(y, prediction)
