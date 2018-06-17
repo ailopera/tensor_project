@@ -203,7 +203,7 @@ def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, 
         print(">> Stance data exported to: ", output_file)
     else:
       fieldNames = ["Stance"]
-      output_file = csvOutputDir + executionDesc + "_trainData_" + date + validationDesc + ".csv"
+      output_file = csvOutputDir + executionDesc + "_trainData_" + date + ".csv"
       
       with open(output_file, 'a') as csv_file:
         newFile = os.stat(output_file).st_size == 0
