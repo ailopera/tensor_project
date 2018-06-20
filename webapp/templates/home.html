@@ -1,0 +1,22 @@
+<html>
+    <head>
+      <title>Submit a form</title>
+     <link rel="stylesheet" type="text/css" href="/static/style.css">
+    </head>
+    <body>
+      <div id="container">
+        <div class="pagetitle">
+          <h1>Submit a form</h1>
+        </div>
+        <div id="main">
+          <form method="post" action="{{ url_for('predictStance') }}">
+            <label for="headline">Titular:</label>
+            <input type="text" name="headline"><br />
+            <label for="body">Cuerpo de la noticia:</label>
+            <textarea name="body"></textarea><br />
+            <input type="submit">
+          </form>
+        </div>
+      </div>
+    </body>
+  </html>
