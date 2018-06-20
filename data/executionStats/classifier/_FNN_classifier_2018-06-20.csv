@@ -1,0 +1,17 @@
+config_tag,train_accuracy,test_accuracy,confusion_matrix,precision_train,precision_test,recall_train,recall_test,n_layers,hidden_neurons,epochs,activation_function,dropout_rate,learning_rate,learning_decrease,early_stopping_patience,execution_dir,execution_time
+DEFAULT,0.9,0.8,"[[ 319   29  152  230]
+ [  33   42   41  123]
+ [ 204   58 1028  410]
+ [ 221   82  370 6463]]",0.9,0.8,0.9,0.8,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-20_arquitectura_original_p3_2/20180620/run-FNNClassifier-DEFAULT-063636/,335.4443008899689
+DEFAULT,0.97,0.79,"[[ 394   10  108  218]
+ [  68   22   27  122]
+ [ 315   25  924  436]
+ [ 378   37  353 6368]]",0.97,0.79,0.97,0.79,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-20_arquitectura_original_p3_2/20180620/run-FNNClassifier-DEFAULT-065105/,299.03116631507874
+DEFAULT,0.9,0.86,"[[ 599   62  120   63]
+ [  45  103   28   29]
+ [ 449   70 1304  215]
+ [ 176   32  274 7366]]",0.9,0.87,0.9,0.86,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-20_arquitectura_original_p3_2/20180620/run-FNNClassifier-DEFAULT-070442/,358.62532091140747
+DEFAULT,0.97,0.85,"[[ 484   46  219   95]
+ [  34   94   51   26]
+ [ 223   55 1493  267]
+ [ 160   35  391 7262]]",0.97,0.86,0.97,0.85,2,"[300, 100]",20,relu,1.0,0.0,False,2,fnnLogs/06-20_arquitectura_original_p3_2/20180620/run-FNNClassifier-DEFAULT-071936/,357.19850182533264
