@@ -31,3 +31,7 @@ date,executionDesc,textModelFeatures,modelName,modelExecutionTime,trainInstances
  [  18   47   65   75]
  [ 172    7 1356  503]
  [  31    1  348 7468]]",all
+2018-06-20 21:26,vector_Average,600,300features_15minwords_10contextALL,392.45,39220,9805,MLP,472.03,0.89,0.8,0.89,0.79,0.89,0.8,"[[ 258   31  161  280]
+ [  31   37   34  137]
+ [ 169   55  970  506]
+ [ 153   52  352 6579]]",all
