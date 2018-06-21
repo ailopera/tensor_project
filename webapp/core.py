@@ -7,7 +7,7 @@ import vectorAverage
 import word2VecModel
 
 #BASE_PATH = "../data/models/"
-BASE_PATH = "../data/"
+BASE_PATH = "../data/models/model/"
 MODEL_NAME = BASE_PATH + "my_model_final.ckpt"
 class_names= ["agree", "disagree", "discuss", "unrelated"]
 

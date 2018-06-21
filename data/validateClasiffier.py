@@ -77,7 +77,7 @@ common_params = {"representation":"vectorAverage","model": "300features_15minwor
 # ]
 
 # Experimentación final
-#base_arquitecture = [300, 100]
+base_arquitecture = [300, 100]
 #base_arquitecture = [300, 100, 100]
 #base_arquitecture = [250,150,100,75]
 #base_arquitecture = [200,100,100,75]
@@ -100,7 +100,7 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.05},
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.05},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.05}
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.05}
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.007", "hidden_neurons": base_arquitecture, "l2_scale": 0.007, "learning_rate": 0.01}
         
@@ -119,18 +119,18 @@ iterations = [
 ]
 
 # Configuraciones del clasificador recurrente
-iterations = [ 
+#iterations = [ 
 #   {"recurrrent": True, "architecture": "simple", "config_tag": "RNN_simple"},
-  {"recurrrent": True, "architecture": "multi", "config_tag": "RNN multicapa"}
-]
+#  {"recurrrent": True, "architecture": "multi", "config_tag": "RNN multicapa"}
+#]
 
 #cargamos el dataset de entrenamiento/validacion y el de test
 # Primer particionado
 #trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
 #testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
 # Segundo particionado
-#trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-#testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 
 # Tercer particionado (Solo cambia la particion de test)
 # trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
@@ -138,8 +138,8 @@ iterations = [
 #testDataPath = "./fnc-1-original/finalDatasets/competition_data_aggregated.csv"
 
 # Particionado para la experimentacion con RNN (Dataset con simbolos de puntuacion)
-trainDataPath = "./fnc-1-original/finalDatasets/RNN/train_partition_split.csv"
-testDataPath = "./fnc-1-original/finalDatasets/RNN/test_partition_split.csv"
+#trainDataPath = "./fnc-1-original/finalDatasets/RNN/train_partition_split.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/RNN/test_partition_split.csv"
 
 
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
@@ -167,8 +167,8 @@ for classifier_config in iterations:
         print(">>> Executing Configuration: ", classifier_config)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
-        #   executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
-            executeVectorFeaturing(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+           executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+            #executeVectorFeaturing(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")

@@ -47,7 +47,7 @@ def createBOWModel(bow_train_data, min_df, max_df, printLogs=False):
 def generateBOWModel(model_executed, train_data=None, test_data=None, min_df=1, max_df=1.0, validation=False, smote=""):
     basePath = "./fnc-1-original/aggregatedDatasets/"
     executionDesc = "bag_Of_Words"
-    execution_label = executionDesc + "_minDF_" + str(min_df) + "_maxDF_" + str(max_df)
+    execution_label = executionDesc + "_minDF_" + str(min_df) + "_maxDF_" + str(max_df) + model_executed
     # Paso 0: Cargamos los datasets de entrada por defecto
     print(">> Loading data...")
     execution_start = time.time()
