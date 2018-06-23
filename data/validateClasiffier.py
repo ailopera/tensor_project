@@ -9,8 +9,8 @@ from embeddingVector import executeVectorFeaturing
 
 
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
-common_params = {"representation":"vectorAverage","model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
-#common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
+# common_params = {"representation":"vectorAverage","model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False, "smote": "all"}
+common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vectors-negative300.bin", "classifier": "MLP", "binaryModel": True, "smote": "all"}
 
 #common_params = { "representation": "BOW", "classifier": "MLP", "min_df": 1, "max_df": 1.0, "smote": "all"}
 
@@ -100,12 +100,13 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.05},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.05}
+        # { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.05}
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.05}
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.007", "hidden_neurons": base_arquitecture, "l2_scale": 0.007, "learning_rate": 0.01}
         
-        
-        
+        # Ejecucion aplicando el optimizador ADAM
+        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture, "optimizer_function": "ADAM", "learning_rate": 0.01} #Configuracion original
+
         # Ejecuciones aumentando el numero de capas
         #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
         #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},

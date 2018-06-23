@@ -10,7 +10,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_arquitectura_original_p3_2"
+EXECUTION_TAG = "_experimentacion_FNN_2_pruebas_"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
@@ -76,7 +76,7 @@ def convert_to_int_classes(targetList):
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
     "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False, 
-    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2}
+    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD"}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -99,16 +99,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     ### Definicion de la red ###
     train_samples = input_features.shape[0] # Numero de ejemplos
     
-    # Hiperparametros del modelo
+    ### Hiperparametros del modelo ###
     valid_hidden_neuron_param = ("hidden_neurons" in hyperparams and len(hyperparams["hidden_neurons"]) >= 2)
     hidden_neurons = hyperparams["hidden_neurons"] if valid_hidden_neuron_param else default_hyperparams["hidden_neurons"]
     early_stopping = hyperparams.get("early_stopping", default_hyperparams["early_stopping"])
     n_inputs = input_features.shape[1] #TamaÃ±o de la entrada
+    
     # Numero de neuronas de la primera capa oculta
     n_hidden1 = hidden_neurons[0] 
     # Numero de neuronas de la segunda capa oculta
     n_hidden2 = hidden_neurons[1]
-    
     n_layers = len(hidden_neurons)
     if n_layers >= 3:
         n_hidden3 = hidden_neurons[2]
@@ -130,11 +130,15 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     else:
         print(">>> ERROR: Wrong activation function specified")
         return
+    
+    # Escala de regularizacion l2
     l2_scale =  hyperparams.get("l2_scale", default_hyperparams["l2_scale"])
     #Tasa de dropout
     drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
     learning_decrease = hyperparams.get("learning_decrease", default_hyperparams["learning_decrease"])
     early_stopping_patience = hyperparams.get("early_stopping_patience", default_hyperparams["early_stopping_patience"])
+    optimizer_function = hyperparams.get("optimizer_function", default_hyperparams["optimizer_function"])
+    
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
@@ -142,7 +146,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Funcion de activacion: ", hyperparams["activation_function"])
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
-    
+    print(">> Funcion optimizadora: ", optimizer_function)
+
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
@@ -218,7 +223,10 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     # Definimos el entrenamiento 
     learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
     with tf.name_scope("train"):
-        optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+        if optimizer_function == 'ADAM':
+            optimizer = tf.train.AdamOptimizer(learning_rate)
+        else:
+            optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
         training_op = optimizer.minimize(final_loss)
 
