@@ -44,6 +44,6 @@ def predictStance(headline, articleBody, model):
     with tf.Session() as sess:
         saver.restore(sess, MODEL_NAME)  # this restores the graph's state
         print("tf.graphKeys: ", [n.name for n in tf.get_default_graph().as_graph_def().node])
-        stance = sess.run('prediction:0', feed_dict={X: input_sample, y: default_label, keep_prob: 1.0})
+        stance = sess.run('prediction:0', feed_dict={X: [input_sample], y: default_label, keep_prob: 1.0})
         print(">> Prediction: ", stance)
         return class_names[stance]
