@@ -8,8 +8,8 @@ from BOWModel2 import generateBOWModel
 # Uso: python validateModel.py BOW | vectorAverage
 validation = sys.argv[1]
 
-SMOTE = "all"
-#SMOTE = ""
+#SMOTE = "all"
+SMOTE = ""
 # Definimos las distintas configuraciones con las que evaluaremos el modelo. Cada configuración se evalúa k veces
 vectorAverage_iterations = [
         {"model": "300features_15minwords_10contextALL", "classifier": "MLP", "binaryModel": False}, \
@@ -44,12 +44,12 @@ clusters_iterations = [{"model": "~/GoogleNews-vectors-negative300.bin", "classi
 
 #cargamos el dataset de entrenamiento/validacion y el de test
 # Primer particionado
-#trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
-#testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
+trainDataPath = "./fnc-1-original/finalDatasets/train_partition.csv"
+testDataPath = "./fnc-1-original/finalDatasets/test_partition.csv"
 
 # Segundo particionado
-trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
-testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
+#trainDataPath = "./fnc-1-original/finalDatasets/train_partition_split.csv"
+#testDataPath = "./fnc-1-original/finalDatasets/test_partition_split.csv"
 train_df = pd.read_csv(trainDataPath,header=0,delimiter=",", quoting=1)
 test_df = pd.read_csv(testDataPath,header=0,delimiter=",", quoting=1)
 
