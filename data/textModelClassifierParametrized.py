@@ -73,11 +73,10 @@ def convert_to_int_classes(targetList):
 
 
 # activation_function: relu | leaky_relu | elu | 
-# learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
     "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.001, "dropout_rate": 1.0, "learning_decrease_base": 1, 
-    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD"}
+    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD", "momentum": 0.9}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -148,6 +147,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     starter_learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
     learning_decrease_base = hyperparams.get("learning_decrease_base", default_hyperparams["learning_decrease_base"])
     
+    momentum = hyperparams.get("momentum", default_hyperparams["momentum"])
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
@@ -156,6 +156,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
     print(">> Funcion optimizadora: ", optimizer_function)
+    print(">> Momentum (aplicable si optimizacion momentum):", momentum)
     print("> Numero de epochs: ", n_epochs)
     print("> Learning rate: ", starter_learning_rate)
     print("> Learning rate base decay: ", learning_decrease_base)
@@ -244,7 +245,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     with tf.name_scope("train"):
         if optimizer_function == 'ADAM':
             optimizer = tf.train.AdamOptimizer(learning_rate)
-        else:
+        elif optimizer_function == 'Momentum':
+            optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum)
+        else: # GD by default
             optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
         if learning_decrease_base == 1:
@@ -257,8 +260,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
     prediction=tf.argmax(logits,1,name="prediction")
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-    recall = tf.metrics.recall(y, prediction)
-    precision = tf.metrics.precision(y, prediction)
+    # recall = tf.metrics.recall(y, prediction)
+    # precision = tf.metrics.precision(y, prediction)
     confusion_matrix_class = tf.confusion_matrix(y, prediction)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
