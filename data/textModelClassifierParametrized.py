@@ -21,7 +21,8 @@ def write_metrics_to_file(metrics):
         "n_layers", "hidden_neurons",
         "epochs", "activation_function",
         "dropout_rate", "learning_rate", "learning_decrease", "early_stopping_patience",
-        "execution_dir", "execution_time"
+        "execution_dir", "execution_time",
+        'optimizer', 'learning_decrease_base'
     ]
     csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
@@ -156,8 +157,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
     print(">> Funcion optimizadora: ", optimizer_function)
     print("> Numero de epochs: ", n_epochs)
-    print("> Learning rate: ", learning_rate)
-    print("> Learning rate base decay: ", learning_base_decrease)
+    print("> Learning rate: ", starter_learning_rate)
+    print("> Learning rate base decay: ", learning_decrease_base)
     print("> Tam. batch: ", batch_size)
     print("> Prueba: ", config_tag)
 
@@ -323,10 +324,6 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                      else:
                          loss_stacionality = loss_stacionality + 1
                              
-                if not learning_decrease == 1:
-                  #Reducimos el learning rate un 10% en cada epoch
-                  learning_rate = learning_rate * learning_decrease
-                
                 # Obtenemos el accuracy de los datos de entrenamiento y los de tests    
                 # acc_train = accuracy.eval(feed_dict={X: X_batch, y: y_batch})
                 #acc_train, summary_train, r_losses, b_loss, f_loss = sess.run([accuracy, merged_summary_op,reg_losses, loss, final_loss], feed_dict={X: input_features, y: train_labels, keep_prob: drop_rate})
