@@ -26,7 +26,9 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.01", "hidden_neurons": base_arquitecture, "learning_rate": 0.01},  
         #{ "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.05", "hidden_neurons": base_arquitecture, "learning_rate": 0.05},
         #{ "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.01_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.001,"optimizer_function": "ADAM"},
-        { "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.05_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.009,"optimizer_function": "ADAM"}
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.05_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.01,"optimizer_function": "ADAM"},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.01_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.01,"optimizer_function": "ADAM"},
+        { "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.015_ADAM", "hidden_neurons": base_arquitecture,"learning_rate": 0.01, "learning_decrease_base":0.95,"optimizer_function": "ADAM"}
         #Configuracion original
         #{ "activation_function": "relu", "config_tag": "base_arquitecture_0.005", "hidden_neurons": base_arquitecture, "learning_rate": 0.005}, #Configuracion original
         #{ "activation_function": "relu", "config_tag": "base_arquitecture_0.0001", "hidden_neurons": base_arquitecture, "learning_rate": 0.0001}, #Configuracion original
