@@ -84,14 +84,19 @@ base_arquitecture = [300, 100]
 #base_arquitecture = [250,150,100]
 iterations = [
         # Ejecuciones base
-        #{ "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture}, #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.005", "hidden_neurons": base_arquitecture},
+        { "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.01", "hidden_neurons": base_arquitecture, "learning_rate": 0.01},  
+        { "activation_function": "relu", "config_tag": "base_arquitecture_decay_0.05", "hidden_neurons": base_arquitecture, "learning_rate": 0.05}
+        #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_0.005", "hidden_neurons": base_arquitecture, "learning_rate": 0.005}, #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_0.0001", "hidden_neurons": base_arquitecture, "learning_rate": 0.0001}, #Configuracion original
         #{ "activation_function": "relu", "config_tag": "reduccion_neuronas", "hidden_neurons": [200, 50]}, # Reduciendo el numero de neuronas
         
         # Early Stopping sobre la arquitectura base
 
-        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_2", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 2}, 
-        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_1.5", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 1.5},
-        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_3", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.01, "early_stopping_patience": 3},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_2", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 2}, 
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_1.5", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 1.5},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_3", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 3},
 
         # Ejecuciones aplicando regularización Dropout
         #{ "activation_function": "relu", "config_tag": "dropout_25", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.05},
@@ -100,13 +105,14 @@ iterations = [
         #{ "activation_function": "relu", "config_tag": "dropout_75", "hidden_neurons": base_arquitecture, "dropout_rate": 0.75, "epochs": 20, "learning_rate": 0.05}, 
         # Ejecuciones aplicando regularización L2
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.001", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.05},
-        # { "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.05}
-        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.05}
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.002", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.05},
+        #{ "activation_function": "relu", "config_tag": "l2_scale_0.005", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.05},
         #{ "activation_function": "relu", "config_tag": "l2_scale_0.007", "hidden_neurons": base_arquitecture, "l2_scale": 0.007, "learning_rate": 0.01}
         
         # Ejecucion aplicando el optimizador ADAM
-        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture, "optimizer_function": "ADAM", "learning_rate": 0.01} #Configuracion original
-
+        #{ "activation_function": "relu", "config_tag": "l2_scale_ADAM_0.001", "hidden_neurons": base_arquitecture, "optimizer_function": "ADAM", "learning_rate": 0.01, "l2_scale": 0.001}, #Configuracion original
+        #{ "activation_function": "relu", "config_tag": "dropout_35_ADAM", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.05,"optimizer_function": "ADAM"}
+        
         # Ejecuciones aumentando el numero de capas
         #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
         #{ "activation_function": "relu", "config_tag": "ampliacion_capa", "hidden_neurons": [300, 100, 100]},
@@ -168,7 +174,7 @@ for classifier_config in iterations:
         print(">>> Executing Configuration: ", classifier_config)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
-           executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
+           executeVectorAverage(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,True, common_params["smote"], classifier_config)
             #executeVectorFeaturing(common_params["model"],common_params["classifier"], common_params["binaryModel"], train_data, validation_data,False, common_params["smote"], classifier_config)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, validation_data, common_params["min_df"], common_params["max_df"],False, common_params["smote"])

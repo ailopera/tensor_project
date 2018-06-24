@@ -10,7 +10,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_experimentacion_FNN_2_pruebas_"
+EXECUTION_TAG = "_PRUEBAS_ADAM_"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
@@ -75,7 +75,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease": False, 
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.001, "dropout_rate": 1.0, "learning_decrease": False, 
     "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD"}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
@@ -138,6 +138,9 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     learning_decrease = hyperparams.get("learning_decrease", default_hyperparams["learning_decrease"])
     early_stopping_patience = hyperparams.get("early_stopping_patience", default_hyperparams["early_stopping_patience"])
     optimizer_function = hyperparams.get("optimizer_function", default_hyperparams["optimizer_function"])
+    n_epochs = hyperparams["epochs"] if "epochs" in hyperparams else default_hyperparams["epochs"]
+    batch_size = hyperparams.get("batch_size" , default_hyperparams["batch_size"])
+    n_iterations = round(train_samples / batch_size)
     
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
@@ -147,11 +150,12 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
     print(">> Funcion optimizadora: ", optimizer_function)
-
+    
     # We define network architecture
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
     keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
+    
     if not drop_rate == 1.0:
         print(">> Dropout rate: ", drop_rate)
         with tf.name_scope("FNN"):
@@ -221,14 +225,16 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
                 final_loss = tf.reduce_mean(xentropy, name="loss")
 
     # Definimos el entrenamiento 
-    learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
+    starter_learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
+    global_step = tf.Variable(0, trainable=False)
+    learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, n_iterations, 0.90)
     with tf.name_scope("train"):
         if optimizer_function == 'ADAM':
             optimizer = tf.train.AdamOptimizer(learning_rate)
         else:
             optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
-        training_op = optimizer.minimize(final_loss)
+        training_op = optimizer.minimize(final_loss, global_step = global_step)
 
     # Definimos las metricas
     # with tf.name_scope("eval"):
@@ -243,11 +249,6 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     saver = tf.train.Saver()
         
     #### Fase de ejecucion ###
-    n_epochs = hyperparams["epochs"] if "epochs" in hyperparams else default_hyperparams["epochs"]
-    batch_size = hyperparams.get("batch_size" , default_hyperparams["batch_size"])
-
-    n_iterations = round(train_samples / batch_size)
-    
     print("> Numero de epochs: ", n_epochs)
     print("> Learning rate: ", learning_rate)
     print("> Learning rate decay: ", learning_decrease)
@@ -260,6 +261,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     tf.summary.scalar('Accuracy', accuracy)
     tf.summary.scalar('Loss', final_loss)
     tf.summary.histogram('Xentropy', xentropy)
+    tf.summary.scalar('Learning Rate', learning_rate)
     # hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
     # hidden_2_weights = [v for v in tf.global_variables() if v.name == "hidden2/kernel:0"][0]
     # outputs_weigths = [v for v in tf.global_variables() if v.name == "outputs/kernel:0"][0]
