@@ -75,7 +75,7 @@ def convert_to_int_classes(targetList):
 # learning_rate_update: constant | step_decay | exponential_decay
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.001, "dropout_rate": 1.0, "learning_decrease": False, 
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.001, "dropout_rate": 1.0, "learning_decrease_base": 1, 
     "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD"}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
@@ -135,12 +135,17 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     l2_scale =  hyperparams.get("l2_scale", default_hyperparams["l2_scale"])
     #Tasa de dropout
     drop_rate = hyperparams.get("dropout_rate", default_hyperparams["dropout_rate"])
-    learning_decrease = hyperparams.get("learning_decrease", default_hyperparams["learning_decrease"])
+    # Paciencia de early stopping
     early_stopping_patience = hyperparams.get("early_stopping_patience", default_hyperparams["early_stopping_patience"])
+    # Funcion de optimizacion
     optimizer_function = hyperparams.get("optimizer_function", default_hyperparams["optimizer_function"])
+    # Numero de epochs, tamano del batch, numero de iteraciones
     n_epochs = hyperparams["epochs"] if "epochs" in hyperparams else default_hyperparams["epochs"]
     batch_size = hyperparams.get("batch_size" , default_hyperparams["batch_size"])
     n_iterations = round(train_samples / batch_size)
+    # Learning rate y esquema de actualizacion
+    starter_learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
+    learning_decrease_base = hyperparams.get("learning_decrease_base", default_hyperparams["learning_decrease_base"])
     
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
@@ -150,8 +155,13 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     print("> Numero de capas ocultas: ", n_layers)
     print(">> Numero de neuronas de las capas ocultas: ", str(hidden_neurons))
     print(">> Funcion optimizadora: ", optimizer_function)
-    
-    # We define network architecture
+    print("> Numero de epochs: ", n_epochs)
+    print("> Learning rate: ", learning_rate)
+    print("> Learning rate base decay: ", learning_base_decrease)
+    print("> Tam. batch: ", batch_size)
+    print("> Prueba: ", config_tag)
+
+    ### Network Architecture ###
     X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
     y = tf.placeholder(tf.int64, shape=(None), name="y")
     keep_prob = tf.placeholder(tf.float32, shape=(None), name="keep_prob")
@@ -224,19 +234,24 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             else:
                 final_loss = tf.reduce_mean(xentropy, name="loss")
 
-    # Definimos el entrenamiento 
-    starter_learning_rate = hyperparams.get("learning_rate" , default_hyperparams["learning_rate"])
-    global_step = tf.Variable(0, trainable=False)
-    learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, n_iterations, 0.90)
+    ### Training ### 
+    if learning_decrease_base == 1:
+        learning_rate = starter_learning_rate
+    else:
+        global_step = tf.Variable(0, trainable=False)
+        learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, n_iterations, learning_decrease_base)
     with tf.name_scope("train"):
         if optimizer_function == 'ADAM':
             optimizer = tf.train.AdamOptimizer(learning_rate)
         else:
             optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
-        training_op = optimizer.minimize(final_loss, global_step = global_step)
+        if learning_decrease_base == 1:
+            training_op = optimizer.minimize(final_loss)
+        else:
+            training_op = optimizer.minimize(final_loss, global_step = global_step)
 
-    # Definimos las metricas
+    ### Metrics and results ###
     # with tf.name_scope("eval"):
     correct_prediction = tf.nn.in_top_k(logits, y , 1)
     prediction=tf.argmax(logits,1,name="prediction")
@@ -244,18 +259,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     recall = tf.metrics.recall(y, prediction)
     precision = tf.metrics.precision(y, prediction)
     confusion_matrix_class = tf.confusion_matrix(y, prediction)
-    #con_mat = tf.confusion_matrix(labels=y, predictions=prediction, num_classes=4, dtype=tf.int32, name=None)
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
         
-    #### Fase de ejecucion ###
-    print("> Numero de epochs: ", n_epochs)
-    print("> Learning rate: ", learning_rate)
-    print("> Learning rate decay: ", learning_decrease)
-    print("> Tam. batch: ", batch_size)
-    print("> Prueba: ", config_tag)
     
-    # Export de escalares e histogramas
+    ### Export de escalares e histogramas ###
     # Sacamos el valor actual de los dos accuracy en los logs para visualizarlo en tensorboard
     # Descomentar los que resulten interesantes de visualizar
     tf.summary.scalar('Accuracy', accuracy)
@@ -278,14 +286,12 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     #tf.summary.scalar('Recall', recall_classSK)
     merged_summary_op = tf.summary.merge_all()
     
+    
+    #### Fase de ejecucion ###
     # Entrenamos el modelo. Usamos minibatch gradient descent 
     # (en cada iteracion aplicamos el gradiente descendiente sobre una submuestra aleatoria de los datos de entrenamiento)
     #  Al final de cada epoch computamos el accuracy sobre uno de los batches.
     with tf.Session() as sess:
-        # for v in tf.global_variables():
-        #   print(v.name)
-        # # hidden_1_weights = [v for v in tf.global_variables() if v.name == "hidden1/kernel:0"][0]
-        
         # Inicializamos las variables globales del grafo
         init.run()
         # Creamos el writter
@@ -391,11 +397,12 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "config_tag": config_tag,
             "n_layers": n_layers,
             "dropout_rate": drop_rate,
-            "learning_rate": str(learning_rate),
-            "learning_decrease": learning_decrease,
+            "learning_rate": str(starter_learning_rate),
+            "learning_decrease_base": learning_decrease_base,
             "early_stopping_patience": early_stopping_patience,
             "execution_dir": logdir,
-            "execution_time": end - start
+            "execution_time": end - start,
+            "optimizer": optimizer_function
 		    }
         print(">> MLP Metrics: ")
         print(metrics)
