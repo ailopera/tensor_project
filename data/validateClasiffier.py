@@ -22,22 +22,24 @@ base_arquitecture = [300, 100]
 
 iterations = [
         # Ejecuciones base
-        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture},
+        #{ "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.80", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.80},
         
         # Gradient Descent +  Learning rate dinamico
         { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.95},
         { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.90},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.80", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.80},
         { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.95},
         { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.90},
         
         # Aplicando optimizador ADAM
-        { "activation_function": "relu", "config_tag": "default_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.001,"optimizer_function": "ADAM"},
-        { "activation_function": "relu", "config_tag": "ADAM_0.01", "hidden_neurons": base_arquitecture, "learning_rate": 0.01,"optimizer_function": "ADAM"},
-        { "activation_function": "relu", "config_tag": "ADAM_0.015", "hidden_neurons": base_arquitecture, "learning_rate": 0.015,"optimizer_function": "ADAM"},
+        #{ "activation_function": "relu", "config_tag": "default_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.001,"optimizer_function": "ADAM"},
+        #{ "activation_function": "relu", "config_tag": "ADAM_0.005", "hidden_neurons": base_arquitecture, "learning_rate": 0.005,"optimizer_function": "ADAM"},
+        #{ "activation_function": "relu", "config_tag": "ADAM_0.1", "hidden_neurons": base_arquitecture, "learning_rate": 0.1, "optimizer_function": "ADAM"},
         
         # Aplicando optimizador Momentum
-        { "activation_function": "relu", "config_tag": "momentum_0.01", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "momentum_0.05", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "momentum_0.005", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.005},
+        { "activation_function": "relu", "config_tag": "momentum_0.001", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.001},
         
                
         # Early Stopping sobre la arquitectura base
@@ -117,8 +119,8 @@ end = time.time()
 trainValidationTime = end - start
 
 start = time.time()
-Execute test with test data
-Execute the same iterations with final validation data
+#Execute test with test data
+#Execute the same iterations with final validation data
 print("---------------------- TEST ------------------------------")
 print(">> Executing different model configurations over test data")
 print(">>> LEN train data: ", train_data.shape[0])
