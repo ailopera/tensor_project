@@ -10,20 +10,28 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_PRUEBAS_ADAM_"
+EXECUTION_TAG = "_BASE_ARQUITECTURE_"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
 def write_metrics_to_file(metrics):
-    header = ["config_tag", "train_accuracy", "test_accuracy", "confusion_matrix",
-		"precision_train", "precision_test",
-        "recall_train", "recall_test" ,
-        "n_layers", "hidden_neurons",
-        "epochs", "activation_function",
-        "dropout_rate", "learning_rate", "learning_decrease", "early_stopping_patience",
-        "execution_dir", "execution_time",
-        'optimizer', 'learning_decrease_base'
+
+    header = [
+        # Arquitectura de la red e hiperparamentros de aprendizaje
+        "activation_function","config_tag",
+        "hidden_neurons", "n_layers",
+        "optimizer", "learning_rate",
+        "learning_decrease_base", "epochs",
+        # Metricas
+        "train_accuracy","test_accuracy",
+        "precision_train","precision_test",
+        "recall_train","recall_test",
+        "confusion_matrix",
+        # Regularizaciones
+        "early_stopping_patience","dropout_rate","l2_regularization",
+        "execution_time", "execution_dir"
     ]
+    
     csv_output_dir = "./executionStats/classifier/"
     date = time.strftime("%Y-%m-%d")
     output_file = csv_output_dir + '_FNN_classifier_' + date + '.csv'
@@ -384,30 +392,35 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         
         
         metrics = {
+            "activation_function": hyperparams["activation_function"],
+            "config_tag": config_tag,
+            
+            "hidden_neurons": hidden_neurons,
+            "n_layers": n_layers,
+            "optimizer": optimizer_function,
+            "learning_rate": str(starter_learning_rate),
+            "learning_decrease_base": learning_decrease_base,
+            "epochs": executed_epochs,
+
             "train_accuracy": round(acc_final_train,2),
             "test_accuracy": round(acc_final_test,2),
-            "confusion_matrix": confusion_matrix_class,
             "precision_train":round(precision_train,2),
             "precision_test": round(precision_classSK,2),
             "recall_train": round(recall_train,2),
             "recall_test": round(recall_classSK,2),
-            "activation_function": hyperparams["activation_function"],
-            "hidden_neurons": hidden_neurons,
-            "epochs": executed_epochs,
-            "config_tag": config_tag,
-            "n_layers": n_layers,
-            "dropout_rate": drop_rate,
-            "learning_rate": str(starter_learning_rate),
-            "learning_decrease_base": learning_decrease_base,
+            "confusion_matrix": confusion_matrix_class,
+            
             "early_stopping_patience": early_stopping_patience,
-            "execution_dir": logdir,
+            "dropout_rate": drop_rate,
+            "l2_regularization": round(l2_scale,3),
+
             "execution_time": end - start,
-            "optimizer": optimizer_function
+            "execution_dir": logdir      
 		    }
         print(">> MLP Metrics: ")
         print(metrics)
         write_metrics_to_file(metrics)
-        #Anadimos dos campos extra
+        #Anadimos dos campos extra, que no se visualizan en el csv
         metrics["y_true"]= test_labels
         metrics["y_score"] = y_score
         return metrics
