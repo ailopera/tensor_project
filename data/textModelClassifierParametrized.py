@@ -83,7 +83,7 @@ def convert_to_int_classes(targetList):
 # activation_function: relu | leaky_relu | elu | 
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
-    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.001, "dropout_rate": 1.0, "learning_decrease_base": 1, 
+    "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease_base": 1, 
     "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD", "momentum": 0.9}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
@@ -250,10 +250,11 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     else:
         global_step = tf.Variable(0, trainable=False)
         learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, n_iterations, learning_decrease_base)
+    
     with tf.name_scope("train"):
         if optimizer_function == 'ADAM':
             optimizer = tf.train.AdamOptimizer(learning_rate)
-        elif optimizer_function == 'Momentum':
+        elif optimizer_function == 'momentum':
             optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum)
         else: # GD by default
             optimizer = tf.train.GradientDescentOptimizer(learning_rate)
