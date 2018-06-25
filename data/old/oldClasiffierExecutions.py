@@ -59,3 +59,11 @@
         #{ "activation_function": "relu", "config_tag": "learning_rate", "hidden_neurons": [100, 75, 50, 50, 25], "learning_decrease": 0.9, "learning_rate": 0.1}          # Ejecuciones aumentando el tamano del batch
         #{ "activation_function": "relu", "config_tag": "ampliando_batch", "hidden_neurons": [300, 100], 'batch_size': 150}  
 # ]
+
+validateClassifier2 = [
+        # Aplicando optimizador ADAM
+        #{ "activation_function": "relu", "config_tag": "default_ADAM", "hidden_neurons": base_arquitecture, "learning_rate": 0.001,"optimizer_function": "ADAM"},
+        #{ "activation_function": "relu", "config_tag": "ADAM_0.005", "hidden_neurons": base_arquitecture, "learning_rate": 0.005,"optimizer_function": "ADAM"},
+        #{ "activation_function": "relu", "config_tag": "ADAM_0.1", "hidden_neurons": base_arquitecture, "learning_rate": 0.1, "optimizer_function": "ADAM"},
+        
+]
