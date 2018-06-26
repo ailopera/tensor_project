@@ -8,7 +8,7 @@ from sklearn.metrics import roc_curve, auc
 n_classes = 4 # Clases: 0, 1, 2, 3
 class_names= ["agree", "disagree", "discuss", "unrelated"]
 
-base_dir = "FNN/base_architecture/"
+base_dir = "FNN/architecture_3_layer/"
 #base_dir = "P2/"
 #base_dir = "P2_SMOTE/"
 def plotROCCurves(fpr, tpr, roc_auc, color, label, class_name):
@@ -28,6 +28,7 @@ def plotROCCurves(fpr, tpr, roc_auc, color, label, class_name):
     #fig = plt.figure()
     filename = "plots/" + base_dir + "curvaROC_" + label + class_name + '.png'
     fig.savefig(filename, bbox_inches='tight') 
+    plt.close()
 
 # Pinta las curvas ROC para los datos de test
 def defineROCCurves(y_test, y_score, execution_label):

@@ -10,7 +10,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_RESULTADOS_ARQUITECTURA_1_"
+EXECUTION_TAG = "_RESULTADOS_ARQUITECTURA_3_CAPAS_"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 
@@ -28,7 +28,7 @@ def write_metrics_to_file(metrics):
         "recall_train","recall_test",
         "confusion_matrix",
         # Regularizaciones
-        "early_stopping_patience","dropout_rate","l2_regularization",
+        "early_stopping_patience","dropout_rate","l2_regularization", "momentum"
         "execution_time", "execution_dir"
     ]
     
@@ -255,7 +255,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         if optimizer_function == 'ADAM':
             optimizer = tf.train.AdamOptimizer(learning_rate)
         elif optimizer_function == 'momentum':
-            optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum)
+            optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum, use_nesterov=True)
         else: # GD by default
             optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
@@ -414,6 +414,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "early_stopping_patience": early_stopping_patience,
             "dropout_rate": drop_rate,
             "l2_regularization": round(l2_scale,3),
+            "momentum": "nesterov",
 
             "execution_time": end - start,
             "execution_dir": logdir      

@@ -15,9 +15,9 @@ common_params = {"representation": "vectorAverage","model": "~/GoogleNews-vector
 #common_params = { "representation": "BOW", "classifier": "MLP", "min_df": 1, "max_df": 1.0, "smote": "all"}
 
 # Experimentación final
-base_arquitecture = [300, 100]
+#base_arquitecture = [300, 100]
 #base_arquitecture = [200, 200]
-#base_arquitecture = [300, 150, 100]
+base_arquitecture = [300, 150, 100]
 #base_arquitecture = [175, 175, 175]
 
 iterations = [
@@ -31,25 +31,25 @@ iterations = [
         { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.90},
         
         # Aplicando optimizador Momentum
-        { "activation_function": "relu", "config_tag": "momentum_0.005", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.005},
-        { "activation_function": "relu", "config_tag": "momentum_0.001", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.001},
+        { "activation_function": "relu", "config_tag": "momentum_0.005_nesterov", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.005},
+        { "activation_function": "relu", "config_tag": "momentum_0.001_nesterov", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.001},
         
         # Early Stopping sobre la arquitectura base
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_2_momentum", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 2, "optimizer_function": "momentum"}, 
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_1.5_momentum", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 1.5, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_3_momentum", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 3, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_2_momentum_nesterov", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 2, "optimizer_function": "momentum"}, 
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_1.5_momentum_nesterov", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 1.5, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_3_momentum_nesterov", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 3, "optimizer_function": "momentum"},
 
         # Mejor optimización + Dropout 
         # Ejecuciones aplicando regularización Dropout
-        { "activation_function": "relu", "config_tag": "dropout_25_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "dropout_35_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "dropout_50_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"}, 
+        { "activation_function": "relu", "config_tag": "dropout_25_momentum_nesterov", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "dropout_35_momentum_nesterov", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "dropout_50_momentum_nesterov", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"}, 
         
         # Mejor optimización + L2
         # Ejecuciones aplicando regularización L2
-        { "activation_function": "relu", "config_tag": "l2_scale_0.001_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.001, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.002_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.001, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.005_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.001, "optimizer_function": "momentum"}
+        { "activation_function": "relu", "config_tag": "l2_scale_0.001_momentum_nesterov", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.002_momentum_nesterov", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.005_momentum_nesterov", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.001, "optimizer_function": "momentum"}
 ]
 
 # Configuraciones del clasificador recurrente
@@ -136,7 +136,7 @@ print(">> TEST EXECUTION TIME: ", testExecutionTime)
 
 # Export data to a csv file
 csvOutputDir = "./executionStats/"
-# date = time.strftime("%Y-%m-%d")
+date = time.strftime("%Y-%m-%d")
 output_file =  csvOutputDir + "simpleValidation_execution_" + date + ".csv"
 fieldNames = ["date", "execution", "trainValidationTime", "testTime"]
 
