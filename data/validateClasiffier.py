@@ -41,15 +41,15 @@ iterations = [
 
         # Mejor optimización + Dropout 
         # Ejecuciones aplicando regularización Dropout
-        { "activation_function": "relu", "config_tag": "dropout_25_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.005, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "dropout_35_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.005, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "dropout_50_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.005, "optimizer_function": "momentum"}, 
+        { "activation_function": "relu", "config_tag": "dropout_25_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.25, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "dropout_35_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.35, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "dropout_50_momentum", "hidden_neurons": base_arquitecture, "dropout_rate": 0.50, "epochs": 20, "learning_rate": 0.001, "optimizer_function": "momentum"}, 
         
         # Mejor optimización + L2
         # Ejecuciones aplicando regularización L2
-        { "activation_function": "relu", "config_tag": "l2_scale_0.001_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.005, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.002_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.005, "optimizer_function": "momentum"},
-        { "activation_function": "relu", "config_tag": "l2_scale_0.005_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.005, "optimizer_function": "momentum"}
+        { "activation_function": "relu", "config_tag": "l2_scale_0.001_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.001, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.002_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.002, "learning_rate": 0.001, "optimizer_function": "momentum"},
+        { "activation_function": "relu", "config_tag": "l2_scale_0.005_momentum", "hidden_neurons": base_arquitecture, "l2_scale": 0.005, "learning_rate": 0.001, "optimizer_function": "momentum"}
 ]
 
 # Configuraciones del clasificador recurrente
@@ -122,8 +122,8 @@ for iteration in iterations:
         print(">>> Executing Configuration: ", iteration)
         # Execute model with the configuration specified 
         if common_params['representation'] == 'vectorAverage':
-        #   executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
-            executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+          executeVectorAverage(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
+        #     executeVectorFeaturing(common_params["model"], common_params["classifier"], common_params["binaryModel"], train_data, test_df,False, common_params["smote"], iteration)
         # elif common_params['representation'] == 'BOW':
         #   generateBOWModel(common_params["classifier"], train_data, test_df, common_params["min_df"], common_params["max_df"],False, common_params["smote"])
         print("------------------------------------------------------")

@@ -10,7 +10,7 @@ import csv
 import os
 import time
 
-EXECUTION_TAG = "_BASE_ARQUITECTURE_"
+EXECUTION_TAG = "_RESULTADOS_ARQUITECTURA_1_"
 
 ### Funciones auxiliares
 #Vuelca las metricas de ejecucion 

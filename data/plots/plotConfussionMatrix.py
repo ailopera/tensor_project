@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import itertools
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,18 +13,27 @@ import json
 import re
 
 # # Read data Results
+
 # Resultados de modelos de representación de textos
 # Ficheros del particionado 1
+# Primeros Resultados
 # executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-04-23.csv"
 # executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-04-23.csv"
+# Segundos Resultados
+# executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-04-23.csv"
+# executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-06-17_P1.csv"
+# executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-06-21.csv" #P1
+executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-06-17_smote_all.csv" #P2 SMOTE all
 # Ficheros del particionado 2
 # executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-05-01.csv"
 # executionStatsPath = '../executionStats/' + "bag_Of_Words_execution_2018-05-02_smote_all.csv"
 # executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-05-03.csv"
 # executionStatsPath = '../executionStats/' + "vector_Average_execution_2018-05-01.csv"
 
-# Resultados FNN, Particionado 2
-executionStatsPath = '../executionStats/classifier/' + "_FNN_classifier_2018-05-26.csv"
+### Resultados FNN, Particionado 2
+# executionStatsPath = '../executionStats/classifier/' + "_FNN_classifier_2018-05-26.csv"
+
+
 trainExecution = pd.read_csv(executionStatsPath,header=0,delimiter=",", quoting=1)
 print("> Load file ", executionStatsPath)
 class_names = ['Agree', 'Disagree', 'Discuss', 'Unrelated']
@@ -29,8 +41,8 @@ class_names = ['Agree', 'Disagree', 'Discuss', 'Unrelated']
     
 for index, execution in trainExecution.iterrows():
     # print(type(execution['confusionMatrix']))
-    # mat = re.sub("\s+", ",", execution['confusionMatrix'].strip()) #Para csv de modelos de representacion
-    mat = re.sub("\s+", ",", execution['confusion_matrix'].strip()) # Para csv de clasificador neuronal
+    mat = re.sub("\s+", ",", execution['confusionMatrix'].strip()) #Para csv de modelos de representacion
+    # mat = re.sub("\s+", ",", execution['confusion_matrix'].strip()) # Para csv de clasificador neuronal
     mat = mat.replace("[,", "[")
     print(mat)
     cnf_matrix = ast.literal_eval(mat)
@@ -46,7 +58,7 @@ for index, execution in trainExecution.iterrows():
     # sns.heatmap(df, cmap="BuPu")
     # sns.heatmap(df, cmap="Greens")
 
-    sn_plot = sn.heatmap(df_cm, annot=True,fmt="d", cmap="Blues").get_figure()
+    sn_plot = sn.heatmap(df_cm, annot=True,fmt="d").get_figure()
     
     # plt.show()
     # fname = execution['executionDesc'] + "_" + execution['modelTrained'] + "_" + "row" + str(index+2) # Para csv de modelos de representacion
