@@ -215,7 +215,8 @@ def executeVectorAverage(word2vec_model, model_executed, binary, train_data=None
     # Si estamos ante resultados de test, realizamos el computo de las curvas ROC 
     if validation == False: 
         print(">> Ploting ROC curves...")
-        utils.defineROCCurves(classification_results["y_true"], classification_results["y_score"], execution_label)
+        label = execution_label + "_" + classification_results['config_tag']
+        utils.defineROCCurves(classification_results["y_true"], classification_results["y_score"], label)
 
 
     # Ponemos en un csv los tiempos de ejecucion para compararlos más adelante

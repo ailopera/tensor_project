@@ -1,0 +1,5 @@
+activation_function,config_tag,hidden_neurons,n_layers,optimizer,learning_rate,learning_decrease_base,epochs,train_accuracy,test_accuracy,precision_train,precision_test,recall_train,recall_test,confusion_matrix,early_stopping_patience,dropout_rate,l2_regularization,execution_time,execution_dir
+relu,l2_scale_0.005_momentum,"[300, 100]",2,momentum,0.005,1,20,0.89,0.74,0.89,0.82,0.89,0.74,"[[ 513   31  105   81]
+ [  93   59   31   56]
+ [ 402   72 1033  193]
+ [ 718  136  609 5673]]",2,1.0,0.005,337.4198143482208,fnnLogs/06-26_BASE_ARQUITECTURE_/20180626/run-FNNClassifier-l2_scale_0.005_momentum-000138/
