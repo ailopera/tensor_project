@@ -1,0 +1,53 @@
+activation_function,config_tag,hidden_neurons,n_layers,optimizer,learning_rate,learning_decrease_base,epochs,train_accuracy,test_accuracy,precision_train,precision_test,recall_train,recall_test,confusion_matrix,early_stopping_patience,dropout_rate,l2_regularization,momentum_nesterov,execution_time,execution_dir
+relu,base_arquitecture_early_stopping_2_momentum_nesterov,"[300, 150, 100]",3,momentum,0.01,1,4,0.97,0.81,0.97,0.79,0.97,0.81,"[[ 371   15   95  249]
+ [  40   30   25  144]
+ [ 258   35  849  558]
+ [ 177   35  275 6649]]",2,1.0,0.0,True,79.00690197944641,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-base_arquitecture_early_stopping_2_momentum_nesterov-171331/
+relu,dropout_25_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.52,0.42,0.49,0.6,0.52,0.42,"[[ 366   21   48  295]
+ [ 133   19    5   82]
+ [ 390   49  549  712]
+ [2137   86 1683 3230]]",2,0.25,0.0,,479.994264125824,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-dropout_25_learning_decrease_base-172948/
+relu,dropout_35_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.58,0.38,0.56,0.63,0.58,0.38,"[[ 439   17  104  170]
+ [ 129   27   25   58]
+ [ 354   31  891  424]
+ [1748   59 2942 2387]]",2,0.35,0.0,,479.73756432533264,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-dropout_35_learning_decrease_base-173956/
+relu,dropout_50_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.72,0.58,0.71,0.71,0.72,0.58,"[[ 467   10   81  172]
+ [ 123   27   23   66]
+ [ 377   22  780  521]
+ [1409   27 1280 4420]]",2,0.5,0.0,,517.1089432239532,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-dropout_50_learning_decrease_base-175007/
+relu,l2_scale_0.001_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.95,0.77,0.95,0.77,0.95,0.77,"[[ 327    8   94  301]
+ [  62   15   18  144]
+ [ 287   22  826  565]
+ [ 406    6  326 6398]]",2,1.0,0.001,,443.09134459495544,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-l2_scale_0.001_learning_decrease_base-180055/
+relu,l2_scale_0.002_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.94,0.77,0.94,0.79,0.94,0.77,"[[ 372   17  123  218]
+ [  75   32   39   93]
+ [ 260   49 1013  378]
+ [ 478   30  541 6087]]",2,1.0,0.002,,445.33307123184204,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-l2_scale_0.002_learning_decrease_base-181611/
+relu,l2_scale_0.005_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.87,0.68,0.87,0.76,0.87,0.68,"[[ 406   16  118  190]
+ [  85   27   51   76]
+ [ 379   39  906  376]
+ [ 953   23  821 5339]]",2,1.0,0.005,,441.3132736682892,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-l2_scale_0.005_learning_decrease_base-182547/
+relu,dropout_25_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.51,0.39,0.49,0.6,0.51,0.39,"[[ 485  118   47  194]
+ [  71  103    8   23]
+ [ 535   77  682  744]
+ [2594  133 2147 2974]]",2,0.25,0.0,,507.56456685066223,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-dropout_25_learning_decrease_base-183523/
+relu,dropout_35_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.6,0.37,0.59,0.65,0.6,0.37,"[[ 562   99   74  109]
+ [  58  101   27   19]
+ [ 412   80 1175  371]
+ [1925  109 3582 2232]]",2,0.35,0.0,,546.6957960128784,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-dropout_35_learning_decrease_base-184602/
+relu,dropout_50_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.73,0.63,0.72,0.74,0.73,0.63,"[[ 588   70   58  128]
+ [  64   90   27   24]
+ [ 378   50 1124  486]
+ [1278   43 1456 5071]]",2,0.5,0.0,,508.2830970287323,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-dropout_50_learning_decrease_base-185723/
+relu,l2_scale_0.001_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.95,0.82,0.95,0.85,0.95,0.82,"[[ 555   51  150   88]
+ [  42   86   44   33]
+ [ 355   47 1382  254]
+ [ 366   25  482 6975]]",2,1.0,0.001,,424.5754647254944,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-l2_scale_0.001_learning_decrease_base-190805/
+relu,l2_scale_0.002_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.93,0.8,0.93,0.83,0.93,0.8,"[[ 580   46  139   79]
+ [  66   77   39   23]
+ [ 356   47 1331  304]
+ [ 476   26  620 6726]]",2,1.0,0.002,,421.69415616989136,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-l2_scale_0.002_learning_decrease_base-191724/
+relu,l2_scale_0.005_learning_decrease_base,"[300, 150, 100]",3,GD,0.01,0.9,20,0.88,0.73,0.88,0.8,0.88,0.73,"[[ 553   69  146   76]
+ [  46   96   38   25]
+ [ 369   62 1354  253]
+ [ 759   25 1105 5959]]",2,1.0,0.005,,428.7479000091553,fnnLogs/06-27_RESULTADOS_ARQUITECTURA_3_CAPAS_/20180627/run-FNNClassifier-l2_scale_0.005_learning_decrease_base-192641/
