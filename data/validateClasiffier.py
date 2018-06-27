@@ -22,17 +22,20 @@ base_arquitecture = [300, 150, 100]
 
 iterations = [
         # Ejecuciones base
-        #{ "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture},
+        { "activation_function": "relu", "config_tag": "base_arquitecture", "hidden_neurons": base_arquitecture},
         
         # Gradient Descent +  Learning rate dinamico
-        #{ "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.95},
-        #{ "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.90},
-        #{ "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.95},
-        #{ "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.90},
-        
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.95},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.01_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.01, "learning_decrease_base":0.90},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.95},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.05_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.90},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.09_0.95", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.95},
+        { "activation_function": "relu", "config_tag": "dynamic_learning_rate_0.09_0.90", "hidden_neurons": base_arquitecture, "learning_rate": 0.05, "learning_decrease_base":0.90},
+                
         # Aplicando optimizador Momentum
         { "activation_function": "relu", "config_tag": "momentum_0.005_nesterov", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.005},
         { "activation_function": "relu", "config_tag": "momentum_0.001_nesterov", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.001},
+        { "activation_function": "relu", "config_tag": "momentum_0.01_nesterov", "hidden_neurons": base_arquitecture, "optimizer_function": "momentum", "learning_rate": 0.01},
         
         # Early Stopping sobre la arquitectura base
         { "activation_function": "relu", "config_tag": "base_arquitecture_early_stopping_2_momentum_nesterov", "hidden_neurons": base_arquitecture, "early_stopping": True, "learning_rate": 0.001, "early_stopping_patience": 2, "optimizer_function": "momentum"}, 

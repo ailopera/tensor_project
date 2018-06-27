@@ -28,8 +28,8 @@ def write_metrics_to_file(metrics):
         "recall_train","recall_test",
         "confusion_matrix",
         # Regularizaciones
-        "early_stopping_patience","dropout_rate","l2_regularization", "momentum"
-        "execution_time", "execution_dir"
+        "early_stopping_patience","dropout_rate","l2_regularization",
+         "momentum_nesterov","execution_time", "execution_dir"
     ]
     
     csv_output_dir = "./executionStats/classifier/"
@@ -84,7 +84,7 @@ def convert_to_int_classes(targetList):
 ### Clasificador ###
 default_hyperparams = {"activation_function": "relu", "learning_rate_update":"constant", "config_tag": "DEFAULT",
     "epochs": 20, 'hidden_neurons': [300, 100], "early_stopping": False, "learning_rate": 0.01, "dropout_rate": 1.0, "learning_decrease_base": 1, 
-    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD", "momentum": 0.9}
+    "l2_scale": 0.0, 'batch_size': 50, "early_stopping_patience":2, "optimizer_function": "GD", "momentum": 0.9, "momentum_nesterov": True}
   
 def modelClassifier(input_features, target, test_features, test_targets, hyperparams=default_hyperparams):
     print(">>> hyperparams: ", str(hyperparams))
@@ -156,6 +156,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
     learning_decrease_base = hyperparams.get("learning_decrease_base", default_hyperparams["learning_decrease_base"])
     
     momentum = hyperparams.get("momentum", default_hyperparams["momentum"])
+    momentum_nesterov = ""
+    
     print("> Shape de los datos de entrada (entrenamiento): ", input_features.shape)
     print("> Shape de los datos de entrada (test): ", test_features.shape)
     print("> Numero de neuronas de la capa de entrada: ", n_inputs)
@@ -255,7 +257,8 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
         if optimizer_function == 'ADAM':
             optimizer = tf.train.AdamOptimizer(learning_rate)
         elif optimizer_function == 'momentum':
-            optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum, use_nesterov=True)
+            momentum_nesterov = hyperparams.get("momentum_nesterov", default_hyperparams["momentum_nesterov"])
+            optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum, use_nesterov=momentum_nesterov)
         else: # GD by default
             optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         # training_op = optimizer.minimize(loss)
@@ -414,7 +417,7 @@ def modelClassifier(input_features, target, test_features, test_targets, hyperpa
             "early_stopping_patience": early_stopping_patience,
             "dropout_rate": drop_rate,
             "l2_regularization": round(l2_scale,3),
-            "momentum": "nesterov",
+            "momentum_nesterov": momentum_nesterov,
 
             "execution_time": end - start,
             "execution_dir": logdir      
