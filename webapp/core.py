@@ -51,6 +51,9 @@ def predictStance(headline, articleBody, model):
         X = graph.get_tensor_by_name("X:0")
         y = graph.get_tensor_by_name("y:0")
         keep_prob = graph.get_tensor_by_name("keep_prob:0")
-        stance = sess.run('prediction:0', feed_dict={X: [input_sample], y: default_label, keep_prob: 1.0})
+        stance, predictions = sess.run(['prediction:0', 'outputs:0'], feed_dict={X: [input_sample], y: default_label, keep_prob: 1.0})
         print(">> Prediction: ", stance)
-        return class_names[stance[0]]
+        print(">> Full predictions: ", predictions)
+        predictions = []
+
+        return predictions, class_names[stance[0]]

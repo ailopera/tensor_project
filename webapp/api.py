@@ -27,8 +27,12 @@ class Stances(Resource):
         if 'body' in request.form and 'headline' in request.form:
             body = request.form['body']
             headline = request.form['headline']
-            stance = core.predictStance(headline, body, model)
-            return jsonify({'stance': stance})
+            full_predictions, stance = core.predictStance(headline, body, model)
+            return jsonify({
+                'headline': headline,
+                'body': body,
+                'stance': stance,
+                'predictions': full_predictions})
         else:
             return jsonify({'error': 'You must provide both body and articleBody params'})
 
