@@ -2,7 +2,7 @@
 Repositorio del Trabajo de Fin de Máster "Filtrado Inteligente de Noticias basado en Deep Learning", presentado en julio de 2018.
 
 ## Estructura de directorios
-- data:
+- data: Modelos propios de word2vec, scripts de generación de representaciones, modelos clasificadores, script de lanzamiento de entrenamientos/validaciones + test.
   - executionStats: Ficheros csv de los experimentos realizados.
   - fnc-1-original: Datasets base del desafío, particiones creadas y script de tratamiento y limpieza de datos.
   - old: versiones anteriores del código.
