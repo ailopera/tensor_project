@@ -10,6 +10,8 @@
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
 	<!-- <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"> -->
 	<!--===============================================================================================-->
 	<!-- <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css"> -->
@@ -33,40 +35,89 @@
 
 <body>
 
-	<header><img src="images/icons/text-lines.png"> Stance Detector </header>
+	<header>
+		<a href="https://ailopera.github.io/stanceDetector.github.io/index.html"><img src="images/icons/text-lines.png"> Stance Detector </header></a>
 
 
 	<div class="main-section">
 		<div class="article-section">
 			<div class="headline">
-				<p>I Was Fired for Making Fun of Trump</p>
+				<p id="headlineText">TITULO</p>
 			</div>
 			<div class="article-body">
-				<p>
-					After 25 years as the editorial cartoonist for The Pittsburgh Post-Gazette, I was fired on Thursday. I blame Donald Trump.Well,
-					sort of.I should’ve seen it coming. When I had lunch with my new boss a few months ago, he informed me that the paper’s
-					publisher believed that the editorial cartoonist was akin to an editorial writer, and that his views should reflect
-					the philosophy of the newspaper.That was a new one to me.I was trained in a tradition in which editorial cartoonists
-					are the live wires of a publication — as one former colleague put it, the constant irritant. Our job is to provoke readers
-					in a way words alone can’t. Cartoonists are not illustrators for a publisher’s politics. When I was hired in 1993, The
-					Post-Gazette was the liberal newspaper in town, but it always prided itself on being a forum for a lot of divergent
-					ideas. The change in the paper did not happen overnight. From what I remember, it started in 2010, with the endorsement
-					of the Republican candidate for Pennsylvania governor, which shocked a majority of our readership. The next big moment
-					happened in late 2015, when my longtime boss, the editorial page editor, took a buyout after the publisher indicated
-					that the paper might endorse Mr. Trump. Then, early this year, we published openly racist editorials. Things really changed
-					for me in March, when management decided that my cartoons about the president were too angry and said I was “obsessed
-					with Trump.” This about a president who has declared the free press one of the greatest threats to our country. Not every
-					idea I have works. Every year, a few of my cartoons get killed. But suddenly, in a three-month period, 19 cartoons or
-					proposals were rejected.
+				<p id="bodyText">
+					CUERPO DE LA NOTICIA
 				</p>
 			</div>
 		</div>
-		<aside class="stance">Stance</aside>
+		<aside class="stance">
+			<p id="stanceText"> Obteniendo posición de la noticia...</p>
+			<p id="stanceDescription"> <p>
+			
+		</aside>
 	</div>
-	<!-- <footer>
-		<p>Plantilla modificada a partir de (CC License): https://colorlib.com/wp/template/contact-form-v5/. Background Photo by Philip Strong on Unsplash. Favicon by FontAwesome https://fontawesome.com/license </p>	
-		<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-	</footer> -->
+	<div class="footer">
+		<p> Ficheros css básicos obtenidos de plantilla (CC License): <a href="https://colorlib.com/wp/template/contact-form-v5/" title="Colorlib">https://colorlib.com/wp/template/contact-form-v5/</a>. Background Photo by Philip Strong on Unsplash. Favicon by FontAwesome <a href="https://fontawesome.com/license"target="_blank">https://fontawesome.com/license </a> </p>	
+		<div> Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+	</div>
 </body>
+<script>
+	function GetURLParameter(sParam) {
+		var sPageURL = window.location.search.substring(1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++) {
+			var sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam) {
+				return sParameterName[1];
+			}
+		}
+	}
+
+
+	var headline = GetURLParameter('headline');
+	console.log("headline", headline);
+	console.log("Body", body);
+	var body = GetURLParameter('body');
+
+
+	var headlineText = document.getElementById("headlineText");
+	headlineText.innerHTML = decodeURIComponent(headline);
+
+	var bodyText = document.getElementById("bodyText")
+	bodyText.innerHTML = decodeURIComponent(body);
+
+
+	// Hacemos una petición al servicio para obtener la posición de la noticia
+
+	var url = "https://stancedetectorapp.tk/stances";
+	data = new FormData();
+	data.append( 'headline', decodeURIComponent(headline));
+	data.append( 'body', decodeURIComponent(body));
+
+	// $.post(url, $('.contact100-form').serialize())
+	// 	.done(function (data) {
+	// 		console.log("Data: " + data);
+	// 		var stanceText = document.getElementsById("stanceText")
+	// 		stanceText.innerHTML = stance;
+	// 		var stance = GetURLParameter('stance');
+	// 	});
+	
+	xhr = new XMLHttpRequest();
+
+    xhr.open( 'POST', url, true );
+    xhr.onreadystatechange = function () {
+			console.log("Respuesta del servidor: " + xhr.responseText);
+			// console.log("Tipo de la respuesta: " + typeof xhr.responseText);
+			var response = JSON.parse(xhr.responseText)
+			console.log("Clase: " + response["stance"]);
+			console.log("Descripcion: " + response["description"]);
+			var stanceText = document.getElementById("stanceText")
+			var stanceDescription = document.getElementById("stanceDescription")
+			stanceText.innerHTML = response["stance"];
+			stanceDescription.innerHTML = response["description"];
+	};
+    xhr.send( data );
+
+</script>
 
 </html>

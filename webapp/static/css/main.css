@@ -178,7 +178,7 @@ iframe {
   padding: 15px;
   /* background: #e6e6e6; */
   background-size: 100%;
-  background-image: url("../images/news2.jpg")
+  background-image: url("../images/tiny/news2.jpg")
 }
 
 .wrap-contact100 {
@@ -731,14 +731,25 @@ textarea.input100 {
 
 /* FOOTER */
 
+
 .footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
+  height: 25px;
   background-color:#333333;
-  color: white;
   text-align: center;
+  font-family: Poppins-Regular;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666666;
+  margin: 0px;
+}
+
+.footer a{
+  text-transform: none;
+  color:rgba(255, 255, 255, 0.63);
 }
 
 .articleBody {
