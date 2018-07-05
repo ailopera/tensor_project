@@ -4,7 +4,7 @@ from sklearn.model_selection import KFold, train_test_split
 from vectorAverage import executeVectorAverage
 from BOWModel2 import generateBOWModel
 
-# Script que realiza la validación de modelos, utilizando el método de k-fold con k=4 
+# Script que realiza la validación de modelos, utilizando el método de validación simple
 # Uso: python validateModel.py BOW | vectorAverage
 validation = sys.argv[1]
 
